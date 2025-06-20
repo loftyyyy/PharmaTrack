@@ -50,10 +50,12 @@ CREATE TABLE products (
                           description TEXT,
                           category_id BIGINT NOT NULL,
                           barcode VARCHAR(50) UNIQUE, -- Assuming barcodes are unique
+                          created_by BIGINT NOT NULL, -- Added: User who created this product record
                           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                          updated_by BIGINT,
+                          updated_by BIGINT NOT NULL,
                           FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                          FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE, -- Added FK constraint
                           FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
@@ -65,7 +67,7 @@ CREATE TABLE product_batches (
                                  quantity INT NOT NULL CHECK (quantity >= 0), -- Quantity should not be negative
                                  purchase_price_per_unit DECIMAL(10,2) NOT NULL,
                                  expiry_date DATE NOT NULL,
-                                 manufacturing_date DATE,
+                                 manufacturing_date DATE NOT NULL,
                                  location VARCHAR(50),
                                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                                  created_by BIGINT NOT NULL,
