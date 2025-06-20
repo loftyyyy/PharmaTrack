@@ -28,7 +28,7 @@ CREATE TABLE users (
                        username VARCHAR(100) NOT NULL UNIQUE,
                        password VARCHAR(255) NOT NULL,
                        role_id BIGINT NOT NULL,
-                       email VARCHAR(100),
+                       email VARCHAR(100) NOT NULL,
                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                        updated_by BIGINT, -- Can be NULL initially, self-referencing for updates
