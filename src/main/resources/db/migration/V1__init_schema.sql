@@ -90,9 +90,11 @@ CREATE TABLE suppliers (
                            address_city VARCHAR(100),
                            address_state VARCHAR(100),
                            address_zip_code VARCHAR(20),
+                           created_by BIGINT NOT NULL, -- Added: User who created this supplier record
                            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                            updated_by BIGINT,
+                           FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE, -- Added FK constraint
                            FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 

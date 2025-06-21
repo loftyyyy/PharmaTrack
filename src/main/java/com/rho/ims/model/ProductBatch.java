@@ -3,13 +3,13 @@ package com.rho.ims.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
-import javax.naming.Name;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product_batches")
-public class ProductBatches {
+public class ProductBatch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class ProductBatches {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private Product productId;
 
     @Column(name = "batch_number", nullable = false, length = 100)
     private String batchNumber;
@@ -30,7 +30,7 @@ public class ProductBatches {
     private BigDecimal purchasePricePerUnit;
 
     @Column(name = "expiry_date", nullable = false)
-    private LocalDateTime expiryDate;
+    private LocalDate expiryDate;
 
     @Column(name = "manufacturing_date", nullable = false)
     private LocalDateTime manufacturingDate;
