@@ -160,7 +160,7 @@ CREATE TABLE sales (
                        customer_id BIGINT, -- Can be NULL for walk-in customers
                        total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
                        sale_date DATE NOT NULL,
-                       payment_method ENUM('Cash', 'Credit Card', 'Mobile Pay', 'Other') NOT NULL,
+                       payment_method ENUM('Cash', 'Credit Card', 'Mobile Pay', 'Other') NOT NULL DEFAULT 'Cash',
                        discount_amount DECIMAL(10,2) DEFAULT 0.00 CHECK (discount_amount >= 0),
                        created_by BIGINT NOT NULL,
                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
