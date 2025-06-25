@@ -53,7 +53,7 @@ CREATE TABLE products (
                           created_by BIGINT NOT NULL, -- Added: User who created this product record
                           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                          updated_by BIGINT NOT NULL,
+                          updated_by BIGINT,
                           FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                           FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE, -- Added FK constraint
                           FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
