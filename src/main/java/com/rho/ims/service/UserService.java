@@ -30,6 +30,8 @@ public class UserService {
         if (userRepository.existsByEmail(signupDTO.getEmail())) {
             throw new RuntimeException("Email is already in use!");
         }
+
+
         Role role = roleRepository.findById(signupDTO.getRoleId()).orElseThrow(() -> new RuntimeException("Role not found"));
         User user = new User();
         user.setUsername(signupDTO.getUsername());

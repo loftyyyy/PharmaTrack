@@ -8,7 +8,9 @@ import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
 import com.rho.ims.service.RoleService;
 import com.rho.ims.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,7 +28,13 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody SignupDTO signupDTO) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+
+        }
         try {
             userService.createUser(signupDTO);
             return ResponseEntity.ok("User created successfully");
@@ -38,7 +46,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            Map<String,String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+
         try{
             User user = userService.loginUser(loginDTO);
             return ResponseEntity.ok(new UserResponseDTO(user));
@@ -66,7 +80,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserDTO updateUserDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+
+        }
         try {
             //TODO: Future enhancement, implement the updatedBy field
 

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 public class UpdateUserDTO {
 
-    @NotBlank
+    @NotBlank(message = "Username")
     private String username;
     @NotBlank
     private String password;

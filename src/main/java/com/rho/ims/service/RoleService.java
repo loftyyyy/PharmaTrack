@@ -17,8 +17,7 @@ public class RoleService {
     }
 
     public Role findById(Long id) {
-        return roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
+        return roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
     }
 
     public Role createRole(RoleDTO role){
@@ -32,8 +31,8 @@ public class RoleService {
     }
 
     public void deleteRole(long id){
-        Role existingRole = roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
+        Role existingRole = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
+
         roleRepository.delete(existingRole);
 
     }
@@ -42,9 +41,8 @@ public class RoleService {
         Role role = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
         if(roleRepository.existsByName(updateRoleDTO.getName()) || role.getName().equals(updateRoleDTO.getName())){
             throw new RuntimeException("Name Already Exists!");
-
         }
-        System.out.println(updateRoleDTO.getName());
+
         role.setName(updateRoleDTO.getName());
         return roleRepository.save(role);
 
