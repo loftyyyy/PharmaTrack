@@ -55,7 +55,7 @@ public class UserController {
 
         try{
             User user = userService.loginUser(loginDTO);
-            return ResponseEntity.ok(new UserResponseDTO(user));
+            return ResponseEntity.ok("Login Successfully");
 
         }catch (RuntimeException e){
             Map<String, String> error = new HashMap<>();
