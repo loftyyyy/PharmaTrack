@@ -18,7 +18,7 @@ public class SignupDTO {
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
-    @NotBlank(message = "email is required")
+    @NotBlank(message = "Email is required")
     @Email(message = "Invalid email")
     private String email;
 

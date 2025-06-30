@@ -11,9 +11,12 @@ import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,8 +33,14 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            Map<String, List<String>> errors = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String field = error.getField();
+                String message = error.getDefaultMessage();
+                errors.computeIfAbsent(field, key -> new ArrayList<>()).add(message);
+            }
+
             return ResponseEntity.badRequest().body(errors);
 
         }
