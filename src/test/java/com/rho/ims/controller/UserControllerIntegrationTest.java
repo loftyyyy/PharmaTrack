@@ -222,8 +222,17 @@ class UserControllerIntegrationTest {
             testUser.setEmail(email);
             testUser.setRole(testRole);
             testRoleId = testUser.getId();
-
             userRepository.save(testUser);
+        }
+
+        @DisplayName("Should Log in the user")
+        @Test
+        void shouldReturnSuccessfulRequest_LogIn() throws Exception {
+            LoginDTO loginDTO = new LoginDTO();
+            loginDTO.setUsername(username);
+            loginDTO.setPassword(password);
+
+            mockMvc.perform(put())
 
 
         }
