@@ -57,8 +57,14 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            Map<String, List<String>> errors = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String field = error.getField();
+                String message = error.getDefaultMessage();
+                errors.computeIfAbsent(field, key -> new ArrayList<>()).add(message);
+            }
+
             return ResponseEntity.badRequest().body(errors);
         }
 
@@ -69,7 +75,7 @@ public class UserController {
         }catch (RuntimeException e){
             Map<String, String> error = new HashMap<>();
             error.put("message", "Login failed: " + e.getMessage());
-            return ResponseEntity.status(401).body(error);
+            return ResponseEntity.badRequest().body(error);
 
         }
     }

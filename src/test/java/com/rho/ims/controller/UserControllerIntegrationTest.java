@@ -24,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +35,7 @@ import java.sql.Connection;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,6 +61,9 @@ class UserControllerIntegrationTest {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Value("${test.user.username}")
     private String username;
 
@@ -67,9 +72,6 @@ class UserControllerIntegrationTest {
 
     @Value("${test.user.password}")
     private String password;
-
-
-
 
 
     @Nested
@@ -215,14 +217,16 @@ class UserControllerIntegrationTest {
 
             Role testRole = new Role();
             testRole.setName("Test Role");
+            roleRepository.save(testRole);
 
             User testUser = new User();
             testUser.setUsername(username);
-            testUser.setPassword(password);
+            testUser.setPassword(passwordEncoder.encode(password));
             testUser.setEmail(email);
             testUser.setRole(testRole);
-            testRoleId = testUser.getId();
             userRepository.save(testUser);
+
+            testRoleId = testRole.getId();
         }
 
         @DisplayName("Should Log in the user")
@@ -232,7 +236,79 @@ class UserControllerIntegrationTest {
             loginDTO.setUsername(username);
             loginDTO.setPassword(password);
 
-            mockMvc.perform(put())
+            mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
+                    .andExpect(status().is2xxSuccessful())
+                    .andExpect(content().string("Login Successfully"))
+                    .andDo(print());
+
+        }
+
+        @DisplayName("Should fail with wrong username")
+        @Test
+        void shouldReturnBadRequest_wrongUsername() throws Exception {
+            LoginDTO loginDTO = new LoginDTO();
+            loginDTO.setUsername("SomeWrongUsername");
+            loginDTO.setPassword(password);
+
+            mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("Login failed: Invalid username or password"))
+                    .andDo(print());
+        }
+
+        @DisplayName("Should fail with wrong password")
+        @Test
+        void shouldReturnBadRequest_wrongPassword() throws Exception {
+
+
+            LoginDTO loginDTO = new LoginDTO();
+            loginDTO.setUsername(username);
+            loginDTO.setPassword("someWrongPassword");
+
+            mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("Login failed: Invalid username or password"))
+                    .andDo(print());
+
+
+
+        }
+
+        @DisplayName("Should fail with blank username")
+        @Test
+        void shouldReturnBadRequest_blankUsername() throws Exception{
+
+            LoginDTO loginDTO = new LoginDTO();
+            loginDTO.setUsername("");
+            loginDTO.setPassword(password);
+
+            mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.username[0]").value("Username is required"))
+                    .andDo(print());
+
+
+
+
+
+        }
+
+        @DisplayName("Should fail with blank password")
+        @Test
+        void shouldReturnBadRequest_blankPassword() throws Exception{
+
+            LoginDTO loginDTO = new LoginDTO();
+            loginDTO.setUsername(username);
+            loginDTO.setPassword("");
+
+            mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.password[0]").value("Password is required"))
+                    .andExpect(jsonPath("$.password[1]").value("Password must be at least 8 characters"))
+                    .andDo(print());
+
+
+
 
 
         }
