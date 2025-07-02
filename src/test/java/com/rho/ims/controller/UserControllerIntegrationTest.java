@@ -64,6 +64,9 @@ class UserControllerIntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleService roleService;
+
     @Value("${test.user.username}")
     private String username;
 
@@ -318,6 +321,7 @@ class UserControllerIntegrationTest {
     @Nested
     class GetUserTest {
         long testRoleId;
+        long testUserId;
 
         @BeforeEach
         void setup(){
@@ -326,24 +330,67 @@ class UserControllerIntegrationTest {
 
             Role testRole = new Role();
             testRole.setName("Test Role");
+            roleRepository.save(testRole);
 
             User testUser = new User();
             testUser.setUsername(username);
             testUser.setPassword(password);
             testUser.setEmail(email);
             testUser.setRole(testRole);
-            testRoleId = testUser.getId();
-
             userRepository.save(testUser);
+
+            testRoleId = testRole.getId();
+            testUserId = testUser.getId();
 
 
         }
+
+        @DisplayName("Should return a user")
+        @Test
+        void shouldReturnSuccessfulRequest_getUser() throws Exception{
+            String roleName = roleService.findById(testRoleId).getName();
+
+            mockMvc.perform(get("/api/v1/users/" + testUserId + "").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is2xxSuccessful())
+                    .andExpect(jsonPath("$.username").value(username))
+                    .andExpect(jsonPath("$.email").value(email))
+                    .andExpect(jsonPath("$.roleName").value(roleName))
+                    .andDo(print());
+        }
+
+        @DisplayName("Should fail with invalid id format")
+        @Test
+        void shouldReturnBadRequest_invalidId() throws Exception{
+            // TODO: Might implement a Controller Advice
+            String id = "xyz";
+
+            mockMvc.perform(get("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print());
+
+
+
+        }
+
+        @DisplayName("Should fail with id that doesn't exist")
+        @Test
+        void shouldReturnBadRequest_idNotExist() throws Exception {
+            long id = 999;
+
+            mockMvc.perform(get("/api/v1/users/" + id + "").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("User retrieval failed: User not found"))
+                    .andDo(print());
+        }
+
+
 
     }
 
     @Nested
     class UpdateUserTest {
         long testRoleId;
+        long testUserId;
 
         @BeforeEach
         void setup(){
@@ -352,18 +399,86 @@ class UserControllerIntegrationTest {
 
             Role testRole = new Role();
             testRole.setName("Test Role");
+            roleRepository.save(testRole);
 
             User testUser = new User();
             testUser.setUsername(username);
             testUser.setPassword(password);
             testUser.setEmail(email);
             testUser.setRole(testRole);
-            testRoleId = testUser.getId();
 
             userRepository.save(testUser);
 
+            testRoleId = testUser.getId();
+            testUserId = testUser.getId();
 
         }
+
+
+        @DisplayName("Should update the user")
+        @Test
+        void shouldReturnSuccessfulRequest_updateUser() throws Exception {
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername("someNewUsername");
+            updateUserDTO.setEmail("someNewEmail@gmail.com");
+            updateUserDTO.setPassword("someNewPassword");
+
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().is2xxSuccessful())
+                    .andExpect(content().string("Successfully updated profile"))
+                    .andDo(print());
+
+
+        }
+
+
+        @DisplayName("Should fail when username is missing")
+        @Test
+        void shouldReturnBadRequest_missingUsername() throws Exception {
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername(null);
+            updateUserDTO.setEmail("someNewEmail@gmail.com");
+            updateUserDTO.setPassword("someNewPassword");
+
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.username").value("Username is required"))
+                    .andDo(print());
+        }
+
+        @DisplayName("Should fail when email is missing")
+        @Test
+        void shouldReturnBadRequest_missingEmail() throws Exception {
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername("someNewUsername");
+            updateUserDTO.setEmail(null);
+            updateUserDTO.setPassword("someNewPassword");
+
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.email").value("Email is required"))
+                    .andDo(print());
+        }
+
+        @DisplayName("Should fail when password is missing")
+        @Test
+        void shouldReturnBadRequest_missingPassword() throws Exception {
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername("someNewUsername");
+            updateUserDTO.setEmail("someNewEmail@gmail.com");
+            updateUserDTO.setPassword(null);
+
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.password").value("Password is required"))
+                    .andDo(print());
+
+
+
+
+        }
+
+
 
     }
 

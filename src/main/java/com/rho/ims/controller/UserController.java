@@ -107,8 +107,9 @@ public class UserController {
 
             User updatedUser = userService.updateUser(id, updateUserDTO);
 
-            return ResponseEntity.ok(new UserResponseDTO(updatedUser));
+//            return ResponseEntity.ok(new UserResponseDTO(updatedUser));
 
+            return ResponseEntity.ok().body("Successfully updated profile");
         }catch (RuntimeException e) {
             Map<String, String> error = new HashMap<>();
             error.put("message", "User update failed: " + e.getMessage());
