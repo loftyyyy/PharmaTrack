@@ -485,6 +485,7 @@ class UserControllerIntegrationTest {
     @Nested
     class DeleteUserTest {
         long testRoleId;
+        long testUserId;
 
         @BeforeEach
         void setup(){
@@ -493,17 +494,42 @@ class UserControllerIntegrationTest {
 
             Role testRole = new Role();
             testRole.setName("Test Role");
+            roleRepository.save(testRole);
 
             User testUser = new User();
             testUser.setUsername(username);
             testUser.setPassword(password);
             testUser.setEmail(email);
             testUser.setRole(testRole);
-            testRoleId = testUser.getId();
 
             userRepository.save(testUser);
+            testRoleId = testRole.getId();
+            testUserId = testUser.getId();
+
+        }
+
+        @DisplayName("Should delete user")
+        @Test
+        void shouldReturnSuccessfulRequest_deleteUser() throws Exception {
+
+            mockMvc.perform(delete("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is2xxSuccessful())
+                    .andExpect(content().string("User deleted successfully"))
+                    .andDo(print());
 
 
+
+        }
+
+        @DisplayName("Should fail when the user is invalid or doesn't exist")
+        @Test
+        void shouldReturnBadRequest_invalidUser() throws Exception {
+            long someInvalidId = 99;
+
+            mockMvc.perform(delete("/api/v1/users/" + someInvalidId).contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("User deletion failed: User not found"))
+                    .andDo(print());
         }
 
     }
