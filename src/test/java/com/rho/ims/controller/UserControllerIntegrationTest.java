@@ -47,13 +47,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerIntegrationTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired
     private UserRepository userRepository;
