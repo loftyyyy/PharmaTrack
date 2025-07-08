@@ -3,12 +3,15 @@ package com.rho.ims.service;
 import com.rho.ims.dto.LoginDTO;
 import com.rho.ims.dto.SignupDTO;
 import com.rho.ims.dto.UpdateUserDTO;
+import com.rho.ims.dto.UserResponseDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
 import com.rho.ims.respository.RoleRepository;
 import com.rho.ims.respository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -53,6 +56,12 @@ public class UserService {
 
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public List<UserResponseDTO> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> new UserResponseDTO(user)).toList();
+
     }
 
     public User updateUser(Long id, UpdateUserDTO user) {

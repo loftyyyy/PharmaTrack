@@ -94,6 +94,16 @@ public class UserController {
         }
     }
 
+    public ResponseEntity<?> getAllUser(){
+        try{
+            userService.getAllUsers();
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserDTO updateUserDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){

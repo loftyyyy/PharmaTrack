@@ -2,6 +2,11 @@ package com.rho.ims.controller;
 
 import com.rho.ims.model.Product;
 import com.rho.ims.service.ProductService;
+import jakarta.validation.Valid;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +25,38 @@ public class ProductController {
     }
 
 
+    // CRUD
 
-    public List<Product> getAllProduct(){
-        return productService.getAllProducts();
+
+
+    @GetMapping
+    public ResponseEntity<?> getAllProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+
+
+        }
+
+
+        try{
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error creating product:" + e.getMessage());
+        }
+
+
+
+
 
     }
+
+
+
+    // CRUD ends HERE
+
+
+
+
+
 
 
 
