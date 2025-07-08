@@ -19,9 +19,9 @@ public class CategoryController {
 
 
     // CRUD
-    public ResponseEntity<?> getAllCategories(){
-
-    }
+//    public ResponseEntity<?> getAllCategories(){
+//
+//    }
 
     // CRUD ends HERE
 

@@ -94,9 +94,12 @@ public class UserController {
         }
     }
 
+    @GetMapping()
     public ResponseEntity<?> getAllUser(){
         try{
-            userService.getAllUsers();
+            List<UserResponseDTO> users = userService.getAllUsers();
+
+            return ResponseEntity.ok().body(users);
 
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

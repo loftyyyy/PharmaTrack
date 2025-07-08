@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.sql.DataSource;
 
 import java.sql.Connection;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -383,6 +384,68 @@ class UserControllerIntegrationTest {
                     .andDo(print());
         }
 
+
+
+    }
+
+    @Nested
+    class GetAllUsersTest {
+        Role pharmacist;
+        Role cashier;
+
+        User user1;
+        User user2;
+
+        @BeforeEach
+        void setup(){
+            Role pharmacist = new Role();
+            pharmacist.setName("Pharmacist");
+
+            Role cashier = new Role();
+            cashier.setName("Cashier");
+
+            roleRepository.saveAll(List.of(pharmacist,cashier));
+
+            this.pharmacist = pharmacist;
+            this.cashier = cashier;
+
+
+
+            User user1 = new User();
+            user1.setUsername("User1");
+            user1.setEmail("pokemon@gmail.com");
+            user1.setPassword("password123");
+            user1.setRole(pharmacist);
+
+            User user2 = new User();
+            user2.setUsername("User2");
+            user2.setEmail("pokemon2@gmail.com");
+            user2.setPassword("password123");
+            user2.setRole(cashier);
+            userRepository.saveAll(List.of(user1, user2));
+
+            this.user1 = user1;
+            this.user2 = user2;
+
+        }
+
+        @DisplayName("should get all users")
+        @Test
+        void shouldReturnSuccessfulRequest_returnAllUsers() throws Exception{
+
+            mockMvc.perform(get("/api/v1/users").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.length()").value(2))
+                    .andExpect(jsonPath("$[0].username").value(user1.getUsername()))
+                    .andExpect(jsonPath("$[0].email").value(user1.getEmail()))
+                    .andExpect(jsonPath("$[0].roleName").value(user1.getRole().getName()))
+
+                    .andExpect(jsonPath("$[1].username").value(user2.getUsername()))
+                    .andExpect(jsonPath("$[1].email").value(user2.getEmail()))
+                    .andExpect(jsonPath("$[1].roleName").value(user2.getRole().getName()))
+                    .andDo(print());
+
+        }
 
 
     }
