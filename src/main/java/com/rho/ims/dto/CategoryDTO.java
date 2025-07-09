@@ -16,6 +16,7 @@ public class CategoryDTO {
    String name;
 
    public CategoryDTO(Category category){
+       this.id = category.getId();
        this.name = category.getName();
 
    }
