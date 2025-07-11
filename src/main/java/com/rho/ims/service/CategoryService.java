@@ -2,6 +2,7 @@ package com.rho.ims.service;
 
 
 import com.rho.ims.dto.CategoryDTO;
+import com.rho.ims.dto.UpdateCategoryDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,17 @@ public class CategoryService {
     }
 
     public Category saveCategory(CategoryDTO categoryDTO){
-        if(categoryRepository.existsByName(categoryDTO.getName())){
-            throw new RuntimeException("Category already exists");
-        }
         Category category = new Category();
         category.setName(categoryDTO.getName());
+
+        return categoryRepository.save(category);
+
+    }
+
+    public Category updateCategory(Long id, UpdateCategoryDTO updateCategoryDTO){
+
+        Category category = categoryRepository.findById(id).orElseThrow( () -> new RuntimeException("Category doesn't exist"));
+        category.setName(updateCategoryDTO.getName());
 
         return categoryRepository.save(category);
 

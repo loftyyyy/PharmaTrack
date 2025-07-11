@@ -9,6 +9,7 @@ import com.rho.ims.model.User;
 import com.rho.ims.service.RoleService;
 import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -31,27 +32,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            Map<String, List<String>> errors = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                String field = error.getField();
-                String message = error.getDefaultMessage();
-                errors.computeIfAbsent(field, key -> new ArrayList<>()).add(message);
-            }
-
-            return ResponseEntity.badRequest().body(errors);
-
-        }
-        try {
+    public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO) {
             userService.createUser(signupDTO);
             return ResponseEntity.ok("User created successfully");
-        } catch (RuntimeException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "User creation failed: " + e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-       }
     }
 
     @PostMapping("/login")

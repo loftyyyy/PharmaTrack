@@ -2,6 +2,7 @@ package com.rho.ims.controller;
 
 
 import com.rho.ims.dto.CategoryDTO;
+import com.rho.ims.dto.UpdateCategoryDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.service.CategoryService;
 import jakarta.validation.Valid;
@@ -71,7 +72,24 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@Valid @ResponseBody categoryUpdateDTO){
+    public ResponseEntity<?> updateCategory(@PathVariable long id, @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()) );
+            return ResponseEntity.badRequest().body(errors);
+        }
+        try{
+
+            Category category = categoryService.updateCategory(id, updateCategoryDTO);
+
+
+            return ResponseEntity.ok().body(category);
+
+
+
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
 
     }

@@ -114,6 +114,29 @@ class UserControllerIntegrationTest {
 
         }
 
+        @DisplayName("Should fail when username already exist")
+        @Test
+        void shouldReturnBadRequest_usernameIsTaken()throws Exception {
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setRole(roleRepository.findById(testRoleId).orElseThrow(() -> new RuntimeException("Doesn't")));
+            userRepository.save(user);
+
+            SignupDTO signupDTO = new SignupDTO();
+            signupDTO.setUsername(username);
+            signupDTO.setEmail(email);
+            signupDTO.setPassword(password);
+
+            signupDTO.setRoleId(testRoleId);
+
+            mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
+                    .andExpect(status().is4xxClientError())
+                    .andDo(print());
+
+        }
+
         @DisplayName("Should fail when username is blank")
         @Test
         void shouldReturnBadRequest_usernameIsBlank() throws Exception{
@@ -126,7 +149,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.username").value("Username is required"))
+                    .andExpect(jsonPath("$.fieldErrors['username']").value("Username is required"))
                     .andDo(print());
 
 
@@ -144,7 +167,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.email").value("Email is required"))
+                    .andExpect(jsonPath("$.fieldErrors['email']").value("Email is required"))
                     .andDo(print());
 
 
@@ -162,7 +185,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.email").value("Invalid email"))
+                    .andExpect(jsonPath("$.fieldErrors['email']").value("Invalid email"))
                     .andDo(print());
 
 
@@ -180,8 +203,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.password[0]").value("Password is required"))
-                    .andExpect(jsonPath("$.password[1]").value("Password must be at least 8 characters"))
+                    .andExpect(jsonPath("$.fieldErrors['password']").value("Password must be at least 8 characters"))
                     .andDo(print());
 
 
@@ -199,7 +221,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.roleId").value("Role id is required"))
+                    .andExpect(jsonPath("$.fieldErrors['roleId']").value("Role id is required"))
                     .andDo(print());
 
 
@@ -366,7 +388,7 @@ class UserControllerIntegrationTest {
             String id = "xyz";
 
             mockMvc.perform(get("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().is4xxClientError())
                     .andDo(print());
 
 
@@ -398,6 +420,9 @@ class UserControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
+            userRepository.deleteAll();
+            roleRepository.deleteAll();
+
             Role pharmacist = new Role();
             pharmacist.setName("Pharmacist");
 

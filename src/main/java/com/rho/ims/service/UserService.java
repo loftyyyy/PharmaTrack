@@ -64,17 +64,17 @@ public class UserService {
 
     }
 
-    public User updateUser(Long id, UpdateUserDTO user) {
+    public User updateUser(Long id, UpdateUserDTO updateUserDTO) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (user.getUsername() != null) {
-            existingUser.setUsername(user.getUsername());
+        if (updateUserDTO.getUsername() != null) {
+            existingUser.setUsername(updateUserDTO.getUsername());
         }
-        if (user.getEmail() != null) {
-            existingUser.setEmail(user.getEmail());
+        if (updateUserDTO.getEmail() != null) {
+            existingUser.setEmail(updateUserDTO.getEmail());
         }
-        if (user.getPassword() != null) {
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (updateUserDTO.getPassword() != null) {
+            existingUser.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
         }
 
         //TODO: Future enhancement, implement the updatedBy field
