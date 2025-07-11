@@ -48,20 +48,17 @@ public class CategoryController {
             Category category = categoryService.getCategory(id);
             return ResponseEntity.ok().body(new CategoryDTO(category));
 
-
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
-
         }
-
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             Map<String, String> errors = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-
         }
         try{
             Category category = categoryService.saveCategory(categoryDTO);
@@ -71,6 +68,10 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCategory(@Valid @ResponseBody categoryUpdateDTO){
 
 
     }
