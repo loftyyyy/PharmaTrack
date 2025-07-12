@@ -43,24 +43,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
-        String message = "A data integrity constraint was violated";
 
-        Throwable rootCause = ex.getRootCause();
-        if (rootCause != null && rootCause.getMessage() != null) {
-            String rootMsg = rootCause.getMessage().toLowerCase();
-
-            if (rootMsg.contains("unique") && rootMsg.contains("username")) {
-                message = "Username is already taken";
-            } else if (rootMsg.contains("unique") && rootMsg.contains("email")) {
-                message = "Email is already taken";
-            }
-        }
 
         return new ErrorResponse(
                 Instant.now(),
                 HttpStatus.CONFLICT.value(),
                 "conflict",
-                message,
+                ex.getMessage(),
                 request.getRequestURI()
         );
     }
@@ -73,6 +62,23 @@ public class ApiExceptionHandler {
     }
 
     //TODO: implement custom error exceptions
+
+    @ExceptionHandler(DuplicateCredentialException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleDuplicateCredential(DuplicateCredentialException ex, HttpServletRequest req){
+
+         return new ErrorResponse(
+                 Instant.now(),
+                 HttpStatus.CONFLICT.value(),
+                 "credential already exist",
+                 ex.getMessage(),
+                 req.getRequestURI()
+
+
+         );
+
+    }
+
 
 
 

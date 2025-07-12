@@ -1,5 +1,6 @@
 package com.rho.ims.service;
 
+import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.dto.LoginDTO;
 import com.rho.ims.dto.SignupDTO;
 import com.rho.ims.dto.UpdateUserDTO;
@@ -28,10 +29,10 @@ public class UserService {
 
     public User createUser(SignupDTO signupDTO) {
         if (userRepository.existsByUsername(signupDTO.getUsername())) {
-            throw new RuntimeException("Username is already taken!");
+            throw new DuplicateCredentialException("username", signupDTO.getUsername());
         }
         if (userRepository.existsByEmail(signupDTO.getEmail())) {
-            throw new RuntimeException("Email is already in use!");
+            throw new DuplicateCredentialException("email", signupDTO.getEmail());
         }
 
 
