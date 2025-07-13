@@ -1,6 +1,7 @@
 package com.rho.ims.service;
 
 
+import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.dto.CategoryDTO;
 import com.rho.ims.dto.UpdateCategoryDTO;
 import com.rho.ims.model.Category;
@@ -28,6 +29,10 @@ public class CategoryService {
     }
 
     public Category saveCategory(CategoryDTO categoryDTO){
+        if(categoryRepository.existsByName(categoryDTO.getName())){
+            throw new DuplicateCredentialException("name", categoryDTO.getName());
+        }
+
         Category category = new Category();
         category.setName(categoryDTO.getName());
 

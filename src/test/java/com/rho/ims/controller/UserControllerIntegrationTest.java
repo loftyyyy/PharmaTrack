@@ -28,12 +28,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.hamcrest.Matchers.*;
+
 
 import javax.sql.DataSource;
 
 import java.sql.Connection;
 import java.util.List;
 
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
@@ -203,7 +208,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.fieldErrors['password']").value("Password must be at least 8 characters"))
+                    .andExpect(jsonPath("$.fieldErrors['password']").value(anyOf(is("Password is required"), is("Password must be at least 8 characters"))))
                     .andDo(print());
 
 
@@ -278,7 +283,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("Login failed: Invalid username or password"))
+                    .andExpect(jsonPath("$.message").value("Invalid username or password"))
                     .andDo(print());
         }
 
@@ -293,7 +298,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("Login failed: Invalid username or password"))
+                    .andExpect(jsonPath("$.message").value("Invalid username or password"))
                     .andDo(print());
 
 
@@ -310,7 +315,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.username[0]").value("Username is required"))
+                    .andExpect(jsonPath("$.fieldErrors['username']").value("Username is required"))
                     .andDo(print());
 
 
@@ -329,8 +334,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.password[0]").value("Password is required"))
-                    .andExpect(jsonPath("$.password[1]").value("Password must be at least 8 characters"))
+                    .andExpect(jsonPath("$.fieldErrors.password").value(anyOf(is("Password is required"),is("Password must be at least 8 characters"))))
                     .andDo(print());
 
 
@@ -402,7 +406,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(get("/api/v1/users/" + id + "").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("User retrieval failed: User not found"))
+                    .andExpect(jsonPath("$.message").value("User not found"))
                     .andDo(print());
         }
 
@@ -530,7 +534,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.username").value("Username is required"))
+                    .andExpect(jsonPath("$.fieldErrors['username']").value("Username is required"))
                     .andDo(print());
         }
 
@@ -544,7 +548,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.email").value("Email is required"))
+                    .andExpect(jsonPath("$.fieldErrors['email']").value("Email is required"))
                     .andDo(print());
         }
 
@@ -558,7 +562,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.password").value("Password is required"))
+                    .andExpect(jsonPath("$.fieldErrors['password']").value("Password is required"))
                     .andDo(print());
 
 
@@ -616,7 +620,7 @@ class UserControllerIntegrationTest {
 
             mockMvc.perform(delete("/api/v1/users/" + someInvalidId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("User deletion failed: User not found"))
+                    .andExpect(jsonPath("$.message").value("User not found"))
                     .andDo(print());
         }
 

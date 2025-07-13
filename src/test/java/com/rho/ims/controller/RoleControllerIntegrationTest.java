@@ -45,6 +45,7 @@ class RoleControllerIntegrationTest {
         @DisplayName("Should create a new role")
         @Test
         void shouldReturnSuccessRequest_createRole() throws Exception {
+            roleRepository.deleteAll();
             Role newRole = new Role();
             newRole.setName("Test Role");
 
@@ -63,7 +64,7 @@ class RoleControllerIntegrationTest {
 
             mockMvc.perform(post("/api/v1/roles/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(newRole)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.name").value("Name cannot be blank!"))
+                    .andExpect(jsonPath("$.fieldErrors['name']").value("Name cannot be blank!"))
                     .andDo(print());
 
         }
@@ -183,7 +184,7 @@ class RoleControllerIntegrationTest {
 
             mockMvc.perform(put("/api/v1/roles/" + testRoleId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateRoleDTO)))
                     .andExpect(status().is2xxSuccessful())
-                    .andExpect(content().string("Role updated successfully"))
+                    .andExpect(content().string("Role Updated Successfully"))
                     .andDo(print());
         }
 

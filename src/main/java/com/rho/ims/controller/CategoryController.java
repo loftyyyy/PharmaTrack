@@ -31,65 +31,38 @@ public class CategoryController {
     // CRUD
     @GetMapping
     public ResponseEntity<?> getAllCategories(){
-        try{
-            List<CategoryDTO> categories = categoryService.getAll()
-                    .stream().map(category -> new CategoryDTO(category)).toList();
+        List<CategoryDTO> categories = categoryService.getAll()
+                .stream().map(category -> new CategoryDTO(category)).toList();
 
-            return ResponseEntity.ok().body(categories);
+        return ResponseEntity.ok().body(categories);
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
 
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategory(@PathVariable long id){
-        try{
-            Category category = categoryService.getCategory(id);
-            return ResponseEntity.ok().body(new CategoryDTO(category));
+        Category category = categoryService.getCategory(id);
+        return ResponseEntity.ok().body(new CategoryDTO(category));
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        }
-        try{
-            Category category = categoryService.saveCategory(categoryDTO);
-            return ResponseEntity.ok().body(new CategoryDTO(category));
+    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
+        Category category = categoryService.saveCategory(categoryDTO);
+        return ResponseEntity.ok().body(new CategoryDTO(category));
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable long id, @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()) );
-            return ResponseEntity.badRequest().body(errors);
-        }
-        try{
+    public ResponseEntity<?> updateCategory(@PathVariable long id, @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO){
 
-            Category category = categoryService.updateCategory(id, updateCategoryDTO);
+        Category category = categoryService.updateCategory(id, updateCategoryDTO);
 
 
-            return ResponseEntity.ok().body(category);
+        return ResponseEntity.ok().body(category);
 
-
-
-        }catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
 
 
     }

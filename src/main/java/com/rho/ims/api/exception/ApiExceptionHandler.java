@@ -58,7 +58,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleAny(Exception ex, HttpServletRequest req) {
         return new ErrorResponse(Instant.now(), 400, "internal-error",
-                "Something went wrong. Please try again later.", req.getRequestURI());
+                ex.getMessage(), req.getRequestURI());
     }
 
     //TODO: implement custom error exceptions
@@ -78,6 +78,7 @@ public class ApiExceptionHandler {
          );
 
     }
+
 
 
 

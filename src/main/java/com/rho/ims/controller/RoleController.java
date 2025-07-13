@@ -26,63 +26,32 @@ public class RoleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createRole(@Valid @RequestBody RoleDTO roleDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> createRole(@Valid @RequestBody RoleDTO roleDTO) {
+        Role role = roleService.createRole(roleDTO);
 
-        if(bindingResult.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-        }
-        try{
-            Role role = roleService.createRole(roleDTO);
-
-            return ResponseEntity.ok("Role created successfully: " + role.getName());
-
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error creating role: " + e.getMessage());
-        }
+        return ResponseEntity.ok("Role created successfully: " + role.getName());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRole(@PathVariable long id) {
-        try{
-            roleService.deleteRole(id);
-            return ResponseEntity.ok("Role deleted successfully");
-
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error deleting role: " + e.getMessage());
-        }
+        roleService.deleteRole(id);
+        return ResponseEntity.ok("Role deleted successfully");
 
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getRole(@PathVariable long id) {
-        try{
-            Role role = roleService.findById(id);
-            return ResponseEntity.ok(new RoleResponseDTO(role));
+        Role role = roleService.findById(id);
+        return ResponseEntity.ok(new RoleResponseDTO(role));
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error retrieving role: " + e.getMessage());
-        }
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRole(@PathVariable long id, @Valid @RequestBody UpdateRoleDTO updateRoleDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
+    public ResponseEntity<?> updateRole(@PathVariable long id, @Valid @RequestBody UpdateRoleDTO updateRoleDTO){
+        roleService.updateRole(id, updateRoleDTO);
+        return ResponseEntity.ok().body("Role Updated Successfully");
 
-        }
-        try{
-            roleService.updateRole(id, updateRoleDTO);
-            return ResponseEntity.ok().body("Role Updated Successfully");
-
-        }catch(Exception e){
-            return ResponseEntity.badRequest().body("Error updating role: " + e.getMessage());
-
-        }
 
 
 

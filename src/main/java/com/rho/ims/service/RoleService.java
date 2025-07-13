@@ -1,5 +1,6 @@
 package com.rho.ims.service;
 
+import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.dto.RoleDTO;
 import com.rho.ims.dto.UpdateRoleDTO;
 import com.rho.ims.model.Role;
@@ -22,7 +23,7 @@ public class RoleService {
 
     public Role createRole(RoleDTO role){
         if (roleRepository.existsByName(role.getName())) {
-            throw new RuntimeException("Role name is already taken!");
+            throw new DuplicateCredentialException("Role", role.getName());
         }
 
         Role newRole = new Role();

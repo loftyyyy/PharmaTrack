@@ -2,15 +2,14 @@ package com.rho.ims.dto;
 
 import com.rho.ims.model.Category;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 public class CategoryDTO {
 
-   long id;
+    @Setter(AccessLevel.NONE)
+    long id;
 
    @NotBlank(message = "Name is required")
    String name;
@@ -18,7 +17,6 @@ public class CategoryDTO {
    public CategoryDTO(Category category){
        this.id = category.getId();
        this.name = category.getName();
-
    }
 
 

@@ -38,67 +38,30 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            Map<String, List<String>> errors = new HashMap<>();
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
+        User user = userService.loginUser(loginDTO);
+        return ResponseEntity.ok("Login Successfully");
 
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                String field = error.getField();
-                String message = error.getDefaultMessage();
-                errors.computeIfAbsent(field, key -> new ArrayList<>()).add(message);
-            }
-
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        try{
-            User user = userService.loginUser(loginDTO);
-            return ResponseEntity.ok("Login Successfully");
-
-        }catch (RuntimeException e){
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "Login failed: " + e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-
-        }
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable long id) {
-        try{
-            User user = userService.findById(id);
-            return ResponseEntity.ok(new UserResponseDTO(user));
+        User user = userService.findById(id);
+        return ResponseEntity.ok(new UserResponseDTO(user));
 
-        }catch (RuntimeException e){
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "User retrieval failed: " + e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-        }
     }
 
     @GetMapping()
     public ResponseEntity<?> getAllUser(){
-        try{
-            List<UserResponseDTO> users = userService.getAllUsers();
+        List<UserResponseDTO> users = userService.getAllUsers();
 
-            return ResponseEntity.ok().body(users);
-
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok().body(users);
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserDTO updateUserDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(errors);
-
-        }
-        try {
+    public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserDTO updateUserDTO) {
             //TODO: Future enhancement, implement the updatedBy field
 
             User updatedUser = userService.updateUser(id, updateUserDTO);
@@ -106,24 +69,13 @@ public class UserController {
 //            return ResponseEntity.ok(new UserResponseDTO(updatedUser));
 
             return ResponseEntity.ok().body("Successfully updated profile");
-        }catch (RuntimeException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "User update failed: " + e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-        }
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
-        try{
             userService.deleteUser(id);
             return ResponseEntity.ok("User deleted successfully");
-        }catch (RuntimeException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "User deletion failed: " + e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-        }
 
     }
 
