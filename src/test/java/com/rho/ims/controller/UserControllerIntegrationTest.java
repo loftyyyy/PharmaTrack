@@ -566,9 +566,83 @@ class UserControllerIntegrationTest {
                     .andDo(print());
 
 
+        }
+
+        @DisplayName("Should fail when username already exist")
+        @Test
+        void shouldReturnBadRequest_usernameAlreadyExist() throws Exception {
+            User user = new User();
+            user.setUsername("SomeUser");
+            user.setEmail("SomeUser@gmail.com");
+            user.setPassword("Somepassword1234");
+            user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
+            userRepository.save(user);
+
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername(username);
+            updateUserDTO.setEmail("SomeEmail@gmail.com");
+            updateUserDTO.setPassword("newPassword");
+
+            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("username already exist"))
+                    .andDo(print());
+
+
 
 
         }
+
+        @DisplayName("Should fail when email already exist")
+        @Test
+        void shouldReturnBadRequest_emailAlreadyExist() throws Exception {
+            User user = new User();
+            user.setUsername("SomeUser");
+            user.setEmail("SomeUser@gmail.com");
+            user.setPassword("Somepassword1234");
+            user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
+            userRepository.save(user);
+
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername("SomeUserName");
+            updateUserDTO.setEmail(email);
+            updateUserDTO.setPassword("newPassword");
+
+            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value("email already exist"))
+                    .andDo(print());
+
+
+
+
+        }
+
+        @DisplayName("Should fail when username and email already exist")
+        @Test
+        void shouldReturnBadRequest_usernameAndEmailAlreadyExist() throws Exception {
+            User user = new User();
+            user.setUsername("SomeUser");
+            user.setEmail("SomeUser@gmail.com");
+            user.setPassword("Somepassword1234");
+            user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
+            userRepository.save(user);
+
+            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
+            updateUserDTO.setUsername(username);
+            updateUserDTO.setEmail(email);
+            updateUserDTO.setPassword("newPassword");
+
+            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.message").value(anyOf(is("Duplicate credential(s): username, email already exist"),is("Duplicate credential(s): email, username already exist"))))
+                    .andDo(print());
+
+
+
+
+        }
+
 
 
 

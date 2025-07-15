@@ -12,7 +12,9 @@ import com.rho.ims.respository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -68,13 +70,27 @@ public class UserService {
     public User updateUser(Long id, UpdateUserDTO updateUserDTO) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
+        Map<String,String> duplicates = new HashMap<>();
+
         if (updateUserDTO.getUsername() != null) {
-            existingUser.setUsername(updateUserDTO.getUsername());
+            if(userRepository.existsByUsername(updateUserDTO.getUsername())){
+                duplicates.put("username", updateUserDTO.getUsername());
+            }
         }
         if (updateUserDTO.getEmail() != null) {
-            existingUser.setEmail(updateUserDTO.getEmail());
+            if(userRepository.existsByEmail(updateUserDTO.getEmail())){
+                duplicates.put("email", updateUserDTO.getEmail());
+
+            }
         }
+        if(!duplicates.isEmpty()){
+            throw new DuplicateCredentialException(duplicates);
+
+        }
+
         if (updateUserDTO.getPassword() != null) {
+            existingUser.setEmail(updateUserDTO.getEmail());
+            existingUser.setUsername(updateUserDTO.getUsername());
             existingUser.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
         }
 
