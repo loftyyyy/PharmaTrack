@@ -1,21 +1,17 @@
 package com.rho.ims.controller;
 
 
-import com.rho.ims.dto.CategoryDTO;
+import com.rho.ims.dto.CategoryCreateDTO;
+import com.rho.ims.dto.CategoryResponseDTO;
 import com.rho.ims.dto.UpdateCategoryDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import com.rho.ims.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -33,8 +29,8 @@ public class CategoryController {
     // CRUD
     @GetMapping
     public ResponseEntity<?> getAllCategories(){
-        List<CategoryDTO> categories = categoryService.getAll()
-                .stream().map(category -> new CategoryDTO(category)).toList();
+        List<CategoryResponseDTO> categories = categoryService.getAll()
+                .stream().map(category -> new CategoryResponseDTO(category)).toList();
 
         return ResponseEntity.ok().body(categories);
 
@@ -44,15 +40,15 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategory(@PathVariable long id){
         Category category = categoryService.getCategory(id);
-        return ResponseEntity.ok().body(new CategoryDTO(category));
+        return ResponseEntity.ok().body(new CategoryResponseDTO(category));
 
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
-        Category category = categoryService.saveCategory(categoryDTO);
-        return ResponseEntity.ok().body(new CategoryDTO(category));
+    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryCreateDTO categoryCreateDTO){
+        Category category = categoryService.saveCategory(categoryCreateDTO);
+        return ResponseEntity.ok().body(new CategoryResponseDTO(category));
 
 
     }
@@ -63,7 +59,7 @@ public class CategoryController {
         Category category = categoryService.updateCategory(id, updateCategoryDTO);
 
 
-        return ResponseEntity.ok().body(category);
+        return ResponseEntity.ok().body(new CategoryResponseDTO(category));
 
     }
 

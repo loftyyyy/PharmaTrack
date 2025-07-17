@@ -28,7 +28,7 @@ CREATE TABLE users (
                        username VARCHAR(100) NOT NULL UNIQUE,
                        password VARCHAR(255) NOT NULL,
                        role_id BIGINT NOT NULL,
-                       email VARCHAR(100) NOT NULL,
+                       email VARCHAR(100) NOT NULL UNIQUE,
                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                        updated_by BIGINT, -- Can be NULL initially, self-referencing for updates
@@ -46,10 +46,10 @@ CREATE TABLE categories (
 CREATE TABLE products (
                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
                           name VARCHAR(150) NOT NULL,
-                          brand VARCHAR(100),
+                          brand VARCHAR(100) NOT NULL,
                           description TEXT,
                           category_id BIGINT NOT NULL,
-                          barcode VARCHAR(50) UNIQUE, -- Assuming barcodes are unique
+                          barcode VARCHAR(50) UNIQUE NOT NULL, -- Assuming barcodes are unique
                           created_by BIGINT NOT NULL, -- Added: User who created this product record
                           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

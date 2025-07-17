@@ -6,8 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
 public class SignupDTO {
@@ -26,8 +28,6 @@ public class SignupDTO {
     @NotNull(message = "Role id is required")
     private Long roleId;
 
-    public SignupDTO() {
-    }
     public SignupDTO(String username, String password, String email, Long roleId) {
         this.username = username;
         this.password = password;

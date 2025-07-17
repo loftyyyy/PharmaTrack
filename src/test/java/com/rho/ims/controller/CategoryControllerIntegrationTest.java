@@ -2,11 +2,10 @@ package com.rho.ims.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
-import com.rho.ims.dto.CategoryDTO;
+import com.rho.ims.dto.CategoryCreateDTO;
 import com.rho.ims.dto.UpdateCategoryDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
-import com.rho.ims.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -120,7 +118,7 @@ class CategoryControllerIntegrationTest {
         @Test
         void shouldReturnSuccessfulRequest_createCategory() throws Exception{
             categoryRepository.deleteAll();
-            CategoryDTO category = new CategoryDTO();
+            CategoryCreateDTO category = new CategoryCreateDTO();
             category.setName("Test Category");
 
             mockmvc.perform(post("/api/v1/categories/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(category)))
@@ -132,7 +130,7 @@ class CategoryControllerIntegrationTest {
         @DisplayName("Should fail when name is blank")
         @Test
         void shouldReturnBadRequest_blankName() throws Exception{
-            CategoryDTO category = new CategoryDTO();
+            CategoryCreateDTO category = new CategoryCreateDTO();
             category.setName("");
 
             mockmvc.perform(post("/api/v1/categories/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(category)))
@@ -145,7 +143,7 @@ class CategoryControllerIntegrationTest {
         @Test
         void shouldReturnBadRequest_takenName() throws Exception {
 
-            CategoryDTO category = new CategoryDTO();
+            CategoryCreateDTO category = new CategoryCreateDTO();
             category.setName("Test Category");
 
             mockmvc.perform(post("/api/v1/categories/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(category)))
