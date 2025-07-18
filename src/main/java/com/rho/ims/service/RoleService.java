@@ -29,7 +29,7 @@ public class RoleService {
         return roleRepository.save(newRole);
     }
 
-    public void deleteRole(long id){
+    public void deleteRole(Long id){
         Role existingRole = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
 
         roleRepository.delete(existingRole);

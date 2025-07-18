@@ -40,6 +40,7 @@ class CategoryControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
     @Autowired
     private MockMvc mockMvc;
 

@@ -80,6 +80,23 @@ public class ApiExceptionHandler {
     }
 
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest req){
+
+         return new ErrorResponse(
+                 Instant.now(),
+                 HttpStatus.CONFLICT.value(),
+                 "not found",
+                 ex.getMessage(),
+                 req.getRequestURI()
+
+
+         );
+
+    }
+
+
 
 
 
