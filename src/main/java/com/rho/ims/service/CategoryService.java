@@ -3,7 +3,7 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.dto.CategoryCreateDTO;
-import com.rho.ims.dto.UpdateCategoryDTO;
+import com.rho.ims.dto.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -40,14 +40,14 @@ public class CategoryService {
 
     }
 
-    public Category updateCategory(Long id, UpdateCategoryDTO updateCategoryDTO){
+    public Category updateCategory(Long id, CategoryUpdateDTO categoryUpdateDTO){
 
         Category category = categoryRepository.findById(id).orElseThrow( () -> new RuntimeException("Category doesn't exist"));
-        if(categoryRepository.existsByName(updateCategoryDTO.getName())){
-            throw new DuplicateCredentialException("Name", updateCategoryDTO.getName());
+        if(categoryRepository.existsByName(categoryUpdateDTO.getName())){
+            throw new DuplicateCredentialException("Name", categoryUpdateDTO.getName());
 
         }
-        category.setName(updateCategoryDTO.getName());
+        category.setName(categoryUpdateDTO.getName());
 
         return categoryRepository.save(category);
 

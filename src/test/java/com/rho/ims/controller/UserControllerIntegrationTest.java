@@ -4,13 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
 import com.rho.ims.dto.LoginDTO;
 import com.rho.ims.dto.SignupDTO;
-import com.rho.ims.dto.UpdateUserDTO;
+import com.rho.ims.dto.UserUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
 import com.rho.ims.respository.RoleRepository;
 import com.rho.ims.respository.UserRepository;
 import com.rho.ims.service.RoleService;
-import com.rho.ims.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,30 +17,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Description;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.hamcrest.Matchers.*;
 
 
 import javax.sql.DataSource;
 
-import java.sql.Connection;
 import java.util.List;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -510,12 +502,12 @@ class UserControllerIntegrationTest {
         @DisplayName("Should update the user")
         @Test
         void shouldReturnSuccessfulRequest_updateUser() throws Exception {
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername("someNewUsername");
-            updateUserDTO.setEmail("someNewEmail@gmail.com");
-            updateUserDTO.setPassword("someNewPassword");
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername("someNewUsername");
+            userUpdateDTO.setEmail("someNewEmail@gmail.com");
+            userUpdateDTO.setPassword("someNewPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(content().string("Successfully updated profile"))
                     .andDo(print());
@@ -527,12 +519,12 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when username is missing")
         @Test
         void shouldReturnBadRequest_missingUsername() throws Exception {
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername(null);
-            updateUserDTO.setEmail("someNewEmail@gmail.com");
-            updateUserDTO.setPassword("someNewPassword");
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername(null);
+            userUpdateDTO.setEmail("someNewEmail@gmail.com");
+            userUpdateDTO.setPassword("someNewPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['username']").value("Username is required"))
                     .andDo(print());
@@ -541,12 +533,12 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when email is missing")
         @Test
         void shouldReturnBadRequest_missingEmail() throws Exception {
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername("someNewUsername");
-            updateUserDTO.setEmail(null);
-            updateUserDTO.setPassword("someNewPassword");
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername("someNewUsername");
+            userUpdateDTO.setEmail(null);
+            userUpdateDTO.setPassword("someNewPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['email']").value("Email is required"))
                     .andDo(print());
@@ -555,12 +547,12 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when password is missing")
         @Test
         void shouldReturnBadRequest_missingPassword() throws Exception {
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername("someNewUsername");
-            updateUserDTO.setEmail("someNewEmail@gmail.com");
-            updateUserDTO.setPassword(null);
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername("someNewUsername");
+            userUpdateDTO.setEmail("someNewEmail@gmail.com");
+            userUpdateDTO.setPassword(null);
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['password']").value("Password is required"))
                     .andDo(print());
@@ -578,12 +570,12 @@ class UserControllerIntegrationTest {
             user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
             userRepository.save(user);
 
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername(username);
-            updateUserDTO.setEmail("SomeEmail@gmail.com");
-            updateUserDTO.setPassword("newPassword");
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername(username);
+            userUpdateDTO.setEmail("SomeEmail@gmail.com");
+            userUpdateDTO.setPassword("newPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("username already exist"))
                     .andDo(print());
@@ -603,12 +595,12 @@ class UserControllerIntegrationTest {
             user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
             userRepository.save(user);
 
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername("SomeUserName");
-            updateUserDTO.setEmail(email);
-            updateUserDTO.setPassword("newPassword");
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername("SomeUserName");
+            userUpdateDTO.setEmail(email);
+            userUpdateDTO.setPassword("newPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("email already exist"))
                     .andDo(print());
@@ -628,12 +620,12 @@ class UserControllerIntegrationTest {
             user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
             userRepository.save(user);
 
-            UpdateUserDTO updateUserDTO = new UpdateUserDTO();
-            updateUserDTO.setUsername(username);
-            updateUserDTO.setEmail(email);
-            updateUserDTO.setPassword("newPassword");
+            UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+            userUpdateDTO.setUsername(username);
+            userUpdateDTO.setEmail(email);
+            userUpdateDTO.setPassword("newPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateUserDTO)))
+            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value(anyOf(is("Duplicate credential(s): username, email already exist"),is("Duplicate credential(s): email, username already exist"))))
                     .andDo(print());

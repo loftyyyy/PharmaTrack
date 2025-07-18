@@ -2,23 +2,15 @@ package com.rho.ims.controller;
 
 import com.rho.ims.dto.LoginDTO;
 import com.rho.ims.dto.SignupDTO;
-import com.rho.ims.dto.UpdateUserDTO;
+import com.rho.ims.dto.UserUpdateDTO;
 import com.rho.ims.dto.UserResponseDTO;
-import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
-import com.rho.ims.service.RoleService;
 import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -61,10 +53,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
             //TODO: Future enhancement, implement the updatedBy field
 
-            User updatedUser = userService.updateUser(id, updateUserDTO);
+            User updatedUser = userService.updateUser(id, userUpdateDTO);
 
 //            return ResponseEntity.ok(new UserResponseDTO(updatedUser));
 

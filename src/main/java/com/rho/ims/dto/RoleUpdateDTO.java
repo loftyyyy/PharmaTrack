@@ -9,12 +9,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UpdateRoleDTO {
+public class RoleUpdateDTO {
 
     @NotBlank(message = "Name cannot be blank!")
     private String name;
 
-    public UpdateRoleDTO(Role role){
+    public RoleUpdateDTO(Role role){
         this.name = role.getName();
 
     }

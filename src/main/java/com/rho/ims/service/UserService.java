@@ -3,7 +3,7 @@ package com.rho.ims.service;
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.dto.LoginDTO;
 import com.rho.ims.dto.SignupDTO;
-import com.rho.ims.dto.UpdateUserDTO;
+import com.rho.ims.dto.UserUpdateDTO;
 import com.rho.ims.dto.UserResponseDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
@@ -67,19 +67,19 @@ public class UserService {
 
     }
 
-    public User updateUser(Long id, UpdateUserDTO updateUserDTO) {
+    public User updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         Map<String,String> duplicates = new HashMap<>();
 
-        if (updateUserDTO.getUsername() != null) {
-            if(userRepository.existsByUsername(updateUserDTO.getUsername())){
-                duplicates.put("username", updateUserDTO.getUsername());
+        if (userUpdateDTO.getUsername() != null) {
+            if(userRepository.existsByUsername(userUpdateDTO.getUsername())){
+                duplicates.put("username", userUpdateDTO.getUsername());
             }
         }
-        if (updateUserDTO.getEmail() != null) {
-            if(userRepository.existsByEmail(updateUserDTO.getEmail())){
-                duplicates.put("email", updateUserDTO.getEmail());
+        if (userUpdateDTO.getEmail() != null) {
+            if(userRepository.existsByEmail(userUpdateDTO.getEmail())){
+                duplicates.put("email", userUpdateDTO.getEmail());
 
             }
         }
@@ -88,10 +88,10 @@ public class UserService {
 
         }
 
-        if (updateUserDTO.getPassword() != null) {
-            existingUser.setEmail(updateUserDTO.getEmail());
-            existingUser.setUsername(updateUserDTO.getUsername());
-            existingUser.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
+        if (userUpdateDTO.getPassword() != null) {
+            existingUser.setEmail(userUpdateDTO.getEmail());
+            existingUser.setUsername(userUpdateDTO.getUsername());
+            existingUser.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
         }
 
         //TODO: Future enhancement, implement the updatedBy field

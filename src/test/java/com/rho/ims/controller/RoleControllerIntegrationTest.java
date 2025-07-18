@@ -2,7 +2,7 @@ package com.rho.ims.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
-import com.rho.ims.dto.UpdateRoleDTO;
+import com.rho.ims.dto.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.respository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -179,10 +178,10 @@ class RoleControllerIntegrationTest {
         @DisplayName("Should update role")
         @Test
         void shouldReturnSuccessfulRequest_updateRole() throws Exception {
-            UpdateRoleDTO updateRoleDTO = new UpdateRoleDTO();
-            updateRoleDTO.setName("New Test Role");
+            RoleUpdateDTO roleUpdateDTO = new RoleUpdateDTO();
+            roleUpdateDTO.setName("New Test Role");
 
-            mockMvc.perform(put("/api/v1/roles/" + testRoleId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateRoleDTO)))
+            mockMvc.perform(put("/api/v1/roles/" + testRoleId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(roleUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(content().string("Role Updated Successfully"))
                     .andDo(print());
@@ -192,10 +191,10 @@ class RoleControllerIntegrationTest {
         @Test
         void shouldReturnBadRequest_updateRoleFail() throws Exception {
             long invalidId = 999;
-            UpdateRoleDTO updateRoleDTO = new UpdateRoleDTO();
-            updateRoleDTO.setName("New Role Name");
+            RoleUpdateDTO roleUpdateDTO = new RoleUpdateDTO();
+            roleUpdateDTO.setName("New Role Name");
 
-            mockMvc.perform(put("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateRoleDTO)))
+            mockMvc.perform(put("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(roleUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(content().string("Error updating role: Role not found with id: " + invalidId))
                     .andDo(print());

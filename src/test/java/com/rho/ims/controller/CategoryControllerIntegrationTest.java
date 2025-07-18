@@ -3,7 +3,7 @@ package com.rho.ims.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
 import com.rho.ims.dto.CategoryCreateDTO;
-import com.rho.ims.dto.UpdateCategoryDTO;
+import com.rho.ims.dto.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -181,7 +181,7 @@ class CategoryControllerIntegrationTest {
         @DisplayName("Should update the category")
         @Test
         void shouldReturnSuccessfulRequest_updateCategory() throws Exception {
-            UpdateCategoryDTO categoryDTO = new UpdateCategoryDTO();
+            CategoryUpdateDTO categoryDTO = new CategoryUpdateDTO();
             categoryDTO.setName("New Name");
 
 
@@ -200,11 +200,11 @@ class CategoryControllerIntegrationTest {
             category1.setName("SomeCategoryName");
             categoryRepository.save(category1);
 
-            UpdateCategoryDTO updateCategoryDTO = new UpdateCategoryDTO();
-            updateCategoryDTO.setName(category.getName());
+            CategoryUpdateDTO categoryUpdateDTO = new CategoryUpdateDTO();
+            categoryUpdateDTO.setName(category.getName());
 
 
-            mockMvc.perform(put("/api/v1/categories/" +  category1.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateCategoryDTO)))
+            mockMvc.perform(put("/api/v1/categories/" +  category1.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(categoryUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Name already exist"))
                     .andDo(print());

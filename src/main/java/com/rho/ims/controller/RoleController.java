@@ -2,17 +2,12 @@ package com.rho.ims.controller;
 
 import com.rho.ims.dto.RoleDTO;
 import com.rho.ims.dto.RoleResponseDTO;
-import com.rho.ims.dto.UpdateRoleDTO;
+import com.rho.ims.dto.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.service.RoleService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -48,8 +43,8 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRole(@PathVariable long id, @Valid @RequestBody UpdateRoleDTO updateRoleDTO){
-        roleService.updateRole(id, updateRoleDTO);
+    public ResponseEntity<?> updateRole(@PathVariable long id, @Valid @RequestBody RoleUpdateDTO roleUpdateDTO){
+        roleService.updateRole(id, roleUpdateDTO);
         return ResponseEntity.ok().body("Role Updated Successfully");
 
 

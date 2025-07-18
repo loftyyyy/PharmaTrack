@@ -2,12 +2,10 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.dto.RoleDTO;
-import com.rho.ims.dto.UpdateRoleDTO;
+import com.rho.ims.dto.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.respository.RoleRepository;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLOutput;
 
 @Service
 public class RoleService {
@@ -38,13 +36,13 @@ public class RoleService {
 
     }
 
-    public Role updateRole(Long id, UpdateRoleDTO updateRoleDTO){
+    public Role updateRole(Long id, RoleUpdateDTO roleUpdateDTO){
         Role role = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
-        if(roleRepository.existsByName(updateRoleDTO.getName()) || role.getName().equals(updateRoleDTO.getName())){
+        if(roleRepository.existsByName(roleUpdateDTO.getName()) || role.getName().equals(roleUpdateDTO.getName())){
             throw new RuntimeException("Name Already Exists!");
         }
 
-        role.setName(updateRoleDTO.getName());
+        role.setName(roleUpdateDTO.getName());
         return roleRepository.save(role);
 
     }

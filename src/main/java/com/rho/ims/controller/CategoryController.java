@@ -3,7 +3,7 @@ package com.rho.ims.controller;
 
 import com.rho.ims.dto.CategoryCreateDTO;
 import com.rho.ims.dto.CategoryResponseDTO;
-import com.rho.ims.dto.UpdateCategoryDTO;
+import com.rho.ims.dto.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import com.rho.ims.service.CategoryService;
@@ -54,9 +54,9 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable long id, @Valid @RequestBody UpdateCategoryDTO updateCategoryDTO){
+    public ResponseEntity<?> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryUpdateDTO categoryUpdateDTO){
 
-        Category category = categoryService.updateCategory(id, updateCategoryDTO);
+        Category category = categoryService.updateCategory(id, categoryUpdateDTO);
 
 
         return ResponseEntity.ok().body(new CategoryResponseDTO(category));

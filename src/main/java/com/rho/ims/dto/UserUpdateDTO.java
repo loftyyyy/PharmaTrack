@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UpdateUserDTO {
+public class UserUpdateDTO {
 
     @NotBlank(message = "Username is required")
     private String username;
