@@ -11,6 +11,7 @@ import com.rho.ims.respository.CategoryRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.UserRepository;
 import jakarta.validation.Valid;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,8 +42,11 @@ public class ProductService {
         product.setDescription(productCreateDTO.getDescription());
         product.setCategoryId(productCreateDTO.getCategoryId());
         product.setBarcode(productCreateDTO.getBarcode());
+
         // TODO: Reimplement this <>
-        product.setCreatedBy(productCreateDTO.getCreatedBy());
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        product.setCreatedBy(user);
 
 
         return productRepository.save(product);
@@ -73,6 +77,10 @@ public class ProductService {
         product.setDescription(productUpdateDTO.getDescription());
         product.setBarcode(productUpdateDTO.getBarcode());
         product.setCategoryId(productUpdateDTO.getCategoryId());
+
+        //TODO: Reimplement this. Used for testing phase only
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        product.setCreatedBy(user);
 
         return productRepository.save(product);
 

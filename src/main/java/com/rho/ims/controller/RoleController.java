@@ -1,6 +1,6 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.RoleDTO;
+import com.rho.ims.dto.RoleCreateDTO;
 import com.rho.ims.dto.RoleResponseDTO;
 import com.rho.ims.dto.RoleUpdateDTO;
 import com.rho.ims.model.Role;
@@ -21,8 +21,8 @@ public class RoleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createRole(@Valid @RequestBody RoleDTO roleDTO) {
-        Role role = roleService.createRole(roleDTO);
+    public ResponseEntity<?> createRole(@Valid @RequestBody RoleCreateDTO roleCreateDTO) {
+        Role role = roleService.createRole(roleCreateDTO);
 
         return ResponseEntity.ok("Role created successfully: " + role.getName());
     }

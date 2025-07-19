@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class ProductUpdateDTO {
 
-    @NotNull(message = "Name is required")
+    @NotBlank(message = "Name is required")
     @Size(max = 150, message = "Product name must not exceed 150 characters")
     private String name;
 
@@ -25,7 +25,7 @@ public class ProductUpdateDTO {
     @NotNull(message = "Category is required")
     private Long categoryId;
 
-    @NotNull(message = "Barcode is required")
+    @NotBlank(message = "Barcode is required")
     @Size(max = 50)
     private String barcode;
 

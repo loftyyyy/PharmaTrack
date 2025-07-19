@@ -79,6 +79,7 @@ class RoleControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
+            roleRepository.deleteAll();
 
             Role testRole = new Role();
             testRole.setName("Test Role");
@@ -108,7 +109,7 @@ class RoleControllerIntegrationTest {
 
             mockMvc.perform(delete("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string("Error deleting role: Role not found with id: " + invalidId))
+                    .andExpect(jsonPath("message").value("eRole not found with id: " + invalidId))
                     .andDo(print());
 
         }
@@ -122,6 +123,7 @@ class RoleControllerIntegrationTest {
 
         @BeforeEach
         void setup() {
+            roleRepository.deleteAll();
             Role testRole = new Role();
             testRole.setName("Test Role");
 
@@ -149,7 +151,7 @@ class RoleControllerIntegrationTest {
 
             mockMvc.perform(get("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string("Error retrieving role: Role not found with id: " + invalidId) )
+                    .andExpect(jsonPath("message").value("Role not found with id: " + invalidId) )
                     .andDo(print());
 
         }
@@ -165,6 +167,7 @@ class RoleControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
+            roleRepository.deleteAll();
             Role testRole = new Role();
             testRole.setName("Test Role");
             roleRepository.save(testRole);
@@ -196,7 +199,7 @@ class RoleControllerIntegrationTest {
 
             mockMvc.perform(put("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(roleUpdateDTO)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string("Error updating role: Role not found with id: " + invalidId))
+                    .andExpect(jsonPath("message").value("Role not found with id: " + invalidId))
                     .andDo(print());
         }
 

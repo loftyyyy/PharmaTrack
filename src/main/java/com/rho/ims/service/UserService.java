@@ -1,6 +1,7 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
+import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.LoginDTO;
 import com.rho.ims.dto.SignupDTO;
 import com.rho.ims.dto.UserUpdateDTO;
@@ -58,7 +59,7 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
     }
 
     public List<UserResponseDTO> getAllUsers(){
@@ -68,7 +69,7 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserUpdateDTO userUpdateDTO) {
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
 
         Map<String,String> duplicates = new HashMap<>();
 

@@ -1,7 +1,7 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
-import com.rho.ims.dto.RoleDTO;
+import com.rho.ims.dto.RoleCreateDTO;
 import com.rho.ims.dto.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.respository.RoleRepository;
@@ -19,7 +19,7 @@ public class RoleService {
         return roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
     }
 
-    public Role createRole(RoleDTO role){
+    public Role createRole(RoleCreateDTO role){
         if (roleRepository.existsByName(role.getName())) {
             throw new DuplicateCredentialException("Role", role.getName());
         }

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class ProductCreateDTO {
 
-    @NotNull(message = "Name is required")
+    @NotBlank(message = "Name is required")
     @Size(max = 150)
     private String name;
 
@@ -26,12 +26,9 @@ public class ProductCreateDTO {
     @NotNull(message = "Category is required")
     private Long categoryId;
 
-    @NotNull(message = "Barcode is required")
+    @NotBlank(message = "Barcode is required")
     @Size(max = 50)
     private String barcode;
-
-    @NotBlank(message = "Logged user is required")
-    private User createdBy;
 
 
 
