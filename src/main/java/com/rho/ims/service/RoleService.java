@@ -20,6 +20,7 @@ public class RoleService {
     }
 
     public Role createRole(RoleCreateDTO role){
+
         if (roleRepository.existsByName(role.getName())) {
             throw new DuplicateCredentialException("Role", role.getName());
         }
