@@ -15,6 +15,7 @@ public class ProductResponseDTO {
     private String description;
     private Long categoryId;
     private String barcode;
+    private Long createdBy;
 
 
     public ProductResponseDTO(Product product){
@@ -24,6 +25,7 @@ public class ProductResponseDTO {
         this.description = product.getDescription();
         this.categoryId = product.getCategoryId();
         this.barcode = product.getBarcode();
+        this.createdBy = product.getCreatedBy().getId();
     }
 
 

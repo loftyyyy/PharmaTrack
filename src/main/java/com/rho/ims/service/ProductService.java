@@ -80,7 +80,7 @@ public class ProductService {
 
         //TODO: Reimplement this. Used for testing phase only
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        product.setCreatedBy(user);
+        product.setUpdatedBy(user);
 
         return productRepository.save(product);
 

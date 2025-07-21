@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 public class CategoryCreateDTO {
    @NotBlank(message = "Name is required")
-   String name;
+   private String name;
 
 
 

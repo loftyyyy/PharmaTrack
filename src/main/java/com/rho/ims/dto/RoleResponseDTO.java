@@ -2,6 +2,7 @@ package com.rho.ims.dto;
 
 
 import com.rho.ims.model.Role;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

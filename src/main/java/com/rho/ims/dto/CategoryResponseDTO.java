@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class CategoryResponseDTO {
-    Long id;
-    String name;
+    private Long id;
+    private String name;
 
 
     public CategoryResponseDTO(Category category){
