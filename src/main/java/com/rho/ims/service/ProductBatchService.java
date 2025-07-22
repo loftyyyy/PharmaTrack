@@ -1,21 +1,89 @@
 package com.rho.ims.service;
 
+import com.rho.ims.api.exception.DuplicateCredentialException;
+import com.rho.ims.api.exception.ResourceNotFoundException;
+import com.rho.ims.dto.ProductBatchCreateDTO;
+import com.rho.ims.dto.ProductBatchResponseDTO;
+import com.rho.ims.dto.ProductBatchUpdateDTO;
+import com.rho.ims.model.Product;
 import com.rho.ims.model.ProductBatch;
+import com.rho.ims.model.User;
 import com.rho.ims.respository.ProductBatchRepository;
+import com.rho.ims.respository.ProductRepository;
+import com.rho.ims.respository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductBatchService {
     private final ProductBatchRepository productBatchRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public ProductBatchService(ProductBatchRepository productBatchRepository){
+    public ProductBatchService(ProductBatchRepository productBatchRepository, ProductRepository productRepository, UserRepository userRepository){
         this.productBatchRepository = productBatchRepository;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+    }
+
+    public ProductBatch createProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+
+        if(productBatchRepository.existsByBatchNumber(productBatchCreateDTO.getBatchNumber())){
+            throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
+        }
+
+        Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("id", productBatchCreateDTO.getProductId().toString()));
+
+        ProductBatch productBatch = new ProductBatch();
+        productBatch.setProductId(product);
+        productBatch.setBatchNumber(productBatchCreateDTO.getBatchNumber());
+        productBatch.setQuantity(productBatchCreateDTO.getQuantity());
+        productBatch.setPurchasePricePerUnit(productBatchCreateDTO.getPurchasePricePerUnit());
+        productBatch.setExpiryDate(productBatchCreateDTO.getExpiryDate());
+        productBatch.setManufacturingDate(productBatchCreateDTO.getManufacturingDate());
+        productBatch.setLocation(productBatchCreateDTO.getLocation());
+
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        productBatch.setCreatedBy(user);
+
+       return productBatchRepository.save(productBatch);
+
 
     }
 
-    public ProductBatch createProductBatch(){
+    public List<ProductBatch> getAll(){
+        return productBatchRepository.findAll();
+    }
+
+    public ProductBatch getProductBatch(Long id){
+        return productBatchRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Product batch id", id.toString()));
+    }
+
+    public ProductBatch updateProductBatch(ProductBatchUpdateDTO productBatchUpdateDTO, Long id){
+        ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
+
+        productBatch.setQuantity(productBatchUpdateDTO.getQuantity());
+        productBatch.setPurchasePricePerUnit(productBatchUpdateDTO.getPurchasePricePerUnit());
+        productBatch.setExpiryDate(productBatchUpdateDTO.getExpiryDate());
+        productBatch.setManufacturingDate(productBatchUpdateDTO.getManufacturingDate());
+        productBatch.setLocation(productBatchUpdateDTO.getLocation());
+
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        productBatch.setUpdatedBy(user);
+        return productBatchRepository.save(productBatch);
 
     }
+
+    public void deleteProductBatch(Long id){
+        ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
+        productBatchRepository.delete(productBatch);
+
+    }
+
+
 
 
 }

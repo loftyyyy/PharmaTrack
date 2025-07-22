@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
 @Getter
 public class ProductBatchResponseDTO {
 
@@ -19,11 +20,12 @@ public class ProductBatchResponseDTO {
     private Integer quantity;
     private BigDecimal purchasePricePerUnit;
     private LocalDate expiryDate;
-    private LocalDateTime manufacturingDate;
+    private LocalDate manufacturingDate;
     private String location;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long createdById;
 
     public ProductBatchResponseDTO(ProductBatch productBatch){
         this.productBatchId = productBatch.getId();
@@ -36,9 +38,7 @@ public class ProductBatchResponseDTO {
         this.location = productBatch.getLocation();
         this.createdAt = productBatch.getCreatedAt();
         this.updatedAt = productBatch.getUpdatedAt();
-
-
-
+        this.createdById = productBatch.getCreatedBy().getId();
 
     }
 

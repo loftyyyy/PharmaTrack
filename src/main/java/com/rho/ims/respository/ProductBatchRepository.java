@@ -4,7 +4,11 @@ import com.rho.ims.model.ProductBatch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProductBatchRepository extends JpaRepository<Long, ProductBatch> {
+import java.util.Optional;
 
+@Repository
+public interface ProductBatchRepository extends JpaRepository<ProductBatch, Long> {
+    boolean existsByBatchNumber(String batchNumber);
+
+    Optional<ProductBatch> findByBatchNumber(String batchNumber);
 }

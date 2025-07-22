@@ -1,7 +1,18 @@
 package com.rho.ims.controller;
 
+import com.rho.ims.dto.ProductBatchCreateDTO;
+import com.rho.ims.dto.ProductBatchResponseDTO;
+import com.rho.ims.dto.ProductBatchUpdateDTO;
+import com.rho.ims.dto.ProductResponseDTO;
+import com.rho.ims.model.Product;
+import com.rho.ims.model.ProductBatch;
+import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.service.ProductBatchService;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductBatchController {
@@ -13,6 +24,39 @@ public class ProductBatchController {
 
 
     // CRUD:
+    @PostMapping("/create")
+    public ResponseEntity<?> createProductBatch(@Valid @RequestBody ProductBatchCreateDTO productBatchCreateDTO){
+        ProductBatch productBatch = productBatchService.createProductBatch(productBatchCreateDTO);
+        return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
+
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllProductBatch(){
+        List<ProductBatchResponseDTO> productBatches = productBatchService.getAll().stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
+        return ResponseEntity.ok().body(productBatches);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductBatch(@PathVariable Long id){
+        ProductBatch productBatch = productBatchService.getProductBatch(id);
+        return ResponseEntity.ok().body(productBatch);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProductBatch(@Valid @RequestBody ProductBatchUpdateDTO productBatchUpdateDTO, @PathVariable Long id){
+        ProductBatch productBatch = productBatchService.updateProductBatch(productBatchUpdateDTO, id);
+        return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
+
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
+        productBatchService.deleteProductBatch(id);
+        return ResponseEntity.ok().body("Product batch successfully deleted");
+
+    }
 
 
 

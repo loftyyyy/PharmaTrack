@@ -41,7 +41,7 @@ public class ProductBatch {
     private LocalDate expiryDate;
 
     @Column(name = "manufacturing_date", nullable = false)
-    private LocalDateTime manufacturingDate;
+    private LocalDate manufacturingDate;
 
     @Column(length = 50)
     private String location;

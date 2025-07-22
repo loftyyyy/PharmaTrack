@@ -29,7 +29,7 @@ public class ProductBatchCreateDTO {
     private BigDecimal purchasePricePerUnit;
 
     @NotNull(message = "Expire date is required")
-    private LocalDate expireDate;
+    private LocalDate expiryDate;
 
     @NotNull(message = "Manufacturing date is required")
     private LocalDate manufacturingDate;
