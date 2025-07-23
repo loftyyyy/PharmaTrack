@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 public class UserResponseDTO {
 
-    @Setter(AccessLevel.NONE)
     private long id;
     private String username;
     private String email;

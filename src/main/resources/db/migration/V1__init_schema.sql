@@ -84,7 +84,7 @@ CREATE TABLE suppliers (
                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
                            name VARCHAR(150) NOT NULL UNIQUE,
                            contact_person VARCHAR(100),
-                           phone VARCHAR(20),
+                           phone_number VARCHAR(20) NOT NULL,
                            email VARCHAR(100),
                            address_street VARCHAR(255),
                            address_city VARCHAR(100),
