@@ -24,6 +24,7 @@ public class SupplierController {
     public ResponseEntity<?> createSupplier(@Valid @RequestBody SupplierCreateDTO supplierCreateDTO){
         Supplier supplier = supplierService.saveSupplier(supplierCreateDTO);
 
+
         return ResponseEntity.ok().body(new SupplierResponseDTO(supplier));
 
     }
