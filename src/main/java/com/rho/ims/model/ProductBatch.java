@@ -25,7 +25,7 @@ public class ProductBatch {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
     @Column(name = "batch_number", nullable = false, length = 100)
     private String batchNumber;

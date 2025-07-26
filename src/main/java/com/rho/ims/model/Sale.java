@@ -27,7 +27,7 @@ public class Sale {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    private Customer customerId;
+    private Customer customer;
 
     @Column(nullable = false, precision = 12, scale = 2)
     @Min(0)

@@ -18,7 +18,7 @@ public class Purchase {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", nullable = false)
-    private Supplier supplierId;
+    private Supplier supplier;
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     @Min(0)

@@ -24,11 +24,11 @@ public class PurchaseItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id", nullable = false)
-    private Purchase purchaseId;
+    private Purchase purchase;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_batch_id", nullable = false)
-    private ProductBatch productBatchId;
+    private ProductBatch productBatch;
 
     @Column(nullable = false)
     @Min(1)

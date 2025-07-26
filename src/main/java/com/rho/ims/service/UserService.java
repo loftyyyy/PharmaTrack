@@ -30,7 +30,7 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public User createUser(SignupDTO signupDTO) {
+    public User saveUser(SignupDTO signupDTO) {
         if (userRepository.existsByUsername(signupDTO.getUsername())) {
             throw new DuplicateCredentialException("username", signupDTO.getUsername());
         }
@@ -62,7 +62,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
     }
 
-    public List<UserResponseDTO> getAllUsers(){
+    public List<UserResponseDTO> getAll(){
         List<User> users = userRepository.findAll();
         return users.stream().map(user -> new UserResponseDTO(user)).toList();
 

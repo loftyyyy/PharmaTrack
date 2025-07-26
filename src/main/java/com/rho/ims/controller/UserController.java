@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO) {
-            userService.createUser(signupDTO);
+            userService.saveUser(signupDTO);
             return ResponseEntity.ok("User created successfully");
     }
 
@@ -46,7 +46,7 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<?> getAllUser(){
-        List<UserResponseDTO> users = userService.getAllUsers();
+        List<UserResponseDTO> users = userService.getAll();
 
         return ResponseEntity.ok().body(users);
 

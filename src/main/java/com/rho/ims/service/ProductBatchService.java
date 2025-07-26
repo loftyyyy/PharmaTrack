@@ -29,7 +29,7 @@ public class ProductBatchService {
         this.userRepository = userRepository;
     }
 
-    public ProductBatch createProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
 
         if(productBatchRepository.existsByBatchNumber(productBatchCreateDTO.getBatchNumber())){
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
@@ -38,7 +38,7 @@ public class ProductBatchService {
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("id", productBatchCreateDTO.getProductId().toString()));
 
         ProductBatch productBatch = new ProductBatch();
-        productBatch.setProductId(product);
+        productBatch.setProduct(product);
         productBatch.setBatchNumber(productBatchCreateDTO.getBatchNumber());
         productBatch.setQuantity(productBatchCreateDTO.getQuantity());
         productBatch.setPurchasePricePerUnit(productBatchCreateDTO.getPurchasePricePerUnit());

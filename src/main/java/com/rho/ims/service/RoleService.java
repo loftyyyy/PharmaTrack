@@ -19,7 +19,7 @@ public class RoleService {
         return roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
     }
 
-    public Role createRole(RoleCreateDTO role){
+    public Role saveRole(RoleCreateDTO role){
 
         if (roleRepository.existsByName(role.getName())) {
             throw new DuplicateCredentialException("Role", role.getName());

@@ -26,7 +26,7 @@ public class ProductBatchController {
     // CRUD:
     @PostMapping("/create")
     public ResponseEntity<?> createProductBatch(@Valid @RequestBody ProductBatchCreateDTO productBatchCreateDTO){
-        ProductBatch productBatch = productBatchService.createProductBatch(productBatchCreateDTO);
+        ProductBatch productBatch = productBatchService.saveProductBatch(productBatchCreateDTO);
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
 
     }

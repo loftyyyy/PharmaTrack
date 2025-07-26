@@ -22,7 +22,7 @@ public class RoleController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createRole(@Valid @RequestBody RoleCreateDTO roleCreateDTO) {
-        Role role = roleService.createRole(roleCreateDTO);
+        Role role = roleService.saveRole(roleCreateDTO);
 
         return ResponseEntity.ok("Role created successfully: " + role.getName());
     }

@@ -31,7 +31,7 @@ public class SupplierController {
 
     @GetMapping
     public ResponseEntity<?> getAllSupplier(){
-        List<SupplierResponseDTO> suppliers = supplierService.getAllSupplier().stream().map( supplier -> new SupplierResponseDTO(supplier)).toList();
+        List<SupplierResponseDTO> suppliers = supplierService.getAll().stream().map( supplier -> new SupplierResponseDTO(supplier)).toList();
 
         return ResponseEntity.ok().body(suppliers);
 

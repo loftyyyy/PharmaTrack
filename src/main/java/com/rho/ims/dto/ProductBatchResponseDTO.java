@@ -29,7 +29,7 @@ public class ProductBatchResponseDTO {
 
     public ProductBatchResponseDTO(ProductBatch productBatch){
         this.productBatchId = productBatch.getId();
-        this.productId = productBatch.getProductId().getId();
+        this.productId = productBatch.getProduct().getId();
         this.batchNumber = productBatch.getBatchNumber();
         this.quantity = productBatch.getQuantity();
         this. purchasePricePerUnit = productBatch.getPurchasePricePerUnit();

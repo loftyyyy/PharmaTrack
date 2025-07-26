@@ -23,15 +23,15 @@ public class SaleItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_id", nullable = false)
-    private Sale saleId;
+    private Sale sale;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_batch_id", nullable = false)
-    private ProductBatch productBatchId;
+    private ProductBatch productBatch;
 
     @Column(nullable = false)
     @Min(1)

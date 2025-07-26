@@ -45,7 +45,7 @@ public class SupplierService {
 
     }
 
-    public List<Supplier> getAllSupplier(){
+    public List<Supplier> getAll(){
         return supplierRepository.findAll();
     }
 

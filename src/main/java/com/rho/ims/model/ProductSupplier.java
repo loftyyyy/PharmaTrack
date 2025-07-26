@@ -20,11 +20,11 @@ public class ProductSupplier {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", nullable = false)
-    private Supplier supplierId;
+    private Supplier supplier;
 
     @Column(name = "preferred_supplier", nullable = false)
     private Boolean preferredSupplier;
