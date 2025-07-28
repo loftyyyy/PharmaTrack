@@ -34,7 +34,7 @@ public class ProductSupplierService {
 
         boolean exists = productSupplierRepository.existsByProductIdAndSupplierId(productSupplierCreateDTO.getProductId(), productSupplierCreateDTO.getSupplierId());
         if(exists){
-            throw new DuplicateCredentialException("product supplier", "exists");
+            throw new DuplicateCredentialException("product supplier already exists");
         }
 
         ProductSupplier productSupplier = new ProductSupplier();
