@@ -6,9 +6,14 @@ import java.util.Map;
 
 @Getter
 public class ResourceNotFoundException extends RuntimeException{
-    private final String field;
-    private final String value;
-    private final Map<String, String> duplicates;
+    private String field;
+    private String value;
+    private Map<String, String> duplicates;
+
+    public ResourceNotFoundException(String message){
+        super(message);
+
+    }
 
     public ResourceNotFoundException(String field, String value){
         super(field + " not found");

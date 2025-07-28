@@ -1,7 +1,12 @@
 package com.rho.ims.respository;
 
+import com.rho.ims.enums.PurchaseStatus;
 import com.rho.ims.model.Purchase;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
+
+    Optional<Purchase> findBySupplierIdAndPurchaseStatus(Long supplierId, PurchaseStatus purchaseStatus);
 }

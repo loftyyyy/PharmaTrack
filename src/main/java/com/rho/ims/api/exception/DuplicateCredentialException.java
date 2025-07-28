@@ -8,9 +8,14 @@ import java.util.Map;
 
 @Getter
 public class DuplicateCredentialException extends RuntimeException{
-    private final String field;
-    private final String value;
-    private final Map<String, String> duplicates;
+    private String field;
+    private String value;
+    private Map<String, String> duplicates;
+
+    public DuplicateCredentialException(String message){
+        super(message);
+    }
+
 
     public DuplicateCredentialException(String field, String value){
         super(field + " already exist");

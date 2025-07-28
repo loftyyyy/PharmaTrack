@@ -1,13 +1,18 @@
 package com.rho.ims.model;
 
-import com.rho.ims.enums.Status;
+import com.rho.ims.enums.PurchaseStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "purchases")
 public class Purchase {
@@ -29,7 +34,7 @@ public class Purchase {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "ENUM('PENDING', 'ORDERED', 'RECEIVED', 'CANCELLED') DEFAULT 'PENDING'")
-    private Status status = Status.PENDING;
+    private PurchaseStatus purchaseStatus = PurchaseStatus.PENDING;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
