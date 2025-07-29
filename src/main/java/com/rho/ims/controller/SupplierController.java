@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/v1/supplier")
+@RestController
+@RequestMapping("/api/v1/supplier")
 public class SupplierController {
     private final SupplierService supplierService;
 
@@ -20,7 +21,7 @@ public class SupplierController {
     }
 
 
-    @RequestMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createSupplier(@Valid @RequestBody SupplierCreateDTO supplierCreateDTO){
         Supplier supplier = supplierService.saveSupplier(supplierCreateDTO);
 
@@ -53,8 +54,10 @@ public class SupplierController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSupplier(@PathVariable Long id){
+    public ResponseEntity<?> deleteSupplier(@PathVariable Long id){
         supplierService.deleteSupplier(id);
+
+        return ResponseEntity.ok().body("Supplier deleted successfully");
 
     }
 }

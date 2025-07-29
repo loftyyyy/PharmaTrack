@@ -18,7 +18,7 @@ public class DuplicateCredentialException extends RuntimeException{
 
 
     public DuplicateCredentialException(String field, String value){
-        super(field + " already exist");
+        super(field + " already exists");
         this.field = field;
         this.value = value;
         this.duplicates = Map.of(field, value);

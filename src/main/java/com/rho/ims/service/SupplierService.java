@@ -31,14 +31,18 @@ public class SupplierService {
         }
 
         Supplier supplier = new Supplier();
-        supplier.setName(supplier.getName());
-        supplier.setEmail(supplier.getEmail());
-        supplier.setPhoneNumber(supplier.getPhoneNumber());
-        supplier.setAddressCity(supplier.getAddressCity());
-        supplier.setAddressState(supplier.getAddressState());
-        supplier.setAddressStreet(supplier.getAddressStreet());
-        supplier.setAddressZipCode(supplier.getAddressZipCode());
+        supplier.setName(supplierCreateDTO.getName());
+        supplier.setEmail(supplierCreateDTO.getEmail());
+        supplier.setPhoneNumber(supplierCreateDTO.getPhoneNumber());
+        supplier.setAddressCity(supplierCreateDTO.getAddressCity());
+        supplier.setAddressState(supplierCreateDTO.getAddressState());
+        supplier.setAddressStreet(supplierCreateDTO.getAddressStreet());
+        supplier.setAddressZipCode(supplierCreateDTO.getAddressZipCode());
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if(user == null){
+            throw new ResourceNotFoundException("User doesn't exists, make sure you are logged in");
+        }
         supplier.setCreatedBy(user);
 
         return supplierRepository.save(supplier);
@@ -64,6 +68,7 @@ public class SupplierService {
 
         supplier.setName(supplierUpdateDTO.getName());
         supplier.setPhoneNumber(supplierUpdateDTO.getPhoneNumber());
+        supplier.setContactPerson(supplierUpdateDTO.getContactPerson());
         supplier.setEmail(supplierUpdateDTO.getEmail());
         supplier.setAddressCity(supplierUpdateDTO.getAddressCity());
         supplier.setAddressZipCode(supplierUpdateDTO.getAddressZipCode());

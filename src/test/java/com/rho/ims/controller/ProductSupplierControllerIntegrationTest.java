@@ -14,13 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(SecurityConfig.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @ActiveProfiles("test")
-class PurchaseControllerIntegrationTest {
+class ProductSupplierControllerIntegrationTest {
+
     @Autowired
     MockMvc mockMvc;
 
@@ -28,19 +28,8 @@ class PurchaseControllerIntegrationTest {
     ObjectMapper objectMapper;
 
 
-
     @Nested
-    class CreatePurchaseTest {
-        @BeforeEach
-        void setup(){
-
-        }
-
-
-    }
-
-    @Nested
-    class FetchPurchaseTest {
+    class CreateProductSupplierTest {
         @BeforeEach
         void setup(){
 
@@ -49,7 +38,7 @@ class PurchaseControllerIntegrationTest {
     }
 
     @Nested
-    class UpdatePurchaseTest {
+    class FetchProductSupplierTest {
         @BeforeEach
         void setup(){
 
@@ -58,13 +47,24 @@ class PurchaseControllerIntegrationTest {
     }
 
     @Nested
-    class DeletePurchaseTest {
+    class UpdateProductSupplierTest {
         @BeforeEach
         void setup(){
 
         }
 
     }
+
+    @Nested
+    class DeleteProductSupplierTest {
+
+        @BeforeEach
+        void setup(){
+
+        }
+
+    }
+
 
 
 }
