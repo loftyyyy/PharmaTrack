@@ -34,7 +34,7 @@ public class ProductBatchCreateDTO {
     @NotNull(message = "Manufacturing date is required")
     private LocalDate manufacturingDate;
 
-    @Size(min = 50, message = "Location must not exceed 50 characters")
+    @Size(max = 50, message = "Location must not exceed 50 characters")
     private String location;
 
 

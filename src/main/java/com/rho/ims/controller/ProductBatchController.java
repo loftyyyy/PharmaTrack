@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/api/v1/productBatch")
 @RestController
 public class ProductBatchController {
     private final ProductBatchService productBatchService;
@@ -40,7 +41,7 @@ public class ProductBatchController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductBatch(@PathVariable Long id){
         ProductBatch productBatch = productBatchService.getProductBatch(id);
-        return ResponseEntity.ok().body(productBatch);
+        return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
     }
 
     @PutMapping("/{id}")

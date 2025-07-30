@@ -14,6 +14,7 @@ import com.rho.ims.respository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class ProductBatchService {
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
         }
 
-        Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("id", productBatchCreateDTO.getProductId().toString()));
+        Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
 
         ProductBatch productBatch = new ProductBatch();
         productBatch.setProduct(product);
@@ -59,7 +60,7 @@ public class ProductBatchService {
     }
 
     public ProductBatch getProductBatch(Long id){
-        return productBatchRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Product batch id", id.toString()));
+        return productBatchRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("product batch id", id.toString()));
     }
 
     public ProductBatch updateProductBatch(ProductBatchUpdateDTO productBatchUpdateDTO, Long id){
