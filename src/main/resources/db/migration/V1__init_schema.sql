@@ -107,7 +107,8 @@ CREATE TABLE product_suppliers (
                                    supplier_product_code VARCHAR(100),
                                    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
                                    FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                   UNIQUE (product_id, supplier_id) -- A product and supplier pair should be unique
+                                   UNIQUE (product_id, supplier_id), -- A product and supplier pair should be unique
+                                   UNIQUE (supplier_id, supplier_product_code)               -- Prevent duplicate code per supplier
 );
 
 -- Table for Purchases

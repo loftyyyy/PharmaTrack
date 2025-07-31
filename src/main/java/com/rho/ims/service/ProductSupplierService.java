@@ -14,6 +14,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductSupplierService {
@@ -37,6 +38,13 @@ public class ProductSupplierService {
             throw new DuplicateCredentialException("product supplier already exists");
         }
 
+        Optional<ProductSupplier> existing = productSupplierRepository.findBySupplierIdAndSupplierProductCode(productSupplierCreateDTO.getSupplierId(), productSupplierCreateDTO.getSupplierProductCode());
+        if(existing.isPresent()){
+            throw new DuplicateCredentialException("Supplier product code already exists for this supplier");
+        }
+
+
+
         ProductSupplier productSupplier = new ProductSupplier();
         productSupplier.setProduct(product);
         productSupplier.setSupplier(supplier);
@@ -58,6 +66,12 @@ public class ProductSupplierService {
 
     public ProductSupplier updateProductSupplier(ProductSupplierUpdateDTO productSupplierUpdateDTO, Long id){
         ProductSupplier productSupplier = productSupplierRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product supplier", id.toString()));
+
+        Optional<ProductSupplier> existing = productSupplierRepository.findBySupplierIdAndSupplierProductCode(productSupplier.getSupplier().getId(), productSupplierUpdateDTO.getSupplierProductCode());
+
+        if(existing.isPresent() && !existing.get().getId().equals(id)){
+            throw new DuplicateCredentialException("Supplier product code already exists for this supplier");
+        }
 
         productSupplier.setPreferredSupplier(productSupplierUpdateDTO.getPreferredSupplier());
         productSupplier.setSupplierProductCode(productSupplierUpdateDTO.getSupplierProductCode());

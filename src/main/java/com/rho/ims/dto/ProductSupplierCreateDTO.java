@@ -1,5 +1,6 @@
 package com.rho.ims.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class ProductSupplierCreateDTO {
     private Boolean preferredSupplier = false;
 
     @Size(max = 100, message = "Supplier product code must not exceed 100 characters")
+    @NotBlank(message = "Product code is required")
     private String supplierProductCode;
 
 

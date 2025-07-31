@@ -36,22 +36,22 @@ public class ProductSupplierController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductSupplier(Long id){
+    public ResponseEntity<?> getProductSupplier(@PathVariable Long id){
 
         ProductSupplier productSupplier = productSupplierService.getProductSupplier(id);
 
-        return ResponseEntity.ok().body(productSupplier);
+        return ResponseEntity.ok().body(new ProductSupplierResponseDTO(productSupplier));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProductSupplier(@Valid @RequestBody ProductSupplierUpdateDTO productSupplierUpdateDTO,@PathVariable Long id){
         ProductSupplier productSupplier = productSupplierService.updateProductSupplier(productSupplierUpdateDTO, id);
 
-        return ResponseEntity.ok().body(productSupplier);
+        return ResponseEntity.ok().body(new ProductSupplierResponseDTO(productSupplier));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProductSupplier(Long id){
+    public ResponseEntity<?> deleteProductSupplier(@PathVariable Long id){
         productSupplierService.deleteProductSupplier(id);
 
         return ResponseEntity.ok().body("Product supplier successfully deleted");
