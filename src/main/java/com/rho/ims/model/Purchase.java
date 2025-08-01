@@ -33,7 +33,7 @@ public class Purchase {
     private LocalDate purchaseDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "ENUM('PENDING', 'ORDERED', 'RECEIVED', 'CANCELLED') DEFAULT 'PENDING'")
+    @Column(name = "status",nullable = false, columnDefinition = "ENUM('PENDING', 'ORDERED', 'RECEIVED', 'CANCELLED') DEFAULT 'PENDING'")
     private PurchaseStatus purchaseStatus = PurchaseStatus.PENDING;
 
     @Column(name = "created_at")
