@@ -47,7 +47,7 @@ public class PurchaseController {
     public ResponseEntity<?> updatePurchase(@Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO, @PathVariable Long id){
         Purchase purchase = purchaseService.updatePurchase(purchaseUpdateDTO, id);
 
-        return ResponseEntity.ok().body(purchase);
+        return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
 
     }
 

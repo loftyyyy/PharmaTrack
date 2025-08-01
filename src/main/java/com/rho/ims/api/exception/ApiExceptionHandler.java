@@ -5,96 +5,95 @@ import com.rho.ims.api.ValidationErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
- import java.time.Instant;
+
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ValidationErrorResponse handleValidation(MethodArgumentNotValidException ex, HttpServletRequest req) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getFieldErrors().forEach(error -> fieldErrors.put(error.getField(), error.getDefaultMessage()));
 
-     @ExceptionHandler(MethodArgumentNotValidException.class)
-     @ResponseStatus(HttpStatus.BAD_REQUEST)
-     public ValidationErrorResponse handleValidation(MethodArgumentNotValidException ex, HttpServletRequest req){
-
-      Map<String, String> fieldErrors = new HashMap<>();
-      ex.getFieldErrors().forEach(error -> fieldErrors.put(error.getField(), error.getDefaultMessage()));
-
-      return new ValidationErrorResponse(
-              Instant.now(),
-              HttpStatus.BAD_REQUEST,
-              "validation error",
-              "invalid field/s",
-              fieldErrors,
-              req.getRequestURI()
-      );
-
-
-     }
+        return new ValidationErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST,
+                "validation error",
+                "invalid field(s)",
+                fieldErrors,
+                req.getRequestURI()
+        );
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
-
-
         return new ErrorResponse(
                 Instant.now(),
                 HttpStatus.CONFLICT.value(),
-                "conflict",
-                ex.getMessage(),
+                "data integrity violation",
+                ex.getMostSpecificCause().getMessage(),
                 request.getRequestURI()
         );
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleAny(Exception ex, HttpServletRequest req) {
-        return new ErrorResponse(Instant.now(), 400, "internal-error",
-                ex.getMessage(), req.getRequestURI());
-    }
-
-    //TODO: implement custom error exceptions
-
     @ExceptionHandler(DuplicateCredentialException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleDuplicateCredential(DuplicateCredentialException ex, HttpServletRequest req){
-
-         return new ErrorResponse(
-                 Instant.now(),
-                 HttpStatus.CONFLICT.value(),
-                 "credential already exist",
-                 ex.getMessage(),
-                 req.getRequestURI()
-
-
-         );
-
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleDuplicateCredential(DuplicateCredentialException ex, HttpServletRequest req) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.CONFLICT.value(),
+                "duplicate resource",
+                ex.getMessage(),
+                req.getRequestURI()
+        );
     }
-
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest req){
-
-         return new ErrorResponse(
-                 Instant.now(),
-                 HttpStatus.CONFLICT.value(),
-                 "not found",
-                 ex.getMessage(),
-                 req.getRequestURI()
-
-
-         );
-
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest req) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "resource not found",
+                ex.getMessage(),
+                req.getRequestURI()
+        );
     }
+
+    @ExceptionHandler(BusinessRuleViolationException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErrorResponse handleBusinessViolation(BusinessRuleViolationException ex, HttpServletRequest req) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "business rule violation",
+                ex.getMessage(),
+                req.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleAny(Exception ex, HttpServletRequest req) {
+        return new ErrorResponse(
+                Instant.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "internal error",
+                ex.getMessage(),
+                req.getRequestURI()
+        );
+    }
+
 
 
 

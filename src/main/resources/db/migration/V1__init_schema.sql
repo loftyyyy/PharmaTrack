@@ -117,7 +117,7 @@ CREATE TABLE purchases (
                            supplier_id BIGINT NOT NULL,
                            total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
                            purchase_date DATE NOT NULL,
-                           status ENUM('Pending', 'Ordered', 'Received', 'Cancelled') NOT NULL DEFAULT 'Pending',
+                           status ENUM('PENDING', 'ORDERED', 'RECEIVED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
                            created_by BIGINT NOT NULL,
                            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

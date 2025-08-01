@@ -32,10 +32,13 @@ public class PurchaseService {
     }
 
     public Purchase savePurchase(PurchaseCreateDTO purchaseCreateDTO){
-        Optional<Purchase> existing = purchaseRepository.findBySupplierIdAndPurchaseStatus(purchaseCreateDTO.getSupplierId(), purchaseCreateDTO.getPurchaseStatus());
+        if(purchaseCreateDTO.getPurchaseStatus() == PurchaseStatus.PENDING){
 
-        if(existing.isPresent()){
-            throw new DuplicateCredentialException("Supplier already has a pending purchase");
+            Optional<Purchase> existing = purchaseRepository.findBySupplierIdAndPurchaseStatus(purchaseCreateDTO.getSupplierId(), PurchaseStatus.PENDING);
+
+            if(existing.isPresent()){
+                throw new DuplicateCredentialException("Supplier already has a pending purchase");
+            }
         }
 
         Supplier supplier = supplierRepository.findById(purchaseCreateDTO.getSupplierId()).orElseThrow(() -> new ResourceNotFoundException("supplier not found"));
