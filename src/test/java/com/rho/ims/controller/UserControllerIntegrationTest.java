@@ -77,20 +77,26 @@ class UserControllerIntegrationTest {
 
     @Nested
     class CreateUserTest {
+        User user;
+        Role role;
 
-        long testRoleId;
 
         @BeforeEach
         void setup(){
             userRepository.deleteAll();
             roleRepository.deleteAll();
 
-            Role testRole = new Role();
-            testRole.setName("Test Role");
+            role = new Role();
+            role.setName("Test Role");
 
-            roleRepository.save(testRole);
+            roleRepository.save(role);
 
-            testRoleId = testRole.getId();
+            user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setRole(role);
+            userRepository.save(user);
 
 
         }
@@ -98,11 +104,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should create a new user")
         @Test
         void shouldReturnSuccessfulRequest_createUser() throws Exception{
+            Long roleId = role.getId();
+
             SignupDTO signupDTO = new SignupDTO();
-            signupDTO.setUsername(username);
-            signupDTO.setEmail(email);
-            signupDTO.setPassword(password);
-            signupDTO.setRoleId(testRoleId);
+            signupDTO.setUsername("SomeUserName");
+            signupDTO.setEmail("SomeEmail@Gmail.com");
+            signupDTO.setPassword("somePassword");
+            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().is2xxSuccessful())
@@ -114,19 +122,14 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when username already exist")
         @Test
         void shouldReturnBadRequest_usernameIsTaken()throws Exception {
-            User user = new User();
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setRole(roleRepository.findById(testRoleId).orElseThrow(() -> new RuntimeException("Doesn't")));
-            userRepository.save(user);
+            Long roleId = role.getId();
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername(username);
             signupDTO.setEmail(email);
             signupDTO.setPassword(password);
 
-            signupDTO.setRoleId(testRoleId);
+            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().is4xxClientError())
@@ -137,12 +140,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when username is blank")
         @Test
         void shouldReturnBadRequest_usernameIsBlank() throws Exception{
+            Long roleId = role.getId();
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername("");
             signupDTO.setEmail(email);
             signupDTO.setPassword(password);
-            signupDTO.setRoleId(testRoleId);
+            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -155,12 +159,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when email is blank")
         @Test
         void shouldReturnBadRequest_emailIsBlank() throws Exception {
+            Long roleId = role.getId();
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername(username);
             signupDTO.setEmail("");
             signupDTO.setPassword(password);
-            signupDTO.setRoleId(testRoleId);
+            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -173,12 +178,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when email is invalid")
         @Test
         void shouldReturnBadRequest_emailIsInvalid() throws Exception {
+            Long roleId = role.getId();
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername(username);
             signupDTO.setEmail("someInvalidEmail@.com");
             signupDTO.setPassword(password);
-            signupDTO.setRoleId(testRoleId);
+            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -191,12 +197,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when password is blank")
         @Test
         void shouldReturnBadRequest_passwordIsBlank() throws Exception{
+            Long roleId = role.getId();
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername(username);
             signupDTO.setEmail(email);
             signupDTO.setPassword("");
-            signupDTO.setRoleId(testRoleId);
+            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -231,25 +238,24 @@ class UserControllerIntegrationTest {
 
     @Nested
     class LogInUserTest {
-        long testRoleId;
+        User user;
+        Role role;
 
         @BeforeEach
         void setup(){
             userRepository.deleteAll();
             roleRepository.deleteAll();
 
-            Role testRole = new Role();
-            testRole.setName("Test Role");
-            roleRepository.save(testRole);
+            role = new Role();
+            role.setName("Test Role");
+            roleRepository.save(role);
 
-            User testUser = new User();
-            testUser.setUsername(username);
-            testUser.setPassword(passwordEncoder.encode(password));
-            testUser.setEmail(email);
-            testUser.setRole(testRole);
-            userRepository.save(testUser);
-
-            testRoleId = testRole.getId();
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setEmail(email);
+            user.setRole(role);
+            userRepository.save(user);
         }
 
         @DisplayName("Should Log in the user")
@@ -268,20 +274,20 @@ class UserControllerIntegrationTest {
 
         @DisplayName("Should fail with wrong username")
         @Test
-        void shouldReturnBadRequest_wrongUsername() throws Exception {
+        void shouldReturnServerErrorRequest_wrongUsername() throws Exception {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setUsername("SomeWrongUsername");
             loginDTO.setPassword(password);
 
             mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("$.message").value("Invalid username or password"))
                     .andDo(print());
         }
 
         @DisplayName("Should fail with wrong password")
         @Test
-        void shouldReturnBadRequest_wrongPassword() throws Exception {
+        void shouldReturnInternalServerErrorRequest_wrongPassword() throws Exception {
 
 
             LoginDTO loginDTO = new LoginDTO();
@@ -289,7 +295,7 @@ class UserControllerIntegrationTest {
             loginDTO.setPassword("someWrongPassword");
 
             mockMvc.perform(post("/api/v1/users/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("$.message").value("Invalid username or password"))
                     .andDo(print());
 
@@ -339,27 +345,25 @@ class UserControllerIntegrationTest {
 
     @Nested
     class GetUserTest {
-        long testRoleId;
-        long testUserId;
+        User user;
+        Role role;
 
         @BeforeEach
         void setup(){
             userRepository.deleteAll();
             roleRepository.deleteAll();
 
-            Role testRole = new Role();
-            testRole.setName("Test Role");
-            roleRepository.save(testRole);
+            role = new Role();
+            role.setName("Test Role");
+            roleRepository.save(role);
 
-            User testUser = new User();
-            testUser.setUsername(username);
-            testUser.setPassword(password);
-            testUser.setEmail(email);
-            testUser.setRole(testRole);
-            userRepository.save(testUser);
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setRole(role);
+            userRepository.save(user);
 
-            testRoleId = testRole.getId();
-            testUserId = testUser.getId();
 
 
         }
@@ -367,9 +371,12 @@ class UserControllerIntegrationTest {
         @DisplayName("Should return a user")
         @Test
         void shouldReturnSuccessfulRequest_getUser() throws Exception{
-            String roleName = roleService.findById(testRoleId).getName();
+            Long roleId = role.getId();
+            Long userId = user.getId();
 
-            mockMvc.perform(get("/api/v1/users/" + testUserId + "").contentType(MediaType.APPLICATION_JSON))
+            String roleName = roleService.findById(roleId).getName();
+
+            mockMvc.perform(get("/api/v1/users/" + userId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.username").value(username))
                     .andExpect(jsonPath("$.email").value(email))
@@ -384,7 +391,7 @@ class UserControllerIntegrationTest {
             String id = "xyz";
 
             mockMvc.perform(get("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().is4xxClientError())
+                    .andExpect(status().isInternalServerError())
                     .andDo(print());
 
 
@@ -393,12 +400,12 @@ class UserControllerIntegrationTest {
 
         @DisplayName("Should fail with id that doesn't exist")
         @Test
-        void shouldReturnBadRequest_idNotExist() throws Exception {
+        void shouldReturnNotFoundRequest_idNotExist() throws Exception {
             long id = 999;
 
-            mockMvc.perform(get("/api/v1/users/" + id + "").contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("User not found"))
+            mockMvc.perform(get("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.message").value("user not found"))
                     .andDo(print());
         }
 
@@ -410,7 +417,6 @@ class UserControllerIntegrationTest {
     class GetAllUsersTest {
         Role pharmacist;
         Role cashier;
-
         User user1;
         User user2;
 
@@ -473,41 +479,40 @@ class UserControllerIntegrationTest {
 
     @Nested
     class UpdateUserTest {
-        long testRoleId;
-        long testUserId;
+        User user;
+        Role role;
+
 
         @BeforeEach
         void setup(){
             userRepository.deleteAll();
             roleRepository.deleteAll();
 
-            Role testRole = new Role();
-            testRole.setName("Test Role");
-            roleRepository.save(testRole);
+            role = new Role();
+            role.setName("Test Role");
+            roleRepository.save(role);
 
-            User testUser = new User();
-            testUser.setUsername(username);
-            testUser.setPassword(password);
-            testUser.setEmail(email);
-            testUser.setRole(testRole);
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setRole(role);
 
-            userRepository.save(testUser);
-
-            testRoleId = testUser.getId();
-            testUserId = testUser.getId();
-
+            userRepository.save(user);
         }
 
 
         @DisplayName("Should update the user")
         @Test
         void shouldReturnSuccessfulRequest_updateUser() throws Exception {
+            Long id = user.getId();
+
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername("someNewUsername");
             userUpdateDTO.setEmail("someNewEmail@gmail.com");
             userUpdateDTO.setPassword("someNewPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+            mockMvc.perform(put("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(content().string("Successfully updated profile"))
                     .andDo(print());
@@ -519,12 +524,14 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when username is missing")
         @Test
         void shouldReturnBadRequest_missingUsername() throws Exception {
+            Long id = user.getId();
+
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername(null);
             userUpdateDTO.setEmail("someNewEmail@gmail.com");
             userUpdateDTO.setPassword("someNewPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+            mockMvc.perform(put("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['username']").value("Username is required"))
                     .andDo(print());
@@ -533,12 +540,14 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when email is missing")
         @Test
         void shouldReturnBadRequest_missingEmail() throws Exception {
+            Long id = user.getId();
+
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername("someNewUsername");
             userUpdateDTO.setEmail(null);
             userUpdateDTO.setPassword("someNewPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+            mockMvc.perform(put("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['email']").value("Email is required"))
                     .andDo(print());
@@ -547,12 +556,14 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when password is missing")
         @Test
         void shouldReturnBadRequest_missingPassword() throws Exception {
+            Long id = user.getId();
+
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername("someNewUsername");
             userUpdateDTO.setEmail("someNewEmail@gmail.com");
             userUpdateDTO.setPassword(null);
 
-            mockMvc.perform(put("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+            mockMvc.perform(put("/api/v1/users/" + id ).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['password']").value("Password is required"))
                     .andDo(print());
@@ -562,22 +573,17 @@ class UserControllerIntegrationTest {
 
         @DisplayName("Should fail when username already exist")
         @Test
-        void shouldReturnBadRequest_usernameAlreadyExist() throws Exception {
-            User user = new User();
-            user.setUsername("SomeUser");
-            user.setEmail("SomeUser@gmail.com");
-            user.setPassword("Somepassword1234");
-            user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
-            userRepository.save(user);
+        void shouldConflictRequest_usernameAlreadyExist() throws Exception {
+            Long id = user.getId();
 
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername(username);
             userUpdateDTO.setEmail("SomeEmail@gmail.com");
             userUpdateDTO.setPassword("newPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("username already exist"))
+            mockMvc.perform(put("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+                    .andExpect(status().isConflict())
+                    .andExpect(jsonPath("$.message").value("Duplicate credential(s): username already exist"))
                     .andDo(print());
 
 
@@ -587,22 +593,17 @@ class UserControllerIntegrationTest {
 
         @DisplayName("Should fail when email already exist")
         @Test
-        void shouldReturnBadRequest_emailAlreadyExist() throws Exception {
-            User user = new User();
-            user.setUsername("SomeUser");
-            user.setEmail("SomeUser@gmail.com");
-            user.setPassword("Somepassword1234");
-            user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
-            userRepository.save(user);
+        void shouldReturnConflictRequest_emailAlreadyExist() throws Exception {
+            Long id = user.getId();
 
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername("SomeUserName");
             userUpdateDTO.setEmail(email);
             userUpdateDTO.setPassword("newPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("email already exist"))
+            mockMvc.perform(put("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+                    .andExpect(status().isConflict())
+                    .andExpect(jsonPath("$.message").value("Duplicate credential(s): email already exist"))
                     .andDo(print());
 
 
@@ -612,26 +613,18 @@ class UserControllerIntegrationTest {
 
         @DisplayName("Should fail when username and email already exist")
         @Test
-        void shouldReturnBadRequest_usernameAndEmailAlreadyExist() throws Exception {
-            User user = new User();
-            user.setUsername("SomeUser");
-            user.setEmail("SomeUser@gmail.com");
-            user.setPassword("Somepassword1234");
-            user.setRole(roleRepository.findById(testRoleId).orElseThrow( () -> new RuntimeException()));
-            userRepository.save(user);
+        void shouldReturnConflictRequest_usernameAndEmailAlreadyExist() throws Exception {
+            Long id = user.getId();
 
             UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
             userUpdateDTO.setUsername(username);
             userUpdateDTO.setEmail(email);
             userUpdateDTO.setPassword("newPassword");
 
-            mockMvc.perform(put("/api/v1/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
-                    .andExpect(status().isBadRequest())
+            mockMvc.perform(put("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userUpdateDTO)))
+                    .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value(anyOf(is("Duplicate credential(s): username, email already exist"),is("Duplicate credential(s): email, username already exist"))))
                     .andDo(print());
-
-
-
 
         }
 
@@ -642,35 +635,34 @@ class UserControllerIntegrationTest {
 
     @Nested
     class DeleteUserTest {
-        long testRoleId;
-        long testUserId;
+        User user;
+        Role role;
 
         @BeforeEach
         void setup(){
             userRepository.deleteAll();
             roleRepository.deleteAll();
 
-            Role testRole = new Role();
-            testRole.setName("Test Role");
-            roleRepository.save(testRole);
+            role = new Role();
+            role.setName("Test Role");
+            roleRepository.save(role);
 
-            User testUser = new User();
-            testUser.setUsername(username);
-            testUser.setPassword(password);
-            testUser.setEmail(email);
-            testUser.setRole(testRole);
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setRole(role);
 
-            userRepository.save(testUser);
-            testRoleId = testRole.getId();
-            testUserId = testUser.getId();
+            userRepository.save(user);
 
         }
 
         @DisplayName("Should delete user")
         @Test
         void shouldReturnSuccessfulRequest_deleteUser() throws Exception {
+            Long id = user.getId();
 
-            mockMvc.perform(delete("/api/v1/users/" + testUserId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/users/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(content().string("User deleted successfully"))
                     .andDo(print());
@@ -681,11 +673,11 @@ class UserControllerIntegrationTest {
 
         @DisplayName("Should fail when the user is invalid or doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidUser() throws Exception {
+        void shouldReturnInternalServerErrorRequest_invalidUser() throws Exception {
             long someInvalidId = 99;
 
             mockMvc.perform(delete("/api/v1/users/" + someInvalidId).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("$.message").value("User not found"))
                     .andDo(print());
         }

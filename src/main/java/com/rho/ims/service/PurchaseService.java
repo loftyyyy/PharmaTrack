@@ -82,12 +82,10 @@ public class PurchaseService {
         purchase.setUpdatedBy(user);
 
         return purchaseRepository.save(purchase);
-
     }
 
     public void deletePurchase(Long id){
         Purchase purchase = purchaseRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("purchase not found"));
         purchaseRepository.delete(purchase);
-
     }
 }

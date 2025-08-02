@@ -142,14 +142,14 @@ class CategoryControllerIntegrationTest {
 
         @DisplayName("Should fail when category name is already taken")
         @Test
-        void shouldReturnBadRequest_takenName() throws Exception {
+        void shouldReturnConflictRequest_takenName() throws Exception {
 
             CategoryCreateDTO category = new CategoryCreateDTO();
             category.setName("Test Category");
 
             mockmvc.perform(post("/api/v1/categories/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(category)))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("name already exist"))
+                    .andExpect(status().isConflict())
+                    .andExpect(jsonPath("$.message").value("name already exists"))
                     .andDo(print());
 
 
@@ -196,7 +196,7 @@ class CategoryControllerIntegrationTest {
 
         @DisplayName("Should fail when there's already an existing name")
         @Test
-        void shouldReturnBadRequest_categoryNameAlreadyExist() throws Exception {
+        void shouldReturnConflictRequest_categoryNameAlreadyExist() throws Exception {
             Category category1 = new Category();
             category1.setName("SomeCategoryName");
             categoryRepository.save(category1);
@@ -206,8 +206,8 @@ class CategoryControllerIntegrationTest {
 
 
             mockMvc.perform(put("/api/v1/categories/" +  category1.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(categoryUpdateDTO)))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.message").value("Name already exist"))
+                    .andExpect(status().isConflict())
+                    .andExpect(jsonPath("$.message").value("Name already exists"))
                     .andDo(print());
 
         }

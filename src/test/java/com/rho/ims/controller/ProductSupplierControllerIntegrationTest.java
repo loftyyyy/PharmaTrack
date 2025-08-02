@@ -163,7 +163,7 @@ class ProductSupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when there's already an existing product id and supplier id in another product supplier")
         @Test
-        void shouldReturnBadRequest_duplicateProductSupplier() throws Exception {
+        void shouldReturnConflictRequest_duplicateProductSupplier() throws Exception {
             ProductSupplierCreateDTO productSupplierCreateDTO = new ProductSupplierCreateDTO();
             productSupplierCreateDTO.setProductId(product.getId());
             productSupplierCreateDTO.setSupplierId(supplier.getId());
@@ -171,7 +171,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierCreateDTO.setSupplierProductCode("73654321");
 
             mockMvc.perform(post("/api/v1/productSupplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("product supplier already exists"))
                     .andDo(print());
 
@@ -179,7 +179,7 @@ class ProductSupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when there's already an existing supplier id and product code in the same supplier")
         @Test
-        void shouldReturnBadRequest_duplicateProductCode() throws Exception {
+        void shouldReturnConflictRequest_duplicateProductCode() throws Exception {
             ProductSupplierCreateDTO productSupplierCreateDTO = new ProductSupplierCreateDTO();
             productSupplierCreateDTO.setProductId(product2.getId());
             productSupplierCreateDTO.setSupplierId(supplier.getId());
@@ -187,7 +187,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierCreateDTO.setSupplierProductCode("32458");
 
             mockMvc.perform(post("/api/v1/productSupplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("Supplier product code already exists for this supplier"))
                     .andDo(print());
 
@@ -323,11 +323,11 @@ class ProductSupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when specific product supplier id doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidProductSupplier() throws Exception {
+        void shouldReturnNotFoundRequest_invalidProductSupplier() throws Exception {
             Long nonExistentProductSupplierId = 99L;
 
             mockMvc.perform(get("/api/v1/productSupplier/" + nonExistentProductSupplierId))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product supplier not found"))
                     .andDo(print());
 
@@ -437,7 +437,7 @@ class ProductSupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when product code already exists in the same supplier")
         @Test
-        void shouldReturnBadRequest_existingProductCodeSameSupplier() throws Exception {
+        void shouldReturnConflictRequest_existingProductCodeSameSupplier() throws Exception {
             Long productSupplierId = productSupplier.getId();
 
             ProductSupplierUpdateDTO productSupplierUpdateDTO = new ProductSupplierUpdateDTO();
@@ -445,7 +445,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierUpdateDTO.setSupplierProductCode("32458");
 
             mockMvc.perform(put("/api/v1/productSupplier/" + productSupplierId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierUpdateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andDo(print());
 
         }
@@ -552,11 +552,11 @@ class ProductSupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when product supplier id doesn't exist or null")
         @Test
-        void shouldReturnBadRequest_invalidProductSupplierId() throws Exception {
+        void shouldReturnNotFoundRequest_invalidProductSupplierId() throws Exception {
             Long nonExistentProductSupplierId = 99L;
 
             mockMvc.perform(delete("/api/v1/productSupplier/" + nonExistentProductSupplierId).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andDo(print());
 
         }

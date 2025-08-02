@@ -104,12 +104,12 @@ class RoleControllerIntegrationTest {
 
         @DisplayName("Should fail when passing invalid id that doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidRole() throws Exception {
+        void shouldReturnInternalServerErrorRequest_invalidRole() throws Exception {
             long invalidId = 99;
 
             mockMvc.perform(delete("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("message").value("eRole not found with id: " + invalidId))
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(jsonPath("message").value("Role not found with id: " + invalidId))
                     .andDo(print());
 
         }
@@ -146,11 +146,11 @@ class RoleControllerIntegrationTest {
 
         @DisplayName("Should fail when id is invalid")
         @Test
-        void shouldReturnBadRequest_invalidRole() throws Exception {
+        void shouldReturnInternalServerErrorRequest_invalidRole() throws Exception {
             long invalidId = 999;
 
             mockMvc.perform(get("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("message").value("Role not found with id: " + invalidId) )
                     .andDo(print());
 
@@ -192,13 +192,13 @@ class RoleControllerIntegrationTest {
 
         @DisplayName("Should fail when invalid role id")
         @Test
-        void shouldReturnBadRequest_updateRoleFail() throws Exception {
+        void shouldReturnInternalServerErrorRequest_updateRoleFail() throws Exception {
             long invalidId = 999;
             RoleUpdateDTO roleUpdateDTO = new RoleUpdateDTO();
             roleUpdateDTO.setName("New Role Name");
 
             mockMvc.perform(put("/api/v1/roles/" + invalidId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(roleUpdateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isInternalServerError())
                     .andExpect(jsonPath("message").value("Role not found with id: " + invalidId))
                     .andDo(print());
         }

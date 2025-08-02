@@ -172,7 +172,7 @@ class ProductBatchControllerIntegrationTest {
 
         @DisplayName("Should fail if there's already an existing product batch number")
         @Test
-        void shouldReturnBadRequest_duplicateProductBatch() throws Exception {
+        void shouldReturnConflictRequest_duplicateProductBatch() throws Exception {
 
             ProductBatchCreateDTO productBatchCreateDTO = new ProductBatchCreateDTO();
             productBatchCreateDTO.setProductId(this.product.getId());
@@ -184,7 +184,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchCreateDTO.setManufacturingDate(manufactureDate);
 
             mockMvc.perform(post("/api/v1/productBatch/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("batch number already exists"))
                     .andDo(print());
 
@@ -193,7 +193,7 @@ class ProductBatchControllerIntegrationTest {
 
         @DisplayName("Should fail when product doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidProduct() throws Exception {
+        void shouldReturnNotFoundRequest_invalidProduct() throws Exception {
             Long nonExistentId = 99L;
 
             ProductBatchCreateDTO productBatchCreateDTO = new ProductBatchCreateDTO();
@@ -206,7 +206,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchCreateDTO.setManufacturingDate(manufactureDate);
 
             mockMvc.perform(post("/api/v1/productBatch/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product not found"))
                     .andDo(print());
         }
@@ -318,11 +318,11 @@ class ProductBatchControllerIntegrationTest {
 
         @DisplayName("Should fail when product batch id doesn't exist")
         @Test
-        void shouldReturnBadRequest_badProductBatchId() throws Exception {
+        void shouldReturnNotFoundRequest_badProductBatchId() throws Exception {
             Long nonExistentId = 99L;
 
             mockMvc.perform(get("/api/v1/productBatch/" + nonExistentId).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product batch id not found"))
                     .andDo(print());
 
@@ -427,7 +427,7 @@ class ProductBatchControllerIntegrationTest {
 
         @DisplayName("Should fail when product batch id doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidProductBatchId() throws Exception {
+        void shouldReturnNotFoundRequest_invalidProductBatchId() throws Exception {
             Long nonExistentProductBatchId = 99L;
 
 
@@ -439,7 +439,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchUpdateDTO.setLocation("Japan");
 
             mockMvc.perform(put("/api/v1/productBatch/" + nonExistentProductBatchId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchUpdateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product batch not found"))
                     .andDo(print());
 
@@ -538,11 +538,11 @@ class ProductBatchControllerIntegrationTest {
 
         @DisplayName("Should fail when product batch id doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidProductBatchId() throws Exception {
+        void shouldReturnNotFoundRequest_invalidProductBatchId() throws Exception {
             Long nonExistentProductBatchId = 99L;
 
             mockMvc.perform(delete("/api/v1/productBatch//" + nonExistentProductBatchId).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andDo(print());
 
 

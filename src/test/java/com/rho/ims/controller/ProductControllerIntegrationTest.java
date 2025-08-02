@@ -85,9 +85,10 @@ class ProductControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
+            productRepository.deleteAll();
             categoryRepository.deleteAll();
             userRepository.deleteAll();
-            productRepository.deleteAll();
+            roleRepository.deleteAll();
 
             staff = new Role();
             staff.setName("Staff");
@@ -152,11 +153,11 @@ class ProductControllerIntegrationTest {
 
         @DisplayName("Should fail when product doesn't exist")
         @Test
-        void shouldReturnBadRequest_fetchInvalidProduct() throws Exception {
+        void shouldReturnNotFoundRequest_fetchInvalidProduct() throws Exception {
             Long id = 99L;
 
             mockMvc.perform(get("/api/v1/products/" + id).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andDo(print());
 
         }
@@ -172,9 +173,10 @@ class ProductControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
-            roleRepository.deleteAll();
-            userRepository.deleteAll();
+            productRepository.deleteAll();
             categoryRepository.deleteAll();
+            userRepository.deleteAll();
+            roleRepository.deleteAll();
 
             vitamin = new Category();
             vitamin.setName("Vitamins");
@@ -240,9 +242,10 @@ class ProductControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
-            roleRepository.deleteAll();
-            userRepository.deleteAll();
+            productRepository.deleteAll();
             categoryRepository.deleteAll();
+            userRepository.deleteAll();
+            roleRepository.deleteAll();
 
             vitamin = new Category();
             vitamin.setName("Vitamins");
@@ -322,9 +325,10 @@ class ProductControllerIntegrationTest {
 
         @BeforeEach
         void setup(){
-            roleRepository.deleteAll();
-            userRepository.deleteAll();
+            productRepository.deleteAll();
             categoryRepository.deleteAll();
+            userRepository.deleteAll();
+            roleRepository.deleteAll();
 
             vitamin = new Category();
             vitamin.setName("Vitamins");
@@ -366,11 +370,11 @@ class ProductControllerIntegrationTest {
 
         @DisplayName("Should fail when product doesn't eixist")
         @Test
-        void shouldReturnBadRequest_invalidProduct() throws Exception {
+        void shouldReturnNotFoundRequest_invalidProduct() throws Exception {
             Long id = 99L;
 
             mockMvc.perform(delete("/api/v1/products/" + id).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("message").value("product not found"))
                     .andDo(print());
 

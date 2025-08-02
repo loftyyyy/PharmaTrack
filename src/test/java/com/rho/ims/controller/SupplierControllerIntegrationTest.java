@@ -145,7 +145,7 @@ class SupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when there's already an existing supplier name")
         @Test
-        void shouldReturnBadRequest_existingName() throws Exception {
+        void shouldReturnConflictRequest_existingName() throws Exception {
             SupplierCreateDTO supplierCreateDTO = new SupplierCreateDTO();
             supplierCreateDTO.setName("TGP");
             supplierCreateDTO.setContactPerson("James");
@@ -157,7 +157,7 @@ class SupplierControllerIntegrationTest {
             supplierCreateDTO.setAddressZipCode("8000");
 
             mockMvc.perform(post("/api/v1/supplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("name already exists"))
                     .andDo(print());
         }
@@ -241,11 +241,11 @@ class SupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when supplier id doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidSupplierId() throws Exception {
+        void shouldReturnNotFoundRequest_invalidSupplierId() throws Exception {
             Long id = 99L;
 
             mockMvc.perform(get("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("supplier not found"))
                     .andDo(print());
 
@@ -350,7 +350,7 @@ class SupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when name already exists. Duplicate")
         @Test
-        void shouldReturnBadRequest_duplicateName() throws Exception {
+        void shouldReturnConflictRequest_duplicateName() throws Exception {
 
             long id = 1;
 
@@ -365,7 +365,7 @@ class SupplierControllerIntegrationTest {
             supplierUpdateDTO.setAddressZipCode("8000");
 
             mockMvc.perform(put("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("supplier already exists"))
                     .andDo(print());
 
@@ -437,11 +437,11 @@ class SupplierControllerIntegrationTest {
 
         @DisplayName("Should fail when id doesn't exist")
         @Test
-        void shouldReturnBadRequest_invalidId() throws Exception {
+        void shouldReturnNotFoundRequest_invalidId() throws Exception {
             Long id = 99L;
 
             mockMvc.perform(delete("/api/v1/supplier/"  + id).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("supplier not found"))
                     .andDo(print());
         }
