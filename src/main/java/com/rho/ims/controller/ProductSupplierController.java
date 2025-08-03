@@ -28,7 +28,7 @@ public class ProductSupplierController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAllProductSupplier(){
         List<ProductSupplierResponseDTO> productSuppliers = productSupplierService.getAll().stream().map(productSupplier -> new ProductSupplierResponseDTO(productSupplier)).toList();
 
         return ResponseEntity.ok().body(productSuppliers);
