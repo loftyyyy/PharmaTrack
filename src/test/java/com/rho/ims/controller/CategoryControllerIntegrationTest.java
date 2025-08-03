@@ -151,8 +151,6 @@ class CategoryControllerIntegrationTest {
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("name already exists"))
                     .andDo(print());
-
-
         }
 
 
