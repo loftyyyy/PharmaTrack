@@ -110,7 +110,7 @@ class ProductControllerIntegrationTest {
             product1.setName("B12");
             product1.setBrand("Generic");
             product1.setDescription("");
-            product1.setCategoryId(vitamin.getId());
+            product1.setCategory(vitamin);
             product1.setBarcode("1234ABC");
             product1.setCreatedBy(user);
 
@@ -118,7 +118,7 @@ class ProductControllerIntegrationTest {
             product2.setName("B12");
             product2.setBrand("Generic");
             product2.setDescription("");
-            product2.setCategoryId(vitamin.getId());
+            product2.setCategory(vitamin);
             product2.setBarcode("1234ABCDEFG");
             product2.setCreatedBy(user);
 
@@ -266,7 +266,7 @@ class ProductControllerIntegrationTest {
             vb12.setName("B12");
             vb12.setBrand("Genericzasdf");
             vb12.setBarcode("1234ABC");
-            vb12.setCategoryId(vitamin.getId());
+            vb12.setCategory(vitamin);
             vb12.setDescription("");
             vb12.setCreatedBy(user);
             productRepository.save(vb12);
@@ -349,7 +349,7 @@ class ProductControllerIntegrationTest {
             vb12.setName("B12");
             vb12.setBrand("Genericzasdf");
             vb12.setBarcode("1234ABC");
-            vb12.setCategoryId(vitamin.getId());
+            vb12.setCategory(vitamin);
             vb12.setDescription("");
             vb12.setCreatedBy(user);
             productRepository.save(vb12);

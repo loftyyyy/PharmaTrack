@@ -108,7 +108,7 @@ class ProductBatchControllerIntegrationTest {
             product = new Product();
             product.setName("Paracetamol");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setBarcode("xyz123");
             product.setCreatedBy(user);
             productRepository.save(product);
@@ -257,7 +257,7 @@ class ProductBatchControllerIntegrationTest {
             product = new Product();
             product.setName("Paracetamol");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setBarcode("xyz123");
             product.setCreatedBy(user);
             productRepository.save(product);
@@ -373,7 +373,7 @@ class ProductBatchControllerIntegrationTest {
             product = new Product();
             product.setName("Paracetamol");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setBarcode("xyz123");
             product.setCreatedBy(user);
             productRepository.save(product);
@@ -491,7 +491,7 @@ class ProductBatchControllerIntegrationTest {
             product = new Product();
             product.setName("Paracetamol");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setBarcode("xyz123");
             product.setCreatedBy(user);
             productRepository.save(product);

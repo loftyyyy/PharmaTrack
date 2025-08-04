@@ -108,7 +108,7 @@ class ProductSupplierControllerIntegrationTest {
             product.setName("Paracetamol");
             product.setBarcode("xyz");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setDescription("For headaches");
             product.setCreatedBy(user);
 
@@ -116,7 +116,7 @@ class ProductSupplierControllerIntegrationTest {
             product2.setName("Advil");
             product2.setBarcode("yxz");
             product2.setBrand("Generic");
-            product2.setCategoryId(category.getId());
+            product2.setCategory(category);
             product2.setDescription("For pain relief");
             product2.setCreatedBy(user);
 
@@ -254,7 +254,7 @@ class ProductSupplierControllerIntegrationTest {
             product.setName("Paracetamol");
             product.setBarcode("xyz");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setDescription("For headaches");
             product.setCreatedBy(user);
 
@@ -262,7 +262,7 @@ class ProductSupplierControllerIntegrationTest {
             product2.setName("Advil");
             product2.setBarcode("yxz");
             product2.setBrand("Generic");
-            product2.setCategoryId(category.getId());
+            product2.setCategory(category);
             product2.setDescription("For pain relief");
             product2.setCreatedBy(user);
 
@@ -376,7 +376,7 @@ class ProductSupplierControllerIntegrationTest {
             product.setName("Paracetamol");
             product.setBarcode("xyz");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setDescription("For headaches");
             product.setCreatedBy(user);
 
@@ -384,7 +384,7 @@ class ProductSupplierControllerIntegrationTest {
             product2.setName("Advil");
             product2.setBarcode("yxz");
             product2.setBrand("Generic");
-            product2.setCategoryId(category.getId());
+            product2.setCategory(category);
             product2.setDescription("For pain relief");
             product2.setCreatedBy(user);
 
@@ -494,7 +494,7 @@ class ProductSupplierControllerIntegrationTest {
             product.setName("Paracetamol");
             product.setBarcode("xyz");
             product.setBrand("Generic");
-            product.setCategoryId(category.getId());
+            product.setCategory(category);
             product.setDescription("For headaches");
             product.setCreatedBy(user);
 
@@ -502,7 +502,7 @@ class ProductSupplierControllerIntegrationTest {
             product2.setName("Advil");
             product2.setBarcode("yxz");
             product2.setBrand("Generic");
-            product2.setCategoryId(category.getId());
+            product2.setCategory(category);
             product2.setDescription("For pain relief");
             product2.setCreatedBy(user);
 

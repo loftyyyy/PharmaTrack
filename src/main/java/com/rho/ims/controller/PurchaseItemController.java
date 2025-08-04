@@ -22,7 +22,7 @@ public class PurchaseItemController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createPurchaseItem(PurchaseItemCreateDTO purchaseItemCreateDTO) {
+    public ResponseEntity<?> createPurchaseItem(@Valid @RequestBody PurchaseItemCreateDTO purchaseItemCreateDTO) {
         PurchaseItem purchaseItem = purchaseItemService.savePurchaseItem(purchaseItemCreateDTO);
 
         return ResponseEntity.ok().body(new PurchaseItemResponseDTO(purchaseItem));

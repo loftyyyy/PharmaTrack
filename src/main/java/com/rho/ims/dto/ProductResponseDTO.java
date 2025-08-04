@@ -23,7 +23,7 @@ public class ProductResponseDTO {
         this.name = product.getName();
         this.brand = product.getBrand();
         this.description = product.getDescription();
-        this.categoryId = product.getCategoryId();
+        this.categoryId = product.getCategory().getId();
         this.barcode = product.getBarcode();
         this.createdBy = product.getCreatedBy().getId();
     }

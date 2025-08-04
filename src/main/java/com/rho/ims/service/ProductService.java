@@ -36,11 +36,13 @@ public class ProductService {
             throw new DuplicateCredentialException("barcode", productCreateDTO.getBarcode());
         }
 
+        Category category = categoryRepository.findById(productCreateDTO.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
         Product product = new Product();
         product.setName(productCreateDTO.getName());
         product.setBrand(productCreateDTO.getBrand());
         product.setDescription(productCreateDTO.getDescription());
-        product.setCategoryId(productCreateDTO.getCategoryId());
+        product.setCategory(category);
         product.setBarcode(productCreateDTO.getBarcode());
 
         // TODO: Reimplement this <>
@@ -72,11 +74,12 @@ public class ProductService {
             throw new DuplicateCredentialException("barcode", productUpdateDTO.getBarcode());
         }
 
+
         product.setName(productUpdateDTO.getName());
         product.setBrand(productUpdateDTO.getBrand());
         product.setDescription(productUpdateDTO.getDescription());
         product.setBarcode(productUpdateDTO.getBarcode());
-        product.setCategoryId(productUpdateDTO.getCategoryId());
+        product.setCategory(category);
 
         //TODO: Reimplement this. Used for testing phase only
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
