@@ -143,7 +143,7 @@ CREATE TABLE purchase_items (
 CREATE TABLE customers (
                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
                            name VARCHAR(100) NOT NULL,
-                           phone VARCHAR(20),
+                           phoneNumber VARCHAR(20),
                            email VARCHAR(100),
                            address_street VARCHAR(255),
                            address_city VARCHAR(100),
