@@ -1,7 +1,15 @@
 package com.rho.ims.service;
 
+import com.rho.ims.api.exception.DuplicateCredentialException;
+import com.rho.ims.api.exception.ResourceNotFoundException;
+import com.rho.ims.dto.CustomerCreateDTO;
+import com.rho.ims.dto.CustomerUpdateDTO;
+import com.rho.ims.model.Customer;
 import com.rho.ims.respository.CustomerRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -11,6 +19,57 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+    public Customer saveCustomer(CustomerCreateDTO customerCreateDTO) {
+
+        if(customerRepository.existsByEmail(customerCreateDTO.getEmail())){
+            throw new DuplicateCredentialException("Email already registered");
+        }
+
+        Customer customer = new Customer();
+        customer.setName(customerCreateDTO.getName());
+        customer.setEmail(customerCreateDTO.getEmail());
+        customer.setPhone(customerCreateDTO.getPhoneNumber());
+        customer.setAddressCity(customerCreateDTO.getAddressCity());
+        customer.setAddressState(customerCreateDTO.getAddressState());
+        customer.setAddressStreet(customerCreateDTO.getAddressStreet());
+        customer.setAddressZipCode(customerCreateDTO.getAddressZipCode());
+        return customerRepository.save(customer);
+
+    }
+
+    public List<Customer> getAll() {
+        return customerRepository.findAll();
+    }
+
+    public Customer getCustomer(Long id){
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        return customer;
+    }
+
+    public Customer updateCustomer(CustomerUpdateDTO customerUpdateDTO, Long id){
+        Optional<Customer> existing = customerRepository.findByEmail(customerUpdateDTO.getEmail());
+
+        if(existing.isPresent() && !existing.get().getId().equals(id)) {
+            throw new DuplicateCredentialException("Email already exists");
+        }
+
+        Customer customer = new Customer();
+        customer.setName(customerUpdateDTO.getName());
+        customer.setEmail(customerUpdateDTO.getEmail());
+        customer.setPhone(customerUpdateDTO.getPhoneNumber());
+        customer.setAddressCity(customerUpdateDTO.getAddressCity());
+        customer.setAddressState(customerUpdateDTO.getAddressState());
+        customer.setAddressStreet(customerUpdateDTO.getAddressStreet());
+        customer.setAddressZipCode(customerUpdateDTO.getAddressZipCode());
+        return customerRepository.save(customer);
+    }
+
+    public void deleteCustomer(Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        customerRepository.delete(customer);
+
+    }
 
 
 
