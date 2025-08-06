@@ -22,7 +22,7 @@ public class CustomerResponseDTO {
     public CustomerResponseDTO(Customer customer){
         this.customerId = customer.getId();
         this.name = customer.getName();
-        this.phoneNumber = customer.getPhone();
+        this.phoneNumber = customer.getPhoneNumber();
         this.email = customer.getEmail();
         this.addressStreet = customer.getAddressStreet();
         this.addressCity = customer.getAddressCity();

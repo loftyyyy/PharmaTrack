@@ -41,12 +41,12 @@ public class CustomerController {
     public ResponseEntity<?> getCustomer(@PathVariable Long id){
         Customer customer = customerService.getCustomer(id);
 
-        return ResponseEntity.ok().body(customer);
+        return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
     }
 
     @PostMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerUpdateDTO customerUpdateDTO, @PathVariable Long id){
-        Customer customer = customerService.updateCustomer(customerUpdateDTO);
+        Customer customer = customerService.updateCustomer(customerUpdateDTO, id);
 
         return ResponseEntity.ok().body(customer);
     }

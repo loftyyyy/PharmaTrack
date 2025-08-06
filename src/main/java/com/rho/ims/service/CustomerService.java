@@ -28,7 +28,7 @@ public class CustomerService {
         Customer customer = new Customer();
         customer.setName(customerCreateDTO.getName());
         customer.setEmail(customerCreateDTO.getEmail());
-        customer.setPhone(customerCreateDTO.getPhoneNumber());
+        customer.setPhoneNumber(customerCreateDTO.getPhoneNumber());
         customer.setAddressCity(customerCreateDTO.getAddressCity());
         customer.setAddressState(customerCreateDTO.getAddressState());
         customer.setAddressStreet(customerCreateDTO.getAddressStreet());
@@ -57,7 +57,7 @@ public class CustomerService {
         Customer customer = new Customer();
         customer.setName(customerUpdateDTO.getName());
         customer.setEmail(customerUpdateDTO.getEmail());
-        customer.setPhone(customerUpdateDTO.getPhoneNumber());
+        customer.setPhoneNumber(customerUpdateDTO.getPhoneNumber());
         customer.setAddressCity(customerUpdateDTO.getAddressCity());
         customer.setAddressState(customerUpdateDTO.getAddressState());
         customer.setAddressStreet(customerUpdateDTO.getAddressStreet());
