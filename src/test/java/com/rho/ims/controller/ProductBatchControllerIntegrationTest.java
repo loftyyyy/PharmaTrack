@@ -306,7 +306,7 @@ class ProductBatchControllerIntegrationTest {
 
         @DisplayName("Should fetch a specific product batch")
         @Test
-        void shouldReturnSuccessfulRequest_fetchProductBatch() throws Exception {
+        void shouldReturnSuccessfulRequest_fetchSpecificProductBatch() throws Exception {
             Long id = productBatch.getId();
 
             mockMvc.perform(get("/api/v1/productBatch/" + id).contentType(MediaType.APPLICATION_JSON))

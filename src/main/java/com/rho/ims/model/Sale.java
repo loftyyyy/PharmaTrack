@@ -7,11 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "sales")
@@ -29,39 +32,55 @@ public class Sale {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
     @Min(0)
     private BigDecimal totalAmount;
 
+    @Column(name = "sale_date", nullable = false)
     private LocalDate saleDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method",nullable = false, columnDefinition = "ENUM('CASH', 'CREDIT', 'DEBIT', 'ONLINE') DEFAULT 'CASH'")
+    @Column(name = "payment_method",nullable = false)
     private PaymentMethod paymentMethod;
 
     @Column(name = "discount_amount", precision = 10, scale = 2)
     @Min(0)
-    private BigDecimal discountAmount;
+    private BigDecimal discountAmount = BigDecimal.ZERO;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "updated_by", nullable = false)
+    @JoinColumn(name = "updated_by")
     private User updatedBy;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voided_by")
+    private User voidedBy;
+
+    @Column(name = "is_voided")
+    private Boolean isVoided = false;
+
+    @Column(name = "void_reason", columnDefinition = "TEXT")
+    private String voidReason;
+
+    @Column(name = "voided_at")
+    private LocalDateTime voidedAt;
+
+    @Column(name = "reason_for_update", columnDefinition = "TEXT")
+    private String reasonForUpdate;
 
 
-
-
-
-
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleItem> saleItems;
 
 }

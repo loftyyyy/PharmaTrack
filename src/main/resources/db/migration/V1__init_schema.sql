@@ -161,15 +161,21 @@ CREATE TABLE sales (
                        customer_id BIGINT, -- Can be NULL for walk-in customers
                        total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
                        sale_date DATE NOT NULL,
-                       payment_method ENUM('Cash', 'Credit Card', 'Mobile Pay', 'Other') NOT NULL DEFAULT 'Cash',
+                       payment_method ENUM('CASH', 'CREDIT CARD', 'MOBILE PAY', 'OTHER') NOT NULL DEFAULT 'CASH',
                        discount_amount DECIMAL(10,2) DEFAULT 0.00 CHECK (discount_amount >= 0),
+                       reason_for_update TEXT,
                        created_by BIGINT NOT NULL,
                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                        updated_by BIGINT,
+                       is_voided BOOLEAN DEFAULT FALSE, -- Soft-delete alternative
+                       void_reason TEXT,
+                       voided_by BIGINT,
+                       voided_at DATETIME,
                        FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL ON UPDATE CASCADE,
                        FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-                       FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
+                       FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+                       FOREIGN KEY (voided_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- Table for Sale Items (details of each item in a sale)
