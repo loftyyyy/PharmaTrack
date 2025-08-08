@@ -186,6 +186,7 @@ CREATE TABLE sale_items (
                             product_batch_id BIGINT NOT NULL, -- Specific batch sold
                             quantity INT NOT NULL CHECK (quantity > 0),
                             unit_price DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0), -- Selling price at time of sale
+                            sub_total DECIMAL(10,2) NOT NULL CHECK (sub_total >= 0), -- Sub total price at time of sale
                             FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE ON UPDATE CASCADE,
                             FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                             FOREIGN KEY (product_batch_id) REFERENCES product_batches(id) ON DELETE RESTRICT ON UPDATE CASCADE,

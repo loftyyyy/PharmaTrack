@@ -1,6 +1,7 @@
 package com.rho.ims.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,9 +39,11 @@ public class SaleItem {
     private Integer quantity;
 
     @Column(name = "unit_price", precision = 10, scale = 2)
-    @Min(0)
+    @DecimalMin(value = "0.00", inclusive = true)
     private BigDecimal unitPrice;
 
-
+    @Column(precision = 10, scale = 2)
+    @DecimalMin("0.00")
+    private BigDecimal subtotal;
 
 }

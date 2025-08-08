@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -25,5 +26,7 @@ public class SaleCreateDTO {
 
     @DecimalMin(value = "0.00", inclusive = true, message = "Discount amount must be greater than or equal to 0.00")
     private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    private List<SaleItemCreateDTO> items;
 
 }

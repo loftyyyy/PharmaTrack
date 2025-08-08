@@ -5,9 +5,12 @@ import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.ProductBatchCreateDTO;
 import com.rho.ims.dto.ProductBatchResponseDTO;
 import com.rho.ims.dto.ProductBatchUpdateDTO;
+import com.rho.ims.enums.ChangeType;
+import com.rho.ims.model.InventoryLog;
 import com.rho.ims.model.Product;
 import com.rho.ims.model.ProductBatch;
 import com.rho.ims.model.User;
+import com.rho.ims.respository.InventoryLogRepository;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.UserRepository;
@@ -23,11 +26,13 @@ public class ProductBatchService {
     private final ProductBatchRepository productBatchRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final InventoryLogRepository inventoryLogRepository;
 
-    public ProductBatchService(ProductBatchRepository productBatchRepository, ProductRepository productRepository, UserRepository userRepository){
+    public ProductBatchService(ProductBatchRepository productBatchRepository, ProductRepository productRepository, UserRepository userRepository, InventoryLogRepository inventoryLogRepository){
         this.productBatchRepository = productBatchRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.inventoryLogRepository = inventoryLogRepository;
     }
 
     public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
@@ -50,7 +55,20 @@ public class ProductBatchService {
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         productBatch.setCreatedBy(user);
 
-       return productBatchRepository.save(productBatch);
+        ProductBatch savedBatch = productBatchRepository.save(productBatch);
+
+        InventoryLog inventoryLog = new InventoryLog();
+        inventoryLog.setChangeType(ChangeType.INITIAL);
+        inventoryLog.setProduct(product);
+        inventoryLog.setProductBatch(productBatch);
+        inventoryLog.setQuantityChanged(productBatch.getQuantity());
+        inventoryLog.setReason("Initial stock for new batch");
+        inventoryLog.setAdjustmentReference("INITIAL-STOCK-BATCH-" + productBatch.getId());
+        inventoryLog.setCreatedBy(user);
+        inventoryLogRepository.save(inventoryLog);
+
+
+       return savedBatch;
 
 
     }
