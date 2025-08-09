@@ -3,7 +3,6 @@ package com.rho.ims.service;
 import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.SaleCreateDTO;
 import com.rho.ims.dto.SaleItemCreateDTO;
-import com.rho.ims.dto.SaleUpdateDTO;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.CustomerRepository;
 import com.rho.ims.respository.ProductBatchRepository;

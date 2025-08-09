@@ -28,6 +28,6 @@ public class SaleResponseDTO {
         this.saleDate = sale.getSaleDate();
         this.paymentMethod = sale.getPaymentMethod();
         this.discountAmount = sale.getDiscountAmount();
-
     }
+
 }
