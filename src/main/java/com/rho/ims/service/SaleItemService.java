@@ -48,6 +48,7 @@ public class SaleItemService {
         }
         saleItem.setQuantity(saleItemCreateDTO.getQuantity());
 
+        // Not sure for this one TODO: think about this
         productBatch.setQuantity(productBatch.getQuantity() - saleItemCreateDTO.getQuantity());
         productBatchRepository.save(productBatch);
 
@@ -68,11 +69,6 @@ public class SaleItemService {
     public SaleItem getSaleItem(Long id){
         SaleItem saleItem = saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
         return saleItem;
-    }
-
-    public void deleteSaleItem(Long id) {
-        SaleItem saleItem = saleItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Sale item not found"));
-        saleItemRepository.delete(saleItem);
     }
 
 }

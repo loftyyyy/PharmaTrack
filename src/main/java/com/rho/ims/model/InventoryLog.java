@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -41,16 +42,17 @@ public class InventoryLog {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_id", nullable = true)
-    private Sale saleId;
+    private Sale sale;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id", nullable = false)
-    private Purchase purchaseId;
+    private Purchase purchase;
 
     @Column(name = "adjustment_ref", nullable = false, length = 100)
     private String adjustmentReference;
 
-    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

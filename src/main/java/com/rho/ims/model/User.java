@@ -38,11 +38,11 @@ public class User {
     private String email;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", name = "created_at")
+    @Column(name = "created_at" ,nullable = false, updatable = false )
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false, updatable = true, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", name = "updated_at")
+    @Column(name = "updated_at" ,nullable = false, updatable = true)
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
