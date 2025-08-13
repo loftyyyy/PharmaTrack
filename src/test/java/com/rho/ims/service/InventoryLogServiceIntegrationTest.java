@@ -2,6 +2,7 @@ package com.rho.ims.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
+import com.rho.ims.dto.InventoryLogCreateDTO;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.enums.PaymentMethod;
 import com.rho.ims.enums.PurchaseStatus;
@@ -25,7 +26,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -220,7 +223,17 @@ class InventoryLogServiceIntegrationTest {
         @DisplayName("Should create inventory log")
         @Test
         void shouldReturnSuccessfulRequest_createInventoryLog() throws Exception {
+            InventoryLogCreateDTO inventoryLogCreateDTO = new InventoryLogCreateDTO();
+            inventoryLogCreateDTO.setProductBatchId(productBatch2.getId());
+            inventoryLogCreateDTO.setProductId(product2.getId());
+            inventoryLogCreateDTO.setSaleId(sale.getId());
+            inventoryLogCreateDTO.setPurchaseId(purchase.getId());
+            inventoryLogCreateDTO.setAdjustmentReference("");
+            inventoryLogCreateDTO.setChangeType(ChangeType.OUT);
+            inventoryLogCreateDTO.setQuantityChanged(2);
+            inventoryLogCreateDTO.setReason("");
 
+            mockMvc.perform(post("/api/v1/"));
 
         }
 

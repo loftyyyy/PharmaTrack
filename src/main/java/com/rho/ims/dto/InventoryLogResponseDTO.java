@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class InventoryResponseDTO {
+public class InventoryLogResponseDTO {
     private Long productId;
     private Long productBatchId;
     private ChangeType changeType;
@@ -23,7 +22,7 @@ public class InventoryResponseDTO {
     private String adjustmentReference;
     private LocalDate createdAt;
 
-    public InventoryResponseDTO(InventoryLog inventoryLog){
+    public InventoryLogResponseDTO(InventoryLog inventoryLog){
         this.productId = inventoryLog.getProduct().getId();
         this.productBatchId = inventoryLog.getProductBatch().getId();
         this.changeType = inventoryLog.getChangeType();
