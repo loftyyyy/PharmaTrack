@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @ActiveProfiles("test")
+@WithMockUser(username = "user", roles = "Staff")
 class InventoryLogServiceIntegrationTest {
     @Autowired
     MockMvc mockMvc;
@@ -193,7 +196,7 @@ class InventoryLogServiceIntegrationTest {
             saleItem.setQuantity(3);
             saleItem.setUnitPrice(BigDecimal.valueOf(32.5));
             saleItem.setSale(sale);
-            saleItem.setSubtotal(BigDecimal.valueOf(32.5).multiply(BigDecimal.valueOf(3)));
+            saleItem.setSubTotal(BigDecimal.valueOf(32.5).multiply(BigDecimal.valueOf(3)));
 
             SaleItem saleItem2 = new SaleItem();
             saleItem2.setProduct(product2);
@@ -201,10 +204,10 @@ class InventoryLogServiceIntegrationTest {
             saleItem2.setQuantity(6);
             saleItem2.setUnitPrice(BigDecimal.valueOf(15));
             saleItem2.setSale(sale);
-            saleItem2.setSubtotal(BigDecimal.valueOf(15).multiply(BigDecimal.valueOf(6)));
+            saleItem2.setSubTotal(BigDecimal.valueOf(15).multiply(BigDecimal.valueOf(6)));
 
             sale.setSaleItems(List.of(saleItem, saleItem2));
-            sale.setTotalAmount(saleItem.getSubtotal().add(saleItem2.getSubtotal()));
+            sale.setTotalAmount(saleItem.getSubTotal().add(saleItem2.getSubTotal()));
 
             saleRepository.save(sale);
 
@@ -233,7 +236,9 @@ class InventoryLogServiceIntegrationTest {
             inventoryLogCreateDTO.setQuantityChanged(2);
             inventoryLogCreateDTO.setReason("");
 
-            mockMvc.perform(post("/api/v1/"));
+            mockMvc.perform(post("/api/v1/inventoryLog/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(inventoryLogCreateDTO)))
+                    .andDo(print());
+
 
         }
 

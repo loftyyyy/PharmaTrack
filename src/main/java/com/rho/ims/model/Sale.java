@@ -76,9 +76,6 @@ public class Sale {
     @Column(name = "voided_at")
     private LocalDateTime voidedAt;
 
-    @Column(name = "reason_for_update", columnDefinition = "TEXT")
-    private String reasonForUpdate;
-
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SaleItem> saleItems;

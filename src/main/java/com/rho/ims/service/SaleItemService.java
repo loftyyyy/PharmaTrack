@@ -53,7 +53,7 @@ public class SaleItemService {
         productBatchRepository.save(productBatch);
 
         BigDecimal subTotal = saleItemCreateDTO.getUnitPrice().multiply(BigDecimal.valueOf(saleItemCreateDTO.getQuantity()));
-        saleItem.setSubtotal(subTotal);
+        saleItem.setSubTotal(subTotal);
 
         return saleItemRepository.save(saleItem);
 

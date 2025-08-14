@@ -25,7 +25,7 @@ public class SaleItemResponseDTO {
         this.saleId = saleItem.getSale().getId();
         this.productBatchId = saleItem.getProductBatch().getId();
         this.quantity = saleItem.getQuantity();
-        this.subTotal = saleItem.getSubtotal();
+        this.subTotal = saleItem.getSubTotal();
     }
 
 }

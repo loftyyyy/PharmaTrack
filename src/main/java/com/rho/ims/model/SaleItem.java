@@ -42,8 +42,8 @@ public class SaleItem {
     @DecimalMin(value = "0.00", inclusive = true)
     private BigDecimal unitPrice;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "subTotal", precision = 10, scale = 2)
     @DecimalMin("0.00")
-    private BigDecimal subtotal;
+    private BigDecimal subTotal;
 
 }
