@@ -397,7 +397,28 @@ class InventoryLogServiceIntegrationTest {
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$[0].productId").value(inventoryLog.getProduct().getId()))
                     .andDo(print());
+        }
 
+        @DisplayName("Should fetch specific inventory log")
+        @Test
+        void shouldReturnSuccessfulRequest_fetchSpecificInventoryLog() throws Exception {
+            Long id = inventoryLog.getId();
+
+            mockMvc.perform(get("/api/v1/inventoryLog/" + id).contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().is2xxSuccessful())
+                    .andExpect(jsonPath("$.productId").value(inventoryLog.getProduct().getId()))
+                    .andDo(print());
+
+        }
+
+        @DisplayName("Should fail when the id is not valid or doesn't exist")
+        @Test
+        void shouldReturnNotFoundRequest_invalidInventoryLog() throws Exception {
+            Long id = 99L;
+
+            mockMvc.perform(get("/api/v1/inventoryLog/" + id).contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andDo(print());
 
         }
 
