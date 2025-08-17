@@ -1,9 +1,8 @@
 package com.rho.ims.enums;
 
-public enum Status {
+public enum SaleStatus {
+    CONFIRMED,
     PENDING,
-    ORDERED,
-    RECEIVED,
     CANCELLED
 
 }

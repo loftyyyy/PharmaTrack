@@ -1,6 +1,7 @@
 package com.rho.ims.dto;
 
 import com.rho.ims.enums.PurchaseStatus;
+import com.rho.ims.model.PurchaseItem;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -28,9 +30,7 @@ public class PurchaseCreateDTO {
     @PastOrPresent(message = "Purchase date cannot be in the future")
     private LocalDate purchaseDate;
 
-    @NotNull(message = "Purchase status is required")
-    private PurchaseStatus purchaseStatus;
-
+    private List<PurchaseItemCreateDTO> purchaseItems;
 
 
 

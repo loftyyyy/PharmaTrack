@@ -117,7 +117,7 @@ class SupplierControllerIntegrationTest {
             supplierCreateDTO.setAddressState("North Cot");
             supplierCreateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(post("/api/v1/supplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/suppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -137,7 +137,7 @@ class SupplierControllerIntegrationTest {
             supplierCreateDTO.setAddressState("North Cot");
             supplierCreateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(post("/api/v1/supplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/suppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
 
@@ -156,7 +156,7 @@ class SupplierControllerIntegrationTest {
             supplierCreateDTO.setAddressState("North Cot");
             supplierCreateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(post("/api/v1/supplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/suppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierCreateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("name already exists"))
                     .andDo(print());
@@ -220,7 +220,7 @@ class SupplierControllerIntegrationTest {
         @Test
         void shouldReturnSuccessfulRequest_fetchAllSupplier() throws Exception {
 
-            mockMvc.perform(get("/api/v1/supplier").contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/suppliers").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.length()").value(2))
                     .andDo(print());
@@ -232,7 +232,7 @@ class SupplierControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_fetchSpecificSupplier() throws Exception {
             long id = supplier.getId();
 
-            mockMvc.perform(get("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/suppliers/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.id").value(id))
                     .andDo(print());
@@ -244,7 +244,7 @@ class SupplierControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidSupplierId() throws Exception {
             Long id = 99L;
 
-            mockMvc.perform(get("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/suppliers/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("supplier not found"))
                     .andDo(print());
@@ -318,7 +318,7 @@ class SupplierControllerIntegrationTest {
             supplierUpdateDTO.setAddressState("Davao del Sur");
             supplierUpdateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(put("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
+            mockMvc.perform(put("/api/v1/suppliers/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -340,7 +340,7 @@ class SupplierControllerIntegrationTest {
             supplierUpdateDTO.setAddressState("Davao del Sur");
             supplierUpdateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(put("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
+            mockMvc.perform(put("/api/v1/suppliers/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['name']").value("Name is required"))
                     .andDo(print());
@@ -364,7 +364,7 @@ class SupplierControllerIntegrationTest {
             supplierUpdateDTO.setAddressState("Davao del Sur");
             supplierUpdateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(put("/api/v1/supplier/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
+            mockMvc.perform(put("/api/v1/suppliers/" + id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(supplierUpdateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("supplier already exists"))
                     .andDo(print());
@@ -427,7 +427,7 @@ class SupplierControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_deleteSupplier() throws Exception {
             long id = 1;
 
-            mockMvc.perform(delete("/api/v1/supplier/"  + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/suppliers/"  + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(content().string("Supplier deleted successfully"))
                     .andDo(print());
@@ -440,7 +440,7 @@ class SupplierControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidId() throws Exception {
             Long id = 99L;
 
-            mockMvc.perform(delete("/api/v1/supplier/"  + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/suppliers/"  + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("supplier not found"))
                     .andDo(print());

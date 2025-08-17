@@ -41,11 +41,11 @@ public class InventoryLog {
     private String reason;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sale_id", nullable = true)
+    @JoinColumn(name = "sale_id")
     private Sale sale;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id", nullable = false)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
     @Column(name = "adjustment_ref", nullable = false, length = 100)

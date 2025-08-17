@@ -79,7 +79,7 @@ class CustomerControllerIntegrationTest {
             customerCreateDTO.setAddressStreet("Matina");
             customerCreateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(post("/api/v1/customer/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerCreateDTO)))
+            mockMvc.perform(post("/api/v1/customers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerCreateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -98,7 +98,7 @@ class CustomerControllerIntegrationTest {
             customerCreateDTO.setAddressStreet("Matina");
             customerCreateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(post("/api/v1/customer/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerCreateDTO)))
+            mockMvc.perform(post("/api/v1/customers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerCreateDTO)))
                     .andExpect(status().isConflict())
                     .andDo(print());
 
@@ -117,7 +117,7 @@ class CustomerControllerIntegrationTest {
             customerCreateDTO.setAddressStreet("Matina");
             customerCreateDTO.setAddressZipCode("8000");
 
-            mockMvc.perform(post("/api/v1/customer/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerCreateDTO)))
+            mockMvc.perform(post("/api/v1/customers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerCreateDTO)))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
 
@@ -158,7 +158,7 @@ class CustomerControllerIntegrationTest {
         @DisplayName("Should fetch all customers")
         @Test
         void shouldReturnSuccessfulRequest_fetchAllCustomer() throws Exception {
-            mockMvc.perform(get("/api/v1/customer").contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/customers").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.length()").value(2))
                     .andDo(print());
@@ -170,7 +170,7 @@ class CustomerControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_fetchSpecificCustomer() throws Exception {
             Long customerId = customer.getId();
 
-            mockMvc.perform(get("/api/v1/customer/" + customerId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/customers/" + customerId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.customerId").value(customerId))
                     .andDo(print());
@@ -183,7 +183,7 @@ class CustomerControllerIntegrationTest {
 
             Long customerId = 99L;
 
-            mockMvc.perform(get("/api/v1/customer/" + customerId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/customers/" + customerId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isInternalServerError())
                     .andDo(print());
 
@@ -232,7 +232,7 @@ class CustomerControllerIntegrationTest {
             customerUpdateDTO.setAddressStreet("Rivas");
             customerUpdateDTO.setAddressState("Cotabato");
 
-            mockMvc.perform(post("/api/v1/customer/" + customerId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerUpdateDTO)))
+            mockMvc.perform(post("/api/v1/customers/" + customerId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -251,7 +251,7 @@ class CustomerControllerIntegrationTest {
             customerUpdateDTO.setAddressStreet("Rivas");
             customerUpdateDTO.setAddressState("Cotabato");
 
-            mockMvc.perform(post("/api/v1/customer/" + customerId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerUpdateDTO)))
+            mockMvc.perform(post("/api/v1/customers/" + customerId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerUpdateDTO)))
                     .andExpect(status().isConflict())
                     .andDo(print());
 
@@ -270,7 +270,7 @@ class CustomerControllerIntegrationTest {
             customerUpdateDTO.setAddressStreet("Rivas");
             customerUpdateDTO.setAddressState("Cotabato");
 
-            mockMvc.perform(post("/api/v1/customer/" + customerId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerUpdateDTO)))
+            mockMvc.perform(post("/api/v1/customers/" + customerId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(customerUpdateDTO)))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
 
@@ -312,7 +312,7 @@ class CustomerControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_deleteCustomer() throws Exception {
             Long customerId = customer.getId();
 
-            mockMvc.perform(delete("/api/v1/customer/" + customerId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/customers/" + customerId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -323,7 +323,7 @@ class CustomerControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidCustomerId() throws Exception {
             Long nonExistentCustomerId = 99L;
 
-            mockMvc.perform(delete("/api/v1/customer/" + nonExistentCustomerId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/customers/" + nonExistentCustomerId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andDo(print());
 

@@ -155,7 +155,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierCreateDTO.setPreferredSupplier(true);
             productSupplierCreateDTO.setSupplierProductCode("73654321");
 
-            mockMvc.perform(post("/api/v1/productSupplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/productSuppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -170,7 +170,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierCreateDTO.setPreferredSupplier(true);
             productSupplierCreateDTO.setSupplierProductCode("73654321");
 
-            mockMvc.perform(post("/api/v1/productSupplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/productSuppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("product supplier already exists"))
                     .andDo(print());
@@ -186,7 +186,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierCreateDTO.setPreferredSupplier(true);
             productSupplierCreateDTO.setSupplierProductCode("32458");
 
-            mockMvc.perform(post("/api/v1/productSupplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/productSuppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("Supplier product code already exists for this supplier"))
                     .andDo(print());
@@ -203,7 +203,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierCreateDTO.setPreferredSupplier(true);
             productSupplierCreateDTO.setSupplierProductCode("73654321");
 
-            mockMvc.perform(post("/api/v1/productSupplier/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
+            mockMvc.perform(post("/api/v1/productSuppliers/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierCreateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['supplierId']").value("Supplier is required"))
                     .andExpect(jsonPath("$.fieldErrors['productId']").value("Product is required"))
@@ -302,7 +302,7 @@ class ProductSupplierControllerIntegrationTest {
         @DisplayName("Should fetch all product suppliers")
         @Test
         void shouldReturnSuccessfulRequest_fetchAllProductSuppliers() throws Exception {
-            mockMvc.perform(get("/api/v1/productSupplier").contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/productSuppliers").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.length()").value(2))
                     .andDo(print());
@@ -315,7 +315,7 @@ class ProductSupplierControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_fetchSpecificProductSupplier() throws Exception {
             Long productSupplierId = productSupplier.getId();
 
-            mockMvc.perform(get("/api/v1/productSupplier/" + productSupplierId))
+            mockMvc.perform(get("/api/v1/productSuppliers/" + productSupplierId))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -326,7 +326,7 @@ class ProductSupplierControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidProductSupplier() throws Exception {
             Long nonExistentProductSupplierId = 99L;
 
-            mockMvc.perform(get("/api/v1/productSupplier/" + nonExistentProductSupplierId))
+            mockMvc.perform(get("/api/v1/productSuppliers/" + nonExistentProductSupplierId))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product supplier not found"))
                     .andDo(print());
@@ -430,7 +430,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierUpdateDTO.setPreferredSupplier(false);
             productSupplierUpdateDTO.setSupplierProductCode("3214532A");
 
-            mockMvc.perform(put("/api/v1/productSupplier/" + productSupplierId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierUpdateDTO)))
+            mockMvc.perform(put("/api/v1/productSuppliers/" + productSupplierId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
         }
@@ -444,7 +444,7 @@ class ProductSupplierControllerIntegrationTest {
             productSupplierUpdateDTO.setPreferredSupplier(false);
             productSupplierUpdateDTO.setSupplierProductCode("32458");
 
-            mockMvc.perform(put("/api/v1/productSupplier/" + productSupplierId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierUpdateDTO)))
+            mockMvc.perform(put("/api/v1/productSuppliers/" + productSupplierId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productSupplierUpdateDTO)))
                     .andExpect(status().isConflict())
                     .andDo(print());
 
@@ -544,7 +544,7 @@ class ProductSupplierControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_deleteProductSupplier() throws Exception {
             Long productSupplierId = productSupplier.getId();
 
-            mockMvc.perform(delete("/api/v1/productSupplier/" + productSupplierId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/productSuppliers/" + productSupplierId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -555,7 +555,7 @@ class ProductSupplierControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidProductSupplierId() throws Exception {
             Long nonExistentProductSupplierId = 99L;
 
-            mockMvc.perform(delete("/api/v1/productSupplier/" + nonExistentProductSupplierId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/productSuppliers/" + nonExistentProductSupplierId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andDo(print());
 

@@ -183,7 +183,7 @@ class PurchaseItemControllerIntegrationTest {
             purchaseItemCreateDTO.setQuantity(12);
             purchaseItemCreateDTO.setUnitPrice(BigDecimal.valueOf(125));
 
-            mockMvc.perform(post("/api/v1/purchaseItem/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemCreateDTO)))
+            mockMvc.perform(post("/api/v1/purchaseItems/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemCreateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -199,7 +199,7 @@ class PurchaseItemControllerIntegrationTest {
             purchaseItemCreateDTO.setUnitPrice(BigDecimal.valueOf(125));
 
 
-            mockMvc.perform(post("/api/v1/purchaseItem/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemCreateDTO)))
+            mockMvc.perform(post("/api/v1/purchaseItems/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemCreateDTO)))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -216,7 +216,7 @@ class PurchaseItemControllerIntegrationTest {
             purchaseItemCreateDTO.setQuantity(12);
             purchaseItemCreateDTO.setUnitPrice(BigDecimal.valueOf(125));
 
-            mockMvc.perform(post("/api/v1/purchaseItem/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemCreateDTO)))
+            mockMvc.perform(post("/api/v1/purchaseItems/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemCreateDTO)))
                     .andExpect(status().isConflict())
                     .andDo(print());
 
@@ -331,7 +331,7 @@ class PurchaseItemControllerIntegrationTest {
         @DisplayName("Should retrieve all purchase items")
         @Test
         void shouldReturnSuccessfulRequest_fetchAllPurchaseItem() throws Exception {
-            mockMvc.perform(get("/api/v1/purchaseItem").contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/purchaseItems").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.length()").value(2))
                     .andDo(print());
@@ -344,7 +344,7 @@ class PurchaseItemControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_fetchSpecificPurchaseItem() throws Exception {
             Long purchaseItemId = purchaseItem.getId();
 
-            mockMvc.perform(get("/api/v1/purchaseItem/" + purchaseItemId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/purchaseItems/" + purchaseItemId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.purchaseItemId").value(purchaseItemId))
                     .andDo(print());
@@ -356,7 +356,7 @@ class PurchaseItemControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidPurchaseItemId() throws Exception {
             Long nonExistentId = 99L;
 
-            mockMvc.perform(get("/api/v1/purchaseItem/" + nonExistentId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/purchaseItems/" + nonExistentId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andDo(print());
 
@@ -471,7 +471,7 @@ class PurchaseItemControllerIntegrationTest {
             purchaseItemUpdateDTO.setQuantity(12);
             purchaseItemUpdateDTO.setUnitPrice(BigDecimal.valueOf(10.5));
 
-            mockMvc.perform(put("/api/v1/purchaseItem/" + purchaseItemId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemUpdateDTO)))
+            mockMvc.perform(put("/api/v1/purchaseItems/" + purchaseItemId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -486,7 +486,7 @@ class PurchaseItemControllerIntegrationTest {
             purchaseItemUpdateDTO.setQuantity(12);
             purchaseItemUpdateDTO.setUnitPrice(BigDecimal.valueOf(10.5));
 
-            mockMvc.perform(put("/api/v1/purchaseItem/" + nonExistentPurchaseItemId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemUpdateDTO)))
+            mockMvc.perform(put("/api/v1/purchaseItems/" + nonExistentPurchaseItemId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseItemUpdateDTO)))
                     .andExpect(status().isNotFound())
                     .andDo(print());
 
@@ -596,7 +596,7 @@ class PurchaseItemControllerIntegrationTest {
             Long purchaseItemId = purchaseItem.getId();
 
 
-            mockMvc.perform(delete("/api/v1/purchaseItem/" + purchaseItemId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/purchaseItems/" + purchaseItemId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(content().string("Purchase item deleted successfully"))
                     .andDo(print());
@@ -609,7 +609,7 @@ class PurchaseItemControllerIntegrationTest {
             Long nonExistentPurchaseItemId = 99L;
 
 
-            mockMvc.perform(delete("/api/v1/purchaseItem/" + nonExistentPurchaseItemId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/purchaseItems/" + nonExistentPurchaseItemId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andDo(print());
 

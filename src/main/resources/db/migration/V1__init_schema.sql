@@ -122,6 +122,8 @@ CREATE TABLE purchases (
                            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                            updated_by BIGINT,
+                           tax_amount DECIMAL(10,2) DEFAULT 0.00,
+                           grand_total DECIMAL(10,2) DEFAULT 0.00,
                            FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                            FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
@@ -171,6 +173,9 @@ CREATE TABLE sales (
                        void_reason TEXT,
                        voided_by BIGINT,
                        voided_at DATETIME,
+                       sale_status ENUM('PENDING', 'CONFIRMED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
+                       tax_amount DECIMAL(10,2) DEFAULT 0.00,
+                       grand_total DECIMAL(10,2) DEFAULT 0.00,
                        FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL ON UPDATE CASCADE,
                        FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                        FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,

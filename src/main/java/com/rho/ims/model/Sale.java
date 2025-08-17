@@ -1,6 +1,7 @@
 package com.rho.ims.model;
 
 import com.rho.ims.enums.PaymentMethod;
+import com.rho.ims.enums.SaleStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -76,6 +77,15 @@ public class Sale {
     @Column(name = "voided_at")
     private LocalDateTime voidedAt;
 
+    @Column(name = "sale_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SaleStatus status = SaleStatus.PENDING;
+
+    @Column(name = "tax_amount", nullable = false, precision = 10, scale = 2)
+    private BigDecimal taxAmount;
+
+    @Column(name = "grand_total", nullable = false, precision = 10, scale = 2)
+    private BigDecimal grandTotal;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SaleItem> saleItems;

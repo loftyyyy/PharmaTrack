@@ -144,7 +144,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchCreateDTO.setExpiryDate(expiryDate);
             productBatchCreateDTO.setManufacturingDate(manufactureDate);
 
-            mockMvc.perform(post("/api/v1/productBatch/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
+            mockMvc.perform(post("/api/v1/productBatches/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -162,7 +162,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchCreateDTO.setExpiryDate(expiryDate);
             productBatchCreateDTO.setManufacturingDate(manufactureDate);
 
-            mockMvc.perform(post("/api/v1/productBatch/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
+            mockMvc.perform(post("/api/v1/productBatches/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors['batchNumber']").value("Batch number is required"))
                     .andDo(print());
@@ -183,7 +183,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchCreateDTO.setExpiryDate(expiryDate);
             productBatchCreateDTO.setManufacturingDate(manufactureDate);
 
-            mockMvc.perform(post("/api/v1/productBatch/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
+            mockMvc.perform(post("/api/v1/productBatches/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("batch number already exists"))
                     .andDo(print());
@@ -205,7 +205,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchCreateDTO.setExpiryDate(expiryDate);
             productBatchCreateDTO.setManufacturingDate(manufactureDate);
 
-            mockMvc.perform(post("/api/v1/productBatch/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
+            mockMvc.perform(post("/api/v1/productBatches/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchCreateDTO)))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product not found"))
                     .andDo(print());
@@ -297,7 +297,7 @@ class ProductBatchControllerIntegrationTest {
         @Test
         void shouldReturnSuccessfulRequest_fetchAllProductBatch() throws Exception {
 
-            mockMvc.perform(get("/api/v1/productBatch").contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/productBatches").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.length()").value(2))
                     .andDo(print());
@@ -309,7 +309,7 @@ class ProductBatchControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_fetchSpecificProductBatch() throws Exception {
             Long id = productBatch.getId();
 
-            mockMvc.perform(get("/api/v1/productBatch/" + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/productBatches/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.batchNumber").value(productBatch.getBatchNumber()))
                     .andDo(print());
@@ -321,7 +321,7 @@ class ProductBatchControllerIntegrationTest {
         void shouldReturnNotFoundRequest_badProductBatchId() throws Exception {
             Long nonExistentId = 99L;
 
-            mockMvc.perform(get("/api/v1/productBatch/" + nonExistentId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/productBatches/" + nonExistentId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product batch id not found"))
                     .andDo(print());
@@ -419,7 +419,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchUpdateDTO.setQuantity(75);
             productBatchUpdateDTO.setLocation("Japan");
 
-            mockMvc.perform(put("/api/v1/productBatch/" + productBatchId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchUpdateDTO)))
+            mockMvc.perform(put("/api/v1/productBatches/" + productBatchId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -438,7 +438,7 @@ class ProductBatchControllerIntegrationTest {
             productBatchUpdateDTO.setQuantity(75);
             productBatchUpdateDTO.setLocation("Japan");
 
-            mockMvc.perform(put("/api/v1/productBatch/" + nonExistentProductBatchId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchUpdateDTO)))
+            mockMvc.perform(put("/api/v1/productBatches/" + nonExistentProductBatchId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(productBatchUpdateDTO)))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("product batch not found"))
                     .andDo(print());
@@ -530,7 +530,7 @@ class ProductBatchControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_deleteProductBatch() throws Exception {
             Long productBatchId = productBatch.getId();
 
-            mockMvc.perform(delete("/api/v1/productBatch/" + productBatchId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/productBatches/" + productBatchId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 

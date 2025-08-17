@@ -130,7 +130,7 @@ class PurchaseControllerIntegrationTest {
             purchaseCreateDTO.setPurchaseStatus(PurchaseStatus.RECEIVED);
             purchaseCreateDTO.setTotalAmount(BigDecimal.valueOf(3520));
 
-            mockMvc.perform(post("/api/v1/purchase/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
+            mockMvc.perform(post("/api/v1/purchases/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
         }
@@ -144,7 +144,7 @@ class PurchaseControllerIntegrationTest {
             purchaseCreateDTO.setPurchaseStatus(PurchaseStatus.PENDING);
             purchaseCreateDTO.setTotalAmount(BigDecimal.valueOf(3520));
 
-            mockMvc.perform(post("/api/v1/purchase/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
+            mockMvc.perform(post("/api/v1/purchases/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("Supplier already has a pending purchase"))
                     .andDo(print());
@@ -161,7 +161,7 @@ class PurchaseControllerIntegrationTest {
             purchaseCreateDTO.setPurchaseStatus(PurchaseStatus.PENDING);
             purchaseCreateDTO.setTotalAmount(null);
 
-            mockMvc.perform(post("/api/v1/purchase/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
+            mockMvc.perform(post("/api/v1/purchases/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.fieldErrors.length()").value(3))
                     .andDo(print());
@@ -236,7 +236,7 @@ class PurchaseControllerIntegrationTest {
         @Test
         void shouldReturnSuccessfulRequest_fetchAllPurchase() throws Exception {
 
-            mockMvc.perform(get("/api/v1/purchase").contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/purchases").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.length()").value(2))
                     .andDo(print());
@@ -247,7 +247,7 @@ class PurchaseControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_fetchSpecificPurchase() throws Exception {
             Long id = purchase.getId();
 
-            mockMvc.perform(get("/api/v1/purchase/" + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/purchases/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andExpect(jsonPath("$.supplierId").value(purchase.getSupplier().getId()))
                     .andDo(print());
@@ -259,7 +259,7 @@ class PurchaseControllerIntegrationTest {
         void shouldNotFoundRequest_invalidId() throws Exception {
             Long invalidId = 99L;
 
-            mockMvc.perform(get("/api/v1/purchase/" + invalidId).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(get("/api/v1/purchases/" + invalidId).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message").value("purchase not found"))
                     .andDo(print());
@@ -335,7 +335,7 @@ class PurchaseControllerIntegrationTest {
             PurchaseUpdateDTO purchaseUpdateDTO = new PurchaseUpdateDTO();
             purchaseUpdateDTO.setPurchaseStatus(PurchaseStatus.RECEIVED);
 
-            mockMvc.perform(put("/api/v1/purchase/" + purchaseId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseUpdateDTO)))
+            mockMvc.perform(put("/api/v1/purchases/" + purchaseId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseUpdateDTO)))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -350,7 +350,7 @@ class PurchaseControllerIntegrationTest {
             PurchaseUpdateDTO purchaseUpdateDTO = new PurchaseUpdateDTO();
             purchaseUpdateDTO.setPurchaseStatus(PurchaseStatus.PENDING);
 
-            mockMvc.perform(put("/api/v1/purchase/" + purchaseId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseUpdateDTO)))
+            mockMvc.perform(put("/api/v1/purchases/" + purchaseId).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseUpdateDTO)))
                     .andExpect(status().isConflict())
                     .andExpect(jsonPath("$.message").value("Supplier already has a different pending purchase."))
                     .andDo(print());
@@ -426,7 +426,7 @@ class PurchaseControllerIntegrationTest {
         void shouldReturnSuccessfulRequest_deletePurchase() throws Exception {
             Long id = purchase.getId();
 
-            mockMvc.perform(delete("/api/v1/purchase/" + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/purchases/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
 
@@ -437,7 +437,7 @@ class PurchaseControllerIntegrationTest {
         void shouldReturnNotFoundRequest_invalidId() throws Exception {
             Long id = 99L;
 
-            mockMvc.perform(delete("/api/v1/purchase/" + id).contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(delete("/api/v1/purchases/" + id).contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andDo(print());
 

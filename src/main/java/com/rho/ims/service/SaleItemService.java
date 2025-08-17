@@ -48,7 +48,7 @@ public class SaleItemService {
         }
         saleItem.setQuantity(saleItemCreateDTO.getQuantity());
 
-        // Not sure for this one TODO: think about this
+        // Not sure for this one TODO: think about this. Only modify the quantity once the sale has been confirmed
         productBatch.setQuantity(productBatch.getQuantity() - saleItemCreateDTO.getQuantity());
         productBatchRepository.save(productBatch);
 
@@ -56,8 +56,6 @@ public class SaleItemService {
         saleItem.setSubTotal(subTotal);
 
         return saleItemRepository.save(saleItem);
-
-
 
     }
 

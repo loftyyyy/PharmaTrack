@@ -13,4 +13,5 @@ public class SaleVoidDTO {
 
     @NotBlank(message = "Void reason is required")
     private String voidReason;
+
 }

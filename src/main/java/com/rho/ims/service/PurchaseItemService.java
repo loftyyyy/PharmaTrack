@@ -46,6 +46,8 @@ import java.util.Optional;
         purchaseItem.setQuantity(purchaseItemCreateDTO.getQuantity());
         purchaseItem.setUnitPrice(purchaseItemCreateDTO.getUnitPrice());
 
+        // TODO: Implement inventory logs
+
         return purchaseItemRepository.save(purchaseItem);
 
 
