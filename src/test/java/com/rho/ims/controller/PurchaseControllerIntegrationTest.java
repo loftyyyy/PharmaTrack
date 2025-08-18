@@ -127,7 +127,6 @@ class PurchaseControllerIntegrationTest {
             PurchaseCreateDTO purchaseCreateDTO = new PurchaseCreateDTO();
             purchaseCreateDTO.setSupplierId(supplier.getId());
             purchaseCreateDTO.setPurchaseDate(purchaseDate);
-            purchaseCreateDTO.setPurchaseStatus(PurchaseStatus.RECEIVED);
             purchaseCreateDTO.setTotalAmount(BigDecimal.valueOf(3520));
 
             mockMvc.perform(post("/api/v1/purchases/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
@@ -141,7 +140,6 @@ class PurchaseControllerIntegrationTest {
             PurchaseCreateDTO purchaseCreateDTO = new PurchaseCreateDTO();
             purchaseCreateDTO.setSupplierId(supplier.getId());
             purchaseCreateDTO.setPurchaseDate(purchaseDate);
-            purchaseCreateDTO.setPurchaseStatus(PurchaseStatus.PENDING);
             purchaseCreateDTO.setTotalAmount(BigDecimal.valueOf(3520));
 
             mockMvc.perform(post("/api/v1/purchases/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))
@@ -158,7 +156,6 @@ class PurchaseControllerIntegrationTest {
             PurchaseCreateDTO purchaseCreateDTO = new PurchaseCreateDTO();
             purchaseCreateDTO.setSupplierId(null);
             purchaseCreateDTO.setPurchaseDate(null);
-            purchaseCreateDTO.setPurchaseStatus(PurchaseStatus.PENDING);
             purchaseCreateDTO.setTotalAmount(null);
 
             mockMvc.perform(post("/api/v1/purchases/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(purchaseCreateDTO)))

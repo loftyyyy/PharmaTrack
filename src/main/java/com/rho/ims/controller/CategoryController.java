@@ -44,7 +44,6 @@ public class CategoryController {
 
     }
 
-
     @PostMapping("/create")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryCreateDTO categoryCreateDTO){
         Category category = categoryService.saveCategory(categoryCreateDTO);
