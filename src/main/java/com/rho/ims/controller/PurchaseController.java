@@ -25,15 +25,12 @@ public class PurchaseController {
     @PostMapping("/create")
     public ResponseEntity<?> createPurchase(@Valid @RequestBody PurchaseCreateDTO purchaseCreateDTO){
         Purchase purchase = purchaseService.savePurchase(purchaseCreateDTO);
-
         return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
-
     }
 
     @GetMapping
     public ResponseEntity<?> getAllPurchase(){
         List<PurchaseResponseDTO> purchases = purchaseService.getAll().stream().map(purchase -> new PurchaseResponseDTO(purchase)).toList();
-
         return ResponseEntity.ok().body(purchases);
     }
 
@@ -42,22 +39,15 @@ public class PurchaseController {
         return ResponseEntity.ok().body(new PurchaseResponseDTO(purchaseService.getPurchase(id)));
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePurchase(@Valid @RequestBody PurchaseUpdateDTO purchaseUpdateDTO, @PathVariable Long id){
         Purchase purchase = purchaseService.updatePurchase(purchaseUpdateDTO, id);
-
         return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
-
     }
 
     @DeleteMapping("/{id}")
     public void deletePurchase(@PathVariable Long id){
         purchaseService.deletePurchase(id);
-
     }
-
-
-
 
 }

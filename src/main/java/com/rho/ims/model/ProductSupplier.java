@@ -32,5 +32,4 @@ public class ProductSupplier {
     @Column(name = "supplier_product_code", length = 100)
     private String supplierProductCode;
 
-
 }

@@ -55,9 +55,4 @@ public class Customer {
     @JoinColumn(name = "updated_by", nullable = false)
     private User updatedBy;
 
-
-
-
-
-
 }

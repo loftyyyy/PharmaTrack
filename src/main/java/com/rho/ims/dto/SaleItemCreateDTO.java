@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class SaleItemCreateDTO {
+
     @NotNull(message = "Sale is required")
     private Long saleId;
 

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class InventoryLogResponseDTO {
+
     private Long productId;
     private Long productBatchId;
     private ChangeType changeType;
@@ -32,10 +33,5 @@ public class InventoryLogResponseDTO {
         this.adjustmentReference = inventoryLog.getAdjustmentReference();
         this.createdAt = inventoryLog.getCreatedAt();
     }
-
-
-
-
-
 
 }

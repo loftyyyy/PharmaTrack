@@ -28,5 +28,4 @@ public class ProductBatchUpdateDTO {
     @Size(max = 50, message = "location must not exceed 50 characters")
     private String location;
 
-
 }

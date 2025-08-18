@@ -35,4 +35,5 @@ public class CustomerCreateDTO {
 
     @Size(max = 20, message = "Zip code must not exceed 20 characters")
     private String addressZipCode;
+
 }

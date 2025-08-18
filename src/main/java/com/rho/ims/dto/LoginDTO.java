@@ -10,12 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginDTO {
+
     @NotBlank(message = "Username is required")
     private String username;
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
-
 
 }

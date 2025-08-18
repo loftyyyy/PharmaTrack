@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class SaleResponseDTO {
+
     private Long saleId;
     private Long customerId;
     private BigDecimal totalAmount;

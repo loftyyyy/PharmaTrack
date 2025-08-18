@@ -30,14 +30,4 @@ public class ProductCreateDTO {
     @Size(max = 50)
     private String barcode;
 
-
-
-
-
-
-
-
-
-
-
 }

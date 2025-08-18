@@ -39,15 +39,6 @@ public class ProductBatchResponseDTO {
         this.createdAt = productBatch.getCreatedAt();
         this.updatedAt = productBatch.getUpdatedAt();
         this.createdById = productBatch.getCreatedBy().getId();
-
     }
-
-
-
-
-
-
-
-
 
 }

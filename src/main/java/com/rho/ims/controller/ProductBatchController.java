@@ -17,19 +17,17 @@ import java.util.List;
 @RequestMapping("/api/v1/productBatches")
 @RestController
 public class ProductBatchController {
+
     private final ProductBatchService productBatchService;
 
     public ProductBatchController(ProductBatchService productBatchService){
         this.productBatchService = productBatchService;
     }
-
-
     // CRUD:
     @PostMapping("/create")
     public ResponseEntity<?> createProductBatch(@Valid @RequestBody ProductBatchCreateDTO productBatchCreateDTO){
         ProductBatch productBatch = productBatchService.saveProductBatch(productBatchCreateDTO);
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
-
     }
 
     @GetMapping
@@ -48,19 +46,12 @@ public class ProductBatchController {
     public ResponseEntity<?> updateProductBatch(@Valid @RequestBody ProductBatchUpdateDTO productBatchUpdateDTO, @PathVariable Long id){
         ProductBatch productBatch = productBatchService.updateProductBatch(productBatchUpdateDTO, id);
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
-
-
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         productBatchService.deleteProductBatch(id);
         return ResponseEntity.ok().body("Product batch successfully deleted");
-
     }
-
-
-
-
 
 }

@@ -49,10 +49,4 @@ public class User {
     @JoinColumn(name = "updated_by", nullable = false)
     private User updatedBy;
 
-
-
-
-
-
-
 }

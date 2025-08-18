@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CustomerResponseDTO {
+
     private Long customerId;
     private String name;
     private String phoneNumber;
@@ -17,7 +18,6 @@ public class CustomerResponseDTO {
     private String addressCity;
     private String addressState;
     private String addressZipCode;
-
 
     public CustomerResponseDTO(Customer customer){
         this.customerId = customer.getId();
@@ -28,7 +28,6 @@ public class CustomerResponseDTO {
         this.addressCity = customer.getAddressCity();
         this.addressState = customer.getAddressState();
         this.addressZipCode = customer.getAddressZipCode();
-
     }
 
 }

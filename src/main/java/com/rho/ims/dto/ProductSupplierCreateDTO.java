@@ -24,8 +24,4 @@ public class ProductSupplierCreateDTO {
     @NotBlank(message = "Product code is required")
     private String supplierProductCode;
 
-
-
-
-
 }

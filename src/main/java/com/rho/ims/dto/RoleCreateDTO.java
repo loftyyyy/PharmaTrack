@@ -13,9 +13,4 @@ public class RoleCreateDTO {
     @NotBlank(message = "Name cannot be blank!")
     private String name;
 
-
-
-
-
-
 }

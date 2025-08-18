@@ -59,7 +59,4 @@ public class InventoryLog {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
-
-
-
 }

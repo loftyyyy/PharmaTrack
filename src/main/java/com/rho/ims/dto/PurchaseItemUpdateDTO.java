@@ -24,6 +24,4 @@ public class PurchaseItemUpdateDTO {
     @NotNull(message = "Unit price is required")
     private BigDecimal unitPrice;
 
-
-
 }

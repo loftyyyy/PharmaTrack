@@ -38,7 +38,4 @@ public class PurchaseItem {
     @DecimalMin("0.00")
     private BigDecimal unitPrice;
 
-
-
-
 }

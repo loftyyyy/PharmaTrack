@@ -31,14 +31,12 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO){
         Product product = productService.saveProduct(productCreateDTO);
         return ResponseEntity.ok().body(new ProductResponseDTO(product));
-
     }
 
     @GetMapping
     public ResponseEntity<?> getAllProduct(){
         List<ProductResponseDTO> productList = productService.getAll().stream().map(product -> new ProductResponseDTO(product)).toList();
         return ResponseEntity.ok().body(productList);
-
     }
 
 
@@ -46,7 +44,6 @@ public class ProductController {
     public ResponseEntity<?> getProduct(@PathVariable Long id){
         Product product = productService.getProduct(id);
         return ResponseEntity.ok().body(new ProductResponseDTO(product));
-
     }
 
     @PutMapping("/{id}")
@@ -59,20 +56,6 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
         return ResponseEntity.ok().body("Product deleted successfully");
-
     }
-
-
-
-    // CRUD ends HERE
-
-
-
-
-
-
-
-
-
 
 }

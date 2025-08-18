@@ -14,5 +14,4 @@ public class PurchaseUpdateDTO {
     @NotNull(message = "Purchase status is required")
     private PurchaseStatus purchaseStatus;
 
-
 }

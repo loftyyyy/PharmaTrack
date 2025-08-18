@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class SaleItemResponseDTO {
+
     private Long saleItemId;
     private Long saleId;
     private Long productBatchId;

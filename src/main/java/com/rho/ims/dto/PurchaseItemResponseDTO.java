@@ -13,13 +13,9 @@ import java.math.BigDecimal;
 public class PurchaseItemResponseDTO {
 
     private Long purchaseItemId;
-
     private Long purchaseId;
-
     private Long productBatchId;
-
     private Integer quantity;
-
     private BigDecimal unitPrice;
 
     public PurchaseItemResponseDTO(PurchaseItem purchaseItem){

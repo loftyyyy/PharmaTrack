@@ -4,6 +4,7 @@ import com.rho.ims.dto.SaleCreateDTO;
 import com.rho.ims.dto.SaleResponseDTO;
 import com.rho.ims.dto.SaleVoidDTO;
 import com.rho.ims.model.Sale;
+import com.rho.ims.respository.SaleRepository;
 import com.rho.ims.service.SaleService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,12 @@ public class SaleController {
     @PostMapping("/{id}/void")
     public ResponseEntity<?> voidSale(@PathVariable Long id, @Valid @RequestBody SaleVoidDTO saleVoidDTO) {
         Sale sale = saleService.voidSale(id, saleVoidDTO);
+        return ResponseEntity.ok().body(new SaleResponseDTO(sale));
+    }
+
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<?> cancelSale(@PathVariable Long id) {
+        Sale sale = saleService.cancelSale(id);
         return ResponseEntity.ok().body(new SaleResponseDTO(sale));
     }
 

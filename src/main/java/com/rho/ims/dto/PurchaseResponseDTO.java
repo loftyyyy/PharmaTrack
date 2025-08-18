@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class PurchaseResponseDTO {
+
     private Long purchaseId;
     private Long supplierId;
     private BigDecimal totalAmount;
@@ -28,8 +29,6 @@ public class PurchaseResponseDTO {
         this.purchaseDate = purchase.getPurchaseDate();
         this.purchaseStatus = purchase.getPurchaseStatus();
         this.createdBy = purchase.getCreatedBy().getId();
-
     }
-
 
 }

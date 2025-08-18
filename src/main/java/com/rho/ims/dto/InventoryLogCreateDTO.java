@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InventoryLogCreateDTO {
+
     @NotNull(message = "Product is required")
     private Long productId;
 
@@ -32,6 +33,5 @@ public class InventoryLogCreateDTO {
 
     @Size(max = 100, message = "Adjustment reference must not exceed 100 characters")
     private String adjustmentReference;
-
 
 }

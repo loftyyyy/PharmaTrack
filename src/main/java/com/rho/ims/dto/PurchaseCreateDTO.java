@@ -18,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PurchaseCreateDTO {
+
     @NotNull(message = "Supplier is required")
     private Long supplierId;
 
@@ -31,8 +32,6 @@ public class PurchaseCreateDTO {
     private LocalDate purchaseDate;
 
     private List<PurchaseItemCreateDTO> purchaseItems;
-
-
 
 }
 

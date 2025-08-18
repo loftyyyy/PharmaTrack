@@ -64,6 +64,4 @@ public class ProductBatch {
     @JoinColumn(name = "updated_by", nullable = false)
     private User updatedBy;
 
-
-
 }

@@ -13,6 +13,4 @@ public class CategoryUpdateDTO {
     @NotBlank(message = "Name is required!")
     private String name;
 
-
-
 }

@@ -29,4 +29,5 @@ public class PurchaseItemCreateDTO {
     @Digits(integer = 8, fraction = 2, message = "Unit price must have up to 8 digits before the decimal and 2 after")
     @NotNull(message = "Unit price is required")
     private BigDecimal unitPrice;
+
 }

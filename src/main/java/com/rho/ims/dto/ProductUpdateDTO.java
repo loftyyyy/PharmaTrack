@@ -29,8 +29,4 @@ public class ProductUpdateDTO {
     @Size(max = 50)
     private String barcode;
 
-
-
-
-
 }

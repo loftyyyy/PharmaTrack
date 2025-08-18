@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 public class CustomerUpdateDTO {
 
-
     @NotBlank(message = "Name is required")
     @Size(max = 100, message = "Name must not exceed 100 characters")
     private String name;
@@ -35,4 +34,5 @@ public class CustomerUpdateDTO {
 
     @Size(max = 20, message = "Zip code must not exceed 20 characters")
     private String addressZipCode;
+
 }

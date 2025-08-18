@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class SupplierResponseDTO {
+
     private Long id;
     private String name;
     private String contactPerson;

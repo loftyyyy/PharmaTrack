@@ -35,5 +35,4 @@ public class SignupDTO {
         this.roleId = roleId;
     }
 
-
 }

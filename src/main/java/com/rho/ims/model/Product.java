@@ -54,8 +54,4 @@ public class Product {
     @JoinColumn(name = "updated_by", nullable = false)
     private User updatedBy;
 
-
-
-
-
 }

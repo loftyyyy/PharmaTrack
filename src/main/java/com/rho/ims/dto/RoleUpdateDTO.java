@@ -16,10 +16,6 @@ public class RoleUpdateDTO {
 
     public RoleUpdateDTO(Role role){
         this.name = role.getName();
-
     }
-
-
-
 
 }

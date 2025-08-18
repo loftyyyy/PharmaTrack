@@ -23,7 +23,6 @@ public class RoleController {
     @PostMapping("/create")
     public ResponseEntity<?> createRole(@Valid @RequestBody RoleCreateDTO roleCreateDTO) {
         Role role = roleService.saveRole(roleCreateDTO);
-
         return ResponseEntity.ok("Role created successfully: " + role.getName());
     }
 
@@ -31,25 +30,18 @@ public class RoleController {
     public ResponseEntity<?> deleteRole(@PathVariable long id) {
         roleService.deleteRole(id);
         return ResponseEntity.ok("Role deleted successfully");
-
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getRole(@PathVariable long id) {
         Role role = roleService.findById(id);
         return ResponseEntity.ok(new RoleResponseDTO(role));
-
-
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRole(@PathVariable long id, @Valid @RequestBody RoleUpdateDTO roleUpdateDTO){
         roleService.updateRole(id, roleUpdateDTO);
         return ResponseEntity.ok().body("Role Updated Successfully");
-
-
-
-
     }
 
 
