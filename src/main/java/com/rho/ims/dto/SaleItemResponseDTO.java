@@ -18,6 +18,7 @@ public class SaleItemResponseDTO {
     private Long saleItemId;
     private Long saleId;
     private Long productBatchId;
+    private String productName;
     private Integer quantity;
     private BigDecimal subTotal;
 
@@ -25,6 +26,7 @@ public class SaleItemResponseDTO {
         this.saleItemId = saleItem.getId();
         this.saleId = saleItem.getSale().getId();
         this.productBatchId = saleItem.getProductBatch().getId();
+        this.productName = saleItem.getProduct().getName();
         this.quantity = saleItem.getQuantity();
         this.subTotal = saleItem.getSubTotal();
     }

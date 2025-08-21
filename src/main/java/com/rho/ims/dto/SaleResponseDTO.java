@@ -21,9 +21,10 @@ public class SaleResponseDTO {
     private BigDecimal totalAmount;
     private BigDecimal grandTotal;
     private BigDecimal taxAmount;
+    private BigDecimal discountAmount;
+    private String customerName;
     private LocalDate saleDate;
     private PaymentMethod paymentMethod;
-    private BigDecimal discountAmount;
     private SaleStatus saleStatus;
     private List<SaleItemResponseDTO> saleItems;
 
@@ -36,6 +37,7 @@ public class SaleResponseDTO {
         this.grandTotal = sale.getGrandTotal();
         this.saleDate = sale.getSaleDate();
         this.paymentMethod = sale.getPaymentMethod();
+        this.customerName = sale.getCustomer().getName();
         this.discountAmount = sale.getDiscountAmount();
         this.saleStatus = sale.getStatus();
         this.saleItems = sale.getSaleItems().stream().map(saleItem -> new SaleItemResponseDTO(saleItem)).toList();
