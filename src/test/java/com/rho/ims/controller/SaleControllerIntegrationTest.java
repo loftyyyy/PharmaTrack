@@ -1,7 +1,9 @@
 package com.rho.ims.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
 import com.rho.ims.dto.SaleCreateDTO;
+import com.rho.ims.dto.SaleItemCreateDTO;
 import com.rho.ims.enums.PaymentMethod;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.*;
@@ -14,13 +16,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @ActiveProfiles("test")
+@WithMockUser(username = "user", roles = "Staff")
 class SaleControllerIntegrationTest {
 
     @Autowired
@@ -59,6 +66,12 @@ class SaleControllerIntegrationTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private SaleRepository saleRepository;
+    @Autowired
+    private SaleItemRepository saleItemRepository;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Nested
     class CreateSaleTest {
@@ -121,6 +134,7 @@ class SaleControllerIntegrationTest {
             productBatch.setExpiryDate(expiryDate);
             productBatch.setManufacturingDate(manufactureDate);
             productBatch.setCreatedBy(user);
+            productBatchRepository.save(productBatch);
 
             customer = new Customer();
             customer.setName("Melinda");
@@ -131,27 +145,31 @@ class SaleControllerIntegrationTest {
             customer.setAddressState("Cotabato");
             customerRepository.save(customer);
 
-            sale = new Sale();
-            sale.setCustomer(customer);
-            sale.setTotalAmount();
 
         }
 
         @DisplayName("Should create a sale")
         @Test
         void shouldReturnSuccessfulRequest_createSale() throws Exception {
-            SaleItem saleItem = new SaleItem();
-            saleItem.setProductBatch(productBatch);
-            saleItem.setProduct(product);
-            saleItem.setSale(sale);
+            SaleItemCreateDTO saleItem = new SaleItemCreateDTO();
+            saleItem.setProductBatchId(productBatch.getId());
+            saleItem.setProductId(product.getId());
+            saleItem.setQuantity(3);
+            saleItem.setUnitPrice(BigDecimal.valueOf(35));
 
 
             SaleCreateDTO saleCreateDTO = new SaleCreateDTO();
             saleCreateDTO.setCustomerId(customer.getId());
-            saleCreateDTO.setItems();
+            saleCreateDTO.setItems(List.of(saleItem));
             saleCreateDTO.setPaymentMethod(PaymentMethod.CASH);
             saleCreateDTO.setSaleDate(LocalDate.now());
             saleCreateDTO.setDiscountAmount(BigDecimal.ZERO);
+
+
+
+            mockMvc.perform(post("/api/v1/sales/create").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(saleCreateDTO)))
+                    .andExpect(status().is2xxSuccessful())
+                    .andDo(print());
 
         }
 

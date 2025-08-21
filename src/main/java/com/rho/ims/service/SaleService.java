@@ -60,7 +60,6 @@ public class SaleService {
         sale.setCreatedBy(user);
         sale.setStatus(SaleStatus.PENDING);
 
-        saleRepository.save(sale);
         List<SaleItem> items = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
 
@@ -73,11 +72,16 @@ public class SaleService {
             saleItem.setProduct(product);
             saleItem.setProductBatch(productBatch);
             saleItem.setUnitPrice(item.getUnitPrice());
+            saleItem.setQuantity(item.getQuantity());
+
+            BigDecimal subTotal = BigDecimal.valueOf(item.getQuantity()).multiply(item.getUnitPrice());
+            saleItem.setSubTotal(subTotal);
 
             totalAmount = totalAmount.add(item.getUnitPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
             items.add(saleItem);
         }
 
+        //TODO: Ewan bakit Total amount is null
         sale.setSaleItems(items);
         sale.setTotalAmount(totalAmount.subtract(sale.getDiscountAmount()));
 

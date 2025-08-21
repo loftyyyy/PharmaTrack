@@ -32,33 +32,33 @@ public class SaleItemService {
         this.productBatchRepository = productBatchRepository;
     }
 
-    @Transactional
-    public SaleItem saveSaleItem(SaleItemCreateDTO saleItemCreateDTO){
-        Sale sale = saleRepository.findById(saleItemCreateDTO.getSaleId()).orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
-        Product product = productRepository.findById(saleItemCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-        ProductBatch productBatch = productBatchRepository.findById(saleItemCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
-        SaleItem saleItem = new SaleItem();
-        saleItem.setSale(sale);
-        saleItem.setProductBatch(productBatch);
-        saleItem.setProduct(product);
-        saleItem.setUnitPrice(saleItemCreateDTO.getUnitPrice());
-
-        if(productBatch.getQuantity() < saleItemCreateDTO.getQuantity()){
-            throw new InsufficientStockException("Not enough stock in this batch, " + productBatch.getId() + " for product " + product.getName());
-        }
-        saleItem.setQuantity(saleItemCreateDTO.getQuantity());
-
-        // Not sure for this one TODO: think about this. Only modify the quantity once the sale has been confirmed
-        productBatch.setQuantity(productBatch.getQuantity() - saleItemCreateDTO.getQuantity());
-        productBatchRepository.save(productBatch);
-
-        BigDecimal subTotal = saleItemCreateDTO.getUnitPrice().multiply(BigDecimal.valueOf(saleItemCreateDTO.getQuantity()));
-        saleItem.setSubTotal(subTotal);
-
-        return saleItemRepository.save(saleItem);
-
-    }
-
+//    @Transactional
+//    public SaleItem saveSaleItem(SaleItemCreateDTO saleItemCreateDTO){
+//        Sale sale = saleRepository.findById(saleItemCreateDTO.getSaleId()).orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
+//        Product product = productRepository.findById(saleItemCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+//        ProductBatch productBatch = productBatchRepository.findById(saleItemCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
+//        SaleItem saleItem = new SaleItem();
+//        saleItem.setSale(sale);
+//        saleItem.setProductBatch(productBatch);
+//        saleItem.setProduct(product);
+//        saleItem.setUnitPrice(saleItemCreateDTO.getUnitPrice());
+//
+//        if(productBatch.getQuantity() < saleItemCreateDTO.getQuantity()){
+//            throw new InsufficientStockException("Not enough stock in this batch, " + productBatch.getId() + " for product " + product.getName());
+//        }
+//        saleItem.setQuantity(saleItemCreateDTO.getQuantity());
+//
+//        // Not sure for this one TODO: think about this. Only modify the quantity once the sale has been confirmed
+//        productBatch.setQuantity(productBatch.getQuantity() - saleItemCreateDTO.getQuantity());
+//        productBatchRepository.save(productBatch);
+//
+//        BigDecimal subTotal = saleItemCreateDTO.getUnitPrice().multiply(BigDecimal.valueOf(saleItemCreateDTO.getQuantity()));
+//        saleItem.setSubTotal(subTotal);
+//
+//        return saleItemRepository.save(saleItem);
+//
+//    }
+//
     public List<SaleItem> getAll(){
         return saleItemRepository.findAll();
 

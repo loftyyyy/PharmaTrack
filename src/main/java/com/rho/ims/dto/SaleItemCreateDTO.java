@@ -14,9 +14,6 @@ import java.math.BigDecimal;
 @Setter
 public class SaleItemCreateDTO {
 
-    @NotNull(message = "Sale is required")
-    private Long saleId;
-
     @NotNull(message = "Product is required")
     private Long productId;
 
