@@ -202,7 +202,7 @@ CREATE TABLE inventory_logs (
                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                 product_id BIGINT NOT NULL,
                                 product_batch_id BIGINT, -- Can be NULL for general product adjustments or if batch info is not relevant for a log entry
-                                change_type ENUM('IN', 'OUT', 'ADJUST') NOT NULL,
+                                change_type ENUM('IN', 'OUT', 'ADJUST', 'INITIAL') NOT NULL,
                                 quantity_changed INT NOT NULL,
                                 reason TEXT,
                                 sale_id BIGINT, -- Link to sales if change is due to a sale
@@ -215,4 +215,21 @@ CREATE TABLE inventory_logs (
                                 FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE SET NULL ON UPDATE CASCADE,
                                 FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE SET NULL ON UPDATE CASCADE,
                                 FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+CREATE TABLE stock_adjustments (
+                                id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                product_id BIGINT NOT NULL,
+                                product_batch_id BIGINT, -- optional: adjustment may apply to a batch or general product
+                                adjustment_type ENUM('IN', 'OUT') NOT NULL, -- IN = add stock, OUT = reduce stock
+                                quantity_adjusted INT NOT NULL,
+                                reason TEXT NOT NULL, -- explanation for the manual adjustment
+                                created_by BIGINT NOT NULL,
+                                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                updated_by BIGINT,
+
+                                FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                                FOREIGN KEY (product_batch_id) REFERENCES product_batches(id) ON DELETE SET NULL ON UPDATE CASCADE,
+                                FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                                FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
