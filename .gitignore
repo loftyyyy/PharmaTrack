@@ -35,3 +35,4 @@ build/
 ### Frontend ###
 
 /src/main/frontend/node_modules/
+/src/main/resources/application.properties
