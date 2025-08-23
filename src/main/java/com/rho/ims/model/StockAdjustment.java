@@ -28,9 +28,10 @@ public class StockAdjustment {
     @JoinColumn(name = "product_batch_id", nullable = false)
     private ProductBatch productBatch;
 
-    @Column(nullable = false)
+    @Column(name = "quantity_adjusted", nullable = false)
     private Integer quantityChanged; // positive = increase, negative = decrease
 
+    @Column(name = "adjustment_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private ChangeType changeType; // IN or OUT
 

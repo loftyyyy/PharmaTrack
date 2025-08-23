@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class StockAdjustmentService {
@@ -48,6 +49,7 @@ public class StockAdjustmentService {
         stockAdjustment.setProductBatch(productBatch);
         stockAdjustment.setChangeType(stockAdjustmentCreateDTO.getQuantityChanged() > 0 ? ChangeType.IN : ChangeType.OUT);
         stockAdjustment.setReason(stockAdjustmentCreateDTO.getReason());
+        stockAdjustment.setQuantityChanged(stockAdjustmentCreateDTO.getQuantityChanged());
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         stockAdjustment.setCreatedBy(user);
         stockAdjustmentRepository.save(stockAdjustment);
@@ -58,11 +60,21 @@ public class StockAdjustmentService {
         inventoryLog.setReason("Manual Stock Adjustment: " + stockAdjustmentCreateDTO.getReason());
         inventoryLog.setPurchase(null);
         inventoryLog.setSale(null);
+        inventoryLog.setChangeType(ChangeType.ADJUST);
+        inventoryLog.setQuantityChanged(stockAdjustmentCreateDTO.getQuantityChanged());
         inventoryLog.setCreatedBy(user);
         inventoryLog.setAdjustmentReference("MSA-" + LocalDateTime.now());
         inventoryLogRepository.save(inventoryLog);
 
         return stockAdjustment;
+    }
+
+    public List<StockAdjustment> getAll() {
+        return stockAdjustmentRepository.findAll();
+    }
+
+    public StockAdjustment getStockAdjustment(Long id){
+        return stockAdjustmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Stock adjustment not found"));
     }
 
 }
