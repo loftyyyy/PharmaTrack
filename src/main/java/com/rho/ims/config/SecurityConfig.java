@@ -1,5 +1,6 @@
 package com.rho.ims.config;
 
+import com.rho.ims.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +47,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -57,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/sales/**", "/api/v1/inventory/**").hasAnyRole("STAFF", "ADMIN")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class) // ✅ add this
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

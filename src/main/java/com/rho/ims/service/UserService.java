@@ -10,6 +10,7 @@ import com.rho.ims.respository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class UserService {
         }
 
 
-        Role role = roleRepository.findByName(signupDTO.getUsername()).orElseThrow(() -> new RuntimeException("Role not found"));
+        Role role = roleRepository.findByName(signupDTO.getRoleName()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
         User user = new User();
         user.setUsername(signupDTO.getUsername());
         user.setPassword(signupDTO.getPassword());
