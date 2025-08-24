@@ -1,9 +1,6 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.LoginDTO;
-import com.rho.ims.dto.SignupDTO;
-import com.rho.ims.dto.UserUpdateDTO;
-import com.rho.ims.dto.UserResponseDTO;
+import com.rho.ims.dto.*;
 import com.rho.ims.model.User;
 import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;
@@ -23,8 +20,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@Valid @RequestBody SignupDTO signupDTO) {
-            userService.saveUser(signupDTO);
+    public ResponseEntity<?> createUser(@Valid @RequestBody RegisterRequest registerRequest) {
+            userService.saveUser(registerRequest);
             return ResponseEntity.ok("User created successfully");
     }
 

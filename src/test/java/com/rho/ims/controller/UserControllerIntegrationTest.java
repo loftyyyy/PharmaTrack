@@ -104,13 +104,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should create a new user")
         @Test
         void shouldReturnSuccessfulRequest_createUser() throws Exception{
-            Long roleId = role.getId();
+            String roleName = role.getName();
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername("SomeUserName");
             signupDTO.setEmail("SomeEmail@Gmail.com");
             signupDTO.setPassword("somePassword");
-            signupDTO.setRoleId(roleId);
+            signupDTO.setRoleName(roleName);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().is2xxSuccessful())
@@ -122,14 +122,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when username already exist")
         @Test
         void shouldReturnBadRequest_usernameIsTaken()throws Exception {
-            Long roleId = role.getId();
+            String roleName = role.getName();
 
             SignupDTO signupDTO = new SignupDTO();
-            signupDTO.setUsername(username);
-            signupDTO.setEmail(email);
-            signupDTO.setPassword(password);
-
-            signupDTO.setRoleId(roleId);
+            signupDTO.setUsername("SomeUserName");
+            signupDTO.setEmail("SomeEmail@Gmail.com");
+            signupDTO.setPassword("somePassword");
+            signupDTO.setRoleName(roleName);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().is4xxClientError())
@@ -140,13 +139,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when username is blank")
         @Test
         void shouldReturnBadRequest_usernameIsBlank() throws Exception{
-            Long roleId = role.getId();
+            String roleName = role.getName();
 
             SignupDTO signupDTO = new SignupDTO();
-            signupDTO.setUsername("");
-            signupDTO.setEmail(email);
-            signupDTO.setPassword(password);
-            signupDTO.setRoleId(roleId);
+            signupDTO.setUsername("SomeUserName");
+            signupDTO.setEmail("SomeEmail@Gmail.com");
+            signupDTO.setPassword("somePassword");
+            signupDTO.setRoleName(roleName);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -159,13 +158,13 @@ class UserControllerIntegrationTest {
         @DisplayName("Should fail when email is blank")
         @Test
         void shouldReturnBadRequest_emailIsBlank() throws Exception {
-            Long roleId = role.getId();
+            String roleName = role.getName();
 
             SignupDTO signupDTO = new SignupDTO();
-            signupDTO.setUsername(username);
-            signupDTO.setEmail("");
-            signupDTO.setPassword(password);
-            signupDTO.setRoleId(roleId);
+            signupDTO.setUsername("SomeUserName");
+            signupDTO.setEmail("SomeEmail@Gmail.com");
+            signupDTO.setPassword("somePassword");
+            signupDTO.setRoleName(roleName);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -184,7 +183,6 @@ class UserControllerIntegrationTest {
             signupDTO.setUsername(username);
             signupDTO.setEmail("someInvalidEmail@.com");
             signupDTO.setPassword(password);
-            signupDTO.setRoleId(roleId);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -201,9 +199,8 @@ class UserControllerIntegrationTest {
 
             SignupDTO signupDTO = new SignupDTO();
             signupDTO.setUsername(username);
-            signupDTO.setEmail(email);
-            signupDTO.setPassword("");
-            signupDTO.setRoleId(roleId);
+            signupDTO.setEmail("someInvalidEmail@.com");
+            signupDTO.setPassword(password);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())
@@ -221,7 +218,7 @@ class UserControllerIntegrationTest {
             signupDTO.setUsername(username);
             signupDTO.setEmail(email);
             signupDTO.setPassword(password);
-            signupDTO.setRoleId(null);
+            signupDTO.setRoleName(null);
 
             mockMvc.perform(post("/api/v1/users/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(signupDTO)))
                     .andExpect(status().isBadRequest())

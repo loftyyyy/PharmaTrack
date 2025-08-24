@@ -5,7 +5,11 @@ import com.rho.ims.config.SecurityConfig;
 import com.rho.ims.dto.CategoryCreateDTO;
 import com.rho.ims.dto.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
+import com.rho.ims.model.Role;
+import com.rho.ims.model.User;
 import com.rho.ims.respository.CategoryRepository;
+import com.rho.ims.respository.RoleRepository;
+import com.rho.ims.respository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,15 +49,32 @@ class CategoryControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Nested
+    @WithMockUser(username = "testuser", roles = "ADMIN") // Use a unique username for testing
     class FetchCategory {
         Category category1;
         Category category2;
 
         @BeforeEach
         void setup() {
+            User user = new User();
+            user.setUsername("testuser");
+            user.setPassword(passwordEncoder.encode("password")); // Hash the password
+            Role role = new Role();
+            role.setName("ADMIN");
+            roleRepository.save(role);
+            user.setRole(role); // Make sure your Role class can be instantiated
+            userRepository.save(user);
+
+
             this.category1 = new Category();
             category1.setName("Category 1");
 

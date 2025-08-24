@@ -1,27 +1,18 @@
+//// src/test/java/com/rho/ims/config/TestSecurityConfig.java
 //package com.rho.ims.config;
 //
+//import org.springframework.boot.test.context.TestConfiguration;
 //import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.web.SecurityFilterChain;
 //
-//@Configuration
+//@Test
 //public class TestSecurityConfig {
-//    @Bean
-//    SecurityFilterChain testFilterChain(HttpSecurity http) throws Exception {
-//        http
-//            .csrf().disable()
-//            .authorizeHttpRequests(auth -> auth
-//                // require authentication for *every* API call
-//                .anyRequest().authenticated()
-//            )
-//            .oauth2ResourceServer(oauth2 -> oauth2.jwt());   // or httpBasic/formLogin etc.
 //
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 //        return http.build();
 //    }
-//
-////    @Bean
-////    JwtDecoder jwtDecoder() {
-////        return token -> Mockito.mock(Jwt.class);   // minimal, never really called
-////    }
 //}

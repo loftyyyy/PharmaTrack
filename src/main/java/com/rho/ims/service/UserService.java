@@ -2,10 +2,7 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.LoginDTO;
-import com.rho.ims.dto.SignupDTO;
-import com.rho.ims.dto.UserUpdateDTO;
-import com.rho.ims.dto.UserResponseDTO;
+import com.rho.ims.dto.*;
 import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
 import com.rho.ims.respository.RoleRepository;
@@ -30,7 +27,7 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public User saveUser(SignupDTO signupDTO) {
+    public User saveUser(RegisterRequest signupDTO) {
         if (userRepository.existsByUsername(signupDTO.getUsername())) {
             throw new DuplicateCredentialException("username", signupDTO.getUsername());
         }
@@ -39,7 +36,7 @@ public class UserService {
         }
 
 
-        Role role = roleRepository.findById(signupDTO.getRoleId()).orElseThrow(() -> new RuntimeException("Role not found"));
+        Role role = roleRepository.findByName(signupDTO.getUsername()).orElseThrow(() -> new RuntimeException("Role not found"));
         User user = new User();
         user.setUsername(signupDTO.getUsername());
         user.setPassword(signupDTO.getPassword());

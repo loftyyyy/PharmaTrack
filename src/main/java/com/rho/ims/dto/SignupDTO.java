@@ -25,14 +25,14 @@ public class SignupDTO {
     @Email(message = "Invalid email")
     private String email;
 
-    @NotNull(message = "Role id is required")
-    private Long roleId;
+    @NotBlank(message = "Role is required")
+    private String roleName;
 
-    public SignupDTO(String username, String password, String email, Long roleId) {
+    public SignupDTO(String username, String password, String email, String roleName) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.roleId = roleId;
+        this.roleName = roleName;
     }
 
 }

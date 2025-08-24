@@ -32,9 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(SecurityConfig.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+//@TestPropertySource(locations = "classpath:application-test.properties")
 @ActiveProfiles("test")
-@WithMockUser(username = "user", roles = "Staff")
+@WithMockUser(roles = "ADMIN")
 class CustomerControllerIntegrationTest {
 
     @Autowired
@@ -68,6 +68,7 @@ class CustomerControllerIntegrationTest {
         }
 
         @DisplayName("Should create customer")
+        @WithMockUser(roles = "ADMIN")
         @Test
         void shouldReturnSuccessfulRequest_createCustomer() throws Exception {
             CustomerCreateDTO customerCreateDTO = new CustomerCreateDTO();
