@@ -2,9 +2,11 @@ package com.rho.ims.controller;
 
 import com.rho.ims.dto.*;
 import com.rho.ims.model.User;
+import com.rho.ims.respository.UserRepository;
 import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +31,13 @@ public class UserController {
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
         User user = userService.loginUser(loginDTO);
         return ResponseEntity.ok("Login Successfully");
+    }
+
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
+        User user = userService.findByName(authentication.getName());
+        return ResponseEntity.ok(new UserResponseDTO(user));
     }
 
     @GetMapping("/{id}")

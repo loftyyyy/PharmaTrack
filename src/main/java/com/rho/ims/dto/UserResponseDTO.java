@@ -1,10 +1,14 @@
 package com.rho.ims.dto;
 
+import com.rho.ims.model.Role;
 import com.rho.ims.model.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -13,13 +17,17 @@ public class UserResponseDTO {
     private long id;
     private String username;
     private String email;
-    private String roleName;
+    private Role role;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.roleName = user.getRole().getName();
+        this.role = user.getRole();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 
 }

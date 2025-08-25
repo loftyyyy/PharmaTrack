@@ -8,9 +8,11 @@ import lombok.Setter;
 @Getter
 public class AuthResponse {
     private String token;
+    private UserResponseDTO userResponseDTO;
 
-    public AuthResponse(String token){
+    public AuthResponse(String token, UserResponseDTO userResponseDTO){
         this.token = token;
+        this.userResponseDTO = userResponseDTO;
     }
 
 }

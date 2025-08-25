@@ -14,6 +14,7 @@ import javax.security.auth.login.CredentialNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -60,6 +61,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
     }
 
+    public User findByName(String name) {
+        return userRepository.findByUsername(name);
+    }
+
     public List<UserResponseDTO> getAll(){
         List<User> users = userRepository.findAll();
         return users.stream().map(user -> new UserResponseDTO(user)).toList();
@@ -67,33 +72,47 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserUpdateDTO userUpdateDTO) {
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
 
-        Map<String,String> duplicates = new HashMap<>();
+        // Require current password
+        if (userUpdateDTO.getCurrentPassword() == null ||
+                !passwordEncoder.matches(userUpdateDTO.getCurrentPassword(), existingUser.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
 
-        if (userUpdateDTO.getUsername() != null) {
-            if(userRepository.existsByUsername(userUpdateDTO.getUsername())){
+        Map<String, String> duplicates = new HashMap<>();
+
+        // Check username duplication
+        if (userUpdateDTO.getUsername() != null &&
+                !userUpdateDTO.getUsername().equals(existingUser.getUsername())) {
+            if (userRepository.existsByUsername(userUpdateDTO.getUsername())) {
                 duplicates.put("username", userUpdateDTO.getUsername());
             }
         }
-        if (userUpdateDTO.getEmail() != null) {
-            if(userRepository.existsByEmail(userUpdateDTO.getEmail())){
-                duplicates.put("email", userUpdateDTO.getEmail());
 
+        // Check email duplication
+        if (userUpdateDTO.getEmail() != null &&
+                !userUpdateDTO.getEmail().equals(existingUser.getEmail())) {
+            if (userRepository.existsByEmail(userUpdateDTO.getEmail())) {
+                duplicates.put("email", userUpdateDTO.getEmail());
             }
         }
-        if(!duplicates.isEmpty()){
-            throw new DuplicateCredentialException(duplicates);
 
+        if (!duplicates.isEmpty()) {
+            throw new DuplicateCredentialException(duplicates);
         }
 
-        if (userUpdateDTO.getPassword() != null) {
-            existingUser.setEmail(userUpdateDTO.getEmail());
+        // Update fields only if provided
+        if (userUpdateDTO.getUsername() != null) {
             existingUser.setUsername(userUpdateDTO.getUsername());
+        }
+        if (userUpdateDTO.getEmail() != null) {
+            existingUser.setEmail(userUpdateDTO.getEmail());
+        }
+        if (userUpdateDTO.getPassword() != null) {
             existingUser.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
         }
-
-        //TODO: Future enhancement, implement the updatedBy field
 
         return userRepository.save(existingUser);
     }

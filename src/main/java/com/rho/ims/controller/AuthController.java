@@ -52,7 +52,8 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
             String token = jwtUtil.generateToken(authentication.getName());
-            return new AuthResponse(token);
+            User user = userService.findByName(authRequest.getUsername());
+            return new AuthResponse(token, new UserResponseDTO(user));
         } catch (Exception e) {
             // Always throw BadCredentialsException for security
             throw new BadCredentialsException("Bad credentials");

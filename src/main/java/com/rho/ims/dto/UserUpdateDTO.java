@@ -15,7 +15,10 @@ public class UserUpdateDTO {
     @NotBlank(message = "Username is required")
     private String username;
 
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "Current password is required")
+    @Size(message = "Current password must be at least 8 characters")
+    private String currentPassword;
+
     @Size(message = "Password must be at least 8 characters")
     private String password;
 
