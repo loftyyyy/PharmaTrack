@@ -47,6 +47,12 @@ CREATE TABLE products (
                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
                           name VARCHAR(150) NOT NULL,
                           brand VARCHAR(100) NOT NULL,
+                          manufacturer VARCHAR(100) NOT NULL,
+                          dosage_form VARCHAR(50) NOT NULL,
+                          strength VARCHAR(50) NOT NULL,
+                          minimum_stock INT NOT NULL CHECK (products.minimum_stock >= 0),
+                          drug_classification ENUM('OTC', 'RX') NOT NULL DEFAULT 'OTC',
+                          active BOOLEAN NOT NULL DEFAULT TRUE,
                           description TEXT,
                           category_id BIGINT NOT NULL,
                           barcode VARCHAR(50) UNIQUE NOT NULL, -- Assuming barcodes are unique
@@ -64,7 +70,7 @@ CREATE TABLE product_batches (
                                  id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                  product_id BIGINT NOT NULL,
                                  batch_number VARCHAR(100) NOT NULL,
-                                 quantity INT NOT NULL CHECK (quantity >= 0), -- Quantity should not be negative
+                                 quantity INT NOT NULL CHECK (product_batches.quantity >= 0), -- Quantity should not be negative
                                  purchase_price_per_unit DECIMAL(10,2) NOT NULL,
                                  expiry_date DATE NOT NULL,
                                  manufacturing_date DATE NOT NULL,

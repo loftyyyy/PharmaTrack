@@ -67,9 +67,7 @@ public class ProductBatchService {
         inventoryLog.setCreatedBy(user);
         inventoryLogRepository.save(inventoryLog);
 
-
        return savedBatch;
-
 
     }
 

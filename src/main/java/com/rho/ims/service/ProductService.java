@@ -41,6 +41,12 @@ public class ProductService {
         Product product = new Product();
         product.setName(productCreateDTO.getName());
         product.setBrand(productCreateDTO.getBrand());
+        product.setManufacturer(productCreateDTO.getManufacturer());
+        product.setDosageForm(productCreateDTO.getDosageForm());
+        product.setStrength(productCreateDTO.getStrength());
+        product.setMinimumStock(productCreateDTO.getMinimumStock());
+        product.setDrugClassification(productCreateDTO.getDrugClassification());
+        product.setActive(Boolean.TRUE);
         product.setDescription(productCreateDTO.getDescription());
         product.setCategory(category);
         product.setBarcode(productCreateDTO.getBarcode());
@@ -52,7 +58,6 @@ public class ProductService {
 
 
         return productRepository.save(product);
-
 
     }
 
@@ -79,6 +84,12 @@ public class ProductService {
         product.setBrand(productUpdateDTO.getBrand());
         product.setDescription(productUpdateDTO.getDescription());
         product.setBarcode(productUpdateDTO.getBarcode());
+        product.setManufacturer(productUpdateDTO.getManufacturer());
+        product.setDosageForm(productUpdateDTO.getDosageForm());
+        product.setStrength(productUpdateDTO.getStrength());
+        product.setMinimumStock(productUpdateDTO.getMinimumStock());
+        product.setDrugClassification(productUpdateDTO.getDrugClassification());
+        product.setActive(productUpdateDTO.getActive());
         product.setCategory(category);
 
         //TODO: Reimplement this. Used for testing phase only

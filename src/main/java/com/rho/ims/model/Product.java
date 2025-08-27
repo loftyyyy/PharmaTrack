@@ -1,5 +1,6 @@
 package com.rho.ims.model;
 
+import com.rho.ims.enums.DrugClassification;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,25 @@ public class Product {
 
     @Column(length = 100, nullable = false)
     private String brand;
+
+    @Column(length = 100, nullable = false)
+    private String manufacturer;
+
+    @Column(name = "dosage_form", length = 50, nullable = false)
+    private String dosageForm;
+
+    @Column(length = 50, nullable = false)
+    private String strength;
+
+    @Column(name = "minimum_stock", nullable = false)
+    private Integer minimumStock;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "drug_classification", nullable = false)
+    private DrugClassification drugClassification;
+
+    @Column(nullable = false)
+    private Boolean active;
 
     @Column(columnDefinition = "TEXT")
     private String description;
