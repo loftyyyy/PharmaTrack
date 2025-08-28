@@ -17,7 +17,7 @@ public class UserResponseDTO {
     private long id;
     private String username;
     private String email;
-    private Role role;
+    private RoleResponseDTO role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -25,7 +25,7 @@ public class UserResponseDTO {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.role = user.getRole();
+        this.role = new RoleResponseDTO(user.getRole());
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
     }
