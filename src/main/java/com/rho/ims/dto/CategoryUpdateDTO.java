@@ -1,6 +1,7 @@
 package com.rho.ims.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ public class CategoryUpdateDTO {
     @NotBlank(message = "Name is required!")
     private String name;
 
-    @NotBlank(message = "Active status is required")
+    @NotNull(message = "Active status is required")
     private Boolean active;
 
 }

@@ -1,6 +1,7 @@
 package com.rho.ims.dto;
 
 
+import com.rho.ims.enums.DrugClassification;
 import com.rho.ims.model.Product;
 import com.rho.ims.respository.CategoryRepository;
 import lombok.Getter;
@@ -14,7 +15,13 @@ public class ProductResponseDTO {
     private String name;
     private String brand;
     private String description;
-    private Long categoryId;
+    private String manufacturer;
+    private String dosageForm;
+    private String strength;
+    private Integer minimumStock;
+    private Boolean active;
+    private DrugClassification drugClassification;
+    private String categoryName;
     private String barcode;
     private Long createdBy;
 
@@ -23,8 +30,14 @@ public class ProductResponseDTO {
         this.name = product.getName();
         this.brand = product.getBrand();
         this.description = product.getDescription();
-        this.categoryId = product.getCategory().getId();
+        this.categoryName = product.getCategory().getName();
         this.barcode = product.getBarcode();
+        this.manufacturer = product.getManufacturer();
+        this.dosageForm = product.getDosageForm();
+        this.strength = product.getStrength();
+        this.active = product.getActive();
+        this.minimumStock = product.getMinimumStock();
+        this.drugClassification = product.getDrugClassification();
         this.createdBy = product.getCreatedBy().getId();
     }
 

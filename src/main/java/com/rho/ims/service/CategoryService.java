@@ -9,6 +9,7 @@ import com.rho.ims.respository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -44,7 +45,8 @@ public class CategoryService {
     public Category updateCategory(Long id, CategoryUpdateDTO categoryUpdateDTO){
 
         Category category = categoryRepository.findById(id).orElseThrow( () -> new RuntimeException("Category doesn't exist"));
-        if(categoryRepository.existsByName(categoryUpdateDTO.getName())){
+        Optional<Category> existing = categoryRepository.findByName(categoryUpdateDTO.getName());
+        if(existing.isPresent() && !existing.get().getId().equals(id)){
             throw new DuplicateCredentialException("Name", categoryUpdateDTO.getName());
 
         }
