@@ -13,4 +13,7 @@ public class CategoryUpdateDTO {
     @NotBlank(message = "Name is required!")
     private String name;
 
+    @NotBlank(message = "Active status is required")
+    private Boolean active;
+
 }

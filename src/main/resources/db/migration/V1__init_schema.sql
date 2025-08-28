@@ -39,7 +39,8 @@ CREATE TABLE users (
 -- Table for Categories
 CREATE TABLE categories (
                             id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                            name VARCHAR(100) NOT NULL UNIQUE
+                            name VARCHAR(100) NOT NULL UNIQUE,
+                            active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- Table for Products

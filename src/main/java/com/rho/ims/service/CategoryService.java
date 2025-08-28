@@ -35,6 +35,7 @@ public class CategoryService {
 
         Category category = new Category();
         category.setName(categoryCreateDTO.getName());
+        category.setActive(Boolean.TRUE);
 
         return categoryRepository.save(category);
 
@@ -48,6 +49,7 @@ public class CategoryService {
 
         }
         category.setName(categoryUpdateDTO.getName());
+        category.setActive(categoryUpdateDTO.getActive());
 
         return categoryRepository.save(category);
 

@@ -51,7 +51,7 @@ public class CategoryController {
     }
 
 
-    @DeleteMapping("/{id}")
+//    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable long id){
         if(!categoryRepository.existsById(id)){
             return ResponseEntity.badRequest().body("Category doesn't exist");

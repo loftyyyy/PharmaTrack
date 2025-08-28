@@ -9,10 +9,12 @@ public class CategoryResponseDTO {
 
     private Long id;
     private String name;
+    private Boolean active;
 
     public CategoryResponseDTO(Category category){
         this.id = category.getId();
         this.name = category.getName();
+        this.active = category.getActive();
     }
 
 }
