@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ProductBatchResponseDTO {
 
     private Long productBatchId;
-    private Long productId;
+    private ProductResponseDTO product;
     private String batchNumber;
     private Integer quantity;
     private BigDecimal purchasePricePerUnit;
@@ -29,7 +29,7 @@ public class ProductBatchResponseDTO {
 
     public ProductBatchResponseDTO(ProductBatch productBatch){
         this.productBatchId = productBatch.getId();
-        this.productId = productBatch.getProduct().getId();
+        this.product = new ProductResponseDTO(productBatch.getProduct());
         this.batchNumber = productBatch.getBatchNumber();
         this.quantity = productBatch.getQuantity();
         this. purchasePricePerUnit = productBatch.getPurchasePricePerUnit();

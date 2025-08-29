@@ -1,7 +1,9 @@
 package com.rho.ims.dto;
 
+import com.rho.ims.enums.BatchStatus;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,17 +17,23 @@ import java.time.LocalDate;
 @Setter
 public class ProductBatchUpdateDTO {
 
+    @NotBlank(message = "Quantity is required")
     @Min(1)
     private Integer quantity;
 
+    @NotBlank(message = "Purchase price per unit is required")
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal purchasePricePerUnit;
 
+    @NotBlank(message = "Expiry date is required")
     private LocalDate expiryDate;
 
+    @NotBlank(message = "Manufacturing date is required")
     private LocalDate manufacturingDate;
 
     @Size(max = 50, message = "location must not exceed 50 characters")
     private String location;
+
+    private BatchStatus batchStatus;
 
 }

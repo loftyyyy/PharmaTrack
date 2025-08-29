@@ -76,6 +76,7 @@ CREATE TABLE product_batches (
                                  expiry_date DATE NOT NULL,
                                  manufacturing_date DATE NOT NULL,
                                  location VARCHAR(50),
+                                 batch_status ENUM('AVAILABLE', 'SOLD_OUT', 'EXPIRED', 'EXPIRED') NOT NULL DEFAULT 'AVAILABLE',
                                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                                  created_by BIGINT NOT NULL,
                                  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -1,5 +1,6 @@
 package com.rho.ims.model;
 
+import com.rho.ims.enums.BatchStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,10 @@ public class ProductBatch {
 
     @Column(length = 50)
     private String location;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "batch_status", nullable = false)
+    private BatchStatus batchStatus;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -5,6 +5,7 @@ import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.ProductBatchCreateDTO;
 import com.rho.ims.dto.ProductBatchResponseDTO;
 import com.rho.ims.dto.ProductBatchUpdateDTO;
+import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.InventoryLog;
 import com.rho.ims.model.Product;
@@ -51,6 +52,7 @@ public class ProductBatchService {
         productBatch.setExpiryDate(productBatchCreateDTO.getExpiryDate());
         productBatch.setManufacturingDate(productBatchCreateDTO.getManufacturingDate());
         productBatch.setLocation(productBatchCreateDTO.getLocation());
+        productBatch.setBatchStatus(BatchStatus.AVAILABLE);
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         productBatch.setCreatedBy(user);
@@ -87,7 +89,7 @@ public class ProductBatchService {
         productBatch.setExpiryDate(productBatchUpdateDTO.getExpiryDate());
         productBatch.setManufacturingDate(productBatchUpdateDTO.getManufacturingDate());
         productBatch.setLocation(productBatchUpdateDTO.getLocation());
-
+        productBatch.setBatchStatus(productBatchUpdateDTO.getBatchStatus());
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         productBatch.setUpdatedBy(user);
         return productBatchRepository.save(productBatch);
