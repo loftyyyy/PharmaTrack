@@ -48,10 +48,10 @@ public class ProductBatchController {
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
-        productBatchService.deleteProductBatch(id);
-        return ResponseEntity.ok().body("Product batch successfully deleted");
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
+//        productBatchService.deleteProductBatch(id);
+//        return ResponseEntity.ok().body("Product batch successfully deleted");
+//    }
 
 }

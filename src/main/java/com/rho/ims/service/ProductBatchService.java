@@ -96,11 +96,11 @@ public class ProductBatchService {
 
     }
 
-    public void deleteProductBatch(Long id){
-        ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
-        productBatchRepository.delete(productBatch);
-
-    }
+//    public void deleteProductBatch(Long id){
+//        ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
+//        productBatchRepository.delete(productBatch);
+//
+//    }
 
 
 

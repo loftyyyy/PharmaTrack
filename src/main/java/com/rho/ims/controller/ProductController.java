@@ -52,10 +52,10 @@ public class ProductController {
         return ResponseEntity.ok().body(new ProductResponseDTO(product));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
-        productService.deleteProduct(id);
-        return ResponseEntity.ok().body("Product deleted successfully");
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
+//        productService.deleteProduct(id);
+//        return ResponseEntity.ok().body("Product deleted successfully");
+//    }
 
 }
