@@ -47,7 +47,12 @@ public class ProductBatchService {
         }
 
 
+
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
+
+        if(!product.getActive()){
+            throw new IllegalStateException("Product is inactive");
+        }
 
         ProductBatch productBatch = new ProductBatch();
         productBatch.setProduct(product);
