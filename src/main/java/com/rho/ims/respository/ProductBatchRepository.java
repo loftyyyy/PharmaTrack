@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface ProductBatchRepository extends JpaRepository<ProductBatch, Long> {
     boolean existsByBatchNumber(String batchNumber);
 
+    boolean existsByProductIdAndBatchNumber(Long productId, String batchNumber);
+
     Optional<ProductBatch> findByBatchNumber(String batchNumber);
 
     List<ProductBatch> findByProductIdAndBatchNumber(Long productId, String batchNumber);

@@ -38,9 +38,14 @@ public class ProductBatchService {
 
     public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
 
-        if(productBatchRepository.existsByBatchNumber(productBatchCreateDTO.getBatchNumber())){
+        if (productBatchRepository.existsByProductIdAndBatchNumber(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber())) {
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
         }
+
+        if(productBatchRepository.existsByBatchNumber(productBatchCreateDTO.getBatchNumber())) {
+            throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
+        }
+
 
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
 
