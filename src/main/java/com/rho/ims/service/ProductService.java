@@ -4,10 +4,13 @@ import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.ProductCreateDTO;
 import com.rho.ims.dto.ProductUpdateDTO;
+import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.model.Category;
 import com.rho.ims.model.Product;
+import com.rho.ims.model.ProductBatch;
 import com.rho.ims.model.User;
 import com.rho.ims.respository.CategoryRepository;
+import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.UserRepository;
 import jakarta.validation.Valid;
@@ -24,11 +27,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final ProductBatchRepository productBatchRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, UserRepository userRepository){
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository){
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.productBatchRepository = productBatchRepository;
     }
 
     public Product saveProduct(ProductCreateDTO productCreateDTO){
@@ -79,6 +84,10 @@ public class ProductService {
             throw new DuplicateCredentialException("barcode", productUpdateDTO.getBarcode());
         }
 
+        if(!productUpdateDTO.getActive()){
+            ProductBatch productBatch = productBatchRepository.findById(product.getId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
+            productBatch.setBatchStatus(BatchStatus.UNAVAILABLE);
+        }
 
         product.setName(productUpdateDTO.getName());
         product.setBrand(productUpdateDTO.getBrand());
