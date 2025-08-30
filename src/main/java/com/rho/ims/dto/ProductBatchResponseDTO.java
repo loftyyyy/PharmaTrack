@@ -1,6 +1,7 @@
 package com.rho.ims.dto;
 
 
+import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.model.ProductBatch;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class ProductBatchResponseDTO {
     private Integer quantity;
     private BigDecimal purchasePricePerUnit;
     private LocalDate expiryDate;
+    private BatchStatus status;
     private LocalDate manufacturingDate;
     private String location;
 
@@ -33,6 +35,7 @@ public class ProductBatchResponseDTO {
         this.batchNumber = productBatch.getBatchNumber();
         this.quantity = productBatch.getQuantity();
         this. purchasePricePerUnit = productBatch.getPurchasePricePerUnit();
+        this.status = productBatch.getBatchStatus();
         this.expiryDate = productBatch.getExpiryDate();
         this.manufacturingDate = productBatch.getManufacturingDate();
         this.location = productBatch.getLocation();
