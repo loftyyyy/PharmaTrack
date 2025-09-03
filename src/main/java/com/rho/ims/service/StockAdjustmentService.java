@@ -37,6 +37,8 @@ public class StockAdjustmentService {
         Product product = productRepository.findById(stockAdjustmentCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         ProductBatch productBatch = productBatchRepository.findById(stockAdjustmentCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
 
+        StockAdjustment stockAdjustment = new StockAdjustment();
+
         if(!productBatch.getProduct().getId().equals(product.getId())){
             throw new IllegalArgumentException("Invalid product and batch combination");
         }
@@ -48,21 +50,21 @@ public class StockAdjustmentService {
         if (stockAdjustmentCreateDTO.getAdjustmentType() == AdjustmentType.CORRECTION) {
             newQuantity = stockAdjustmentCreateDTO.getQuantityChanged();
             delta = newQuantity - oldQuantity;
+            stockAdjustment.setAdjustmentType(AdjustmentType.CORRECTION);
         } else {
             delta = stockAdjustmentCreateDTO.getQuantityChanged();
             newQuantity = oldQuantity + delta;
             if (newQuantity < 0) {
                 throw new IllegalStateException("Stock cannot go below zero");
             }
+            stockAdjustment.setAdjustmentType(delta > 0 ? AdjustmentType.IN : AdjustmentType.OUT);
         }
 
         productBatch.setQuantity(newQuantity);
         productBatchRepository.save(productBatch);
 
-        StockAdjustment stockAdjustment = new StockAdjustment();
         stockAdjustment.setProduct(product);
         stockAdjustment.setProductBatch(productBatch);
-        stockAdjustment.setAdjustmentType(delta > 0 ? AdjustmentType.IN : AdjustmentType.OUT);
         stockAdjustment.setReason(stockAdjustmentCreateDTO.getReason());
         stockAdjustment.setQuantityChanged(delta);
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -72,7 +74,13 @@ public class StockAdjustmentService {
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setProduct(product);
         inventoryLog.setProductBatch(productBatch);
-        inventoryLog.setReason("Manual Stock Adjustment: " + stockAdjustmentCreateDTO.getReason());
+        if (stockAdjustmentCreateDTO.getAdjustmentType() == AdjustmentType.CORRECTION) {
+            inventoryLog.setReason(
+                    String.format("Manual Stock Correction: adjusted from %d → %d (%s)", oldQuantity, newQuantity, stockAdjustmentCreateDTO.getReason())
+            );
+        } else {
+            inventoryLog.setReason("Manual Stock Adjustment: " + stockAdjustmentCreateDTO.getReason());
+        }
         inventoryLog.setPurchase(null);
         inventoryLog.setSale(null);
         inventoryLog.setChangeType(ChangeType.ADJUST);

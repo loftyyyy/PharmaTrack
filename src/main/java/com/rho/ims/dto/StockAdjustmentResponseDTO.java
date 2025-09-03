@@ -6,6 +6,8 @@ import com.rho.ims.model.StockAdjustment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 public class StockAdjustmentResponseDTO {
@@ -15,6 +17,8 @@ public class StockAdjustmentResponseDTO {
     private AdjustmentType adjustmentType;
     private Integer quantityChanged;
     private String reason;
+    private String createdBy;
+    private LocalDateTime createdAt;
 
     public StockAdjustmentResponseDTO(StockAdjustment stockAdjustment){
         this.stockAdjustmentId = stockAdjustment.getId();
@@ -23,6 +27,8 @@ public class StockAdjustmentResponseDTO {
         this.adjustmentType = stockAdjustment.getAdjustmentType();
         this.quantityChanged = stockAdjustment.getQuantityChanged();
         this.reason = stockAdjustment.getReason();
+        this.createdAt = stockAdjustment.getCreatedAt();
+        this.createdBy = stockAdjustment.getCreatedBy().getUsername();
     }
 
 }
