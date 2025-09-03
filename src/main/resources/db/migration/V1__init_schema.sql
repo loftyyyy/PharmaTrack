@@ -228,7 +228,7 @@ CREATE TABLE stock_adjustments (
                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                 product_id BIGINT NOT NULL,
                                 product_batch_id BIGINT, -- optional: adjustment may apply to a batch or general product
-                                adjustment_type ENUM('IN', 'OUT') NOT NULL, -- IN = add stock, OUT = reduce stock
+                                adjustment_type ENUM('IN', 'OUT', 'CORRECTION') NOT NULL, -- IN = add stock, OUT = reduce stock
                                 quantity_adjusted INT NOT NULL,
                                 reason TEXT NOT NULL, -- explanation for the manual adjustment
                                 created_by BIGINT NOT NULL,

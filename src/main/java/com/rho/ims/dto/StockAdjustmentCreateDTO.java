@@ -1,5 +1,6 @@
 package com.rho.ims.dto;
 
+import com.rho.ims.enums.AdjustmentType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -19,6 +20,9 @@ public class StockAdjustmentCreateDTO {
 
     @NotNull(message = "Quantity changed is required")
     private Integer quantityChanged;
+
+    @NotNull(message = "Adjustment type is required")
+    private AdjustmentType adjustmentType;
 
     @NotBlank(message = "Reason is required")
     private String reason;

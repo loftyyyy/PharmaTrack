@@ -2,6 +2,7 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.StockAdjustmentCreateDTO;
+import com.rho.ims.enums.AdjustmentType;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.*;
@@ -35,21 +36,30 @@ public class StockAdjustmentService {
     public StockAdjustment saveStockAdjustment(StockAdjustmentCreateDTO stockAdjustmentCreateDTO) {
         Product product = productRepository.findById(stockAdjustmentCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         ProductBatch productBatch = productBatchRepository.findById(stockAdjustmentCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
+        int oldQuantity = productBatch.getQuantity();
+        int newQuantity;
+        int delta;
 
-
-        int newQuantity = productBatch.getQuantity() + stockAdjustmentCreateDTO.getQuantityChanged();
-        if(newQuantity < 0){
-            throw new IllegalStateException("Stock cannot go below zero");
+        if (stockAdjustmentCreateDTO.getAdjustmentType() == AdjustmentType.CORRECTION) {
+            newQuantity = stockAdjustmentCreateDTO.getQuantityChanged();
+            delta = newQuantity - oldQuantity;
+        } else {
+            delta = stockAdjustmentCreateDTO.getQuantityChanged();
+            newQuantity = oldQuantity + delta;
+            if (newQuantity < 0) {
+                throw new IllegalStateException("Stock cannot go below zero");
+            }
         }
+
         productBatch.setQuantity(newQuantity);
         productBatchRepository.save(productBatch);
 
         StockAdjustment stockAdjustment = new StockAdjustment();
         stockAdjustment.setProduct(product);
         stockAdjustment.setProductBatch(productBatch);
-        stockAdjustment.setChangeType(stockAdjustmentCreateDTO.getQuantityChanged() > 0 ? ChangeType.IN : ChangeType.OUT);
+        stockAdjustment.setAdjustmentType(delta > 0 ? AdjustmentType.IN : AdjustmentType.OUT);
         stockAdjustment.setReason(stockAdjustmentCreateDTO.getReason());
-        stockAdjustment.setQuantityChanged(stockAdjustmentCreateDTO.getQuantityChanged());
+        stockAdjustment.setQuantityChanged(delta);
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         stockAdjustment.setCreatedBy(user);
         stockAdjustmentRepository.save(stockAdjustment);
@@ -61,7 +71,7 @@ public class StockAdjustmentService {
         inventoryLog.setPurchase(null);
         inventoryLog.setSale(null);
         inventoryLog.setChangeType(ChangeType.ADJUST);
-        inventoryLog.setQuantityChanged(stockAdjustmentCreateDTO.getQuantityChanged());
+        inventoryLog.setQuantityChanged(delta);
         inventoryLog.setCreatedBy(user);
         inventoryLog.setAdjustmentReference("MSA-" + LocalDateTime.now());
         inventoryLogRepository.save(inventoryLog);

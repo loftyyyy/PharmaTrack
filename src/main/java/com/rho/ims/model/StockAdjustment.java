@@ -1,5 +1,6 @@
 package com.rho.ims.model;
 
+import com.rho.ims.enums.AdjustmentType;
 import com.rho.ims.enums.ChangeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,7 @@ public class StockAdjustment {
 
     @Column(name = "adjustment_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ChangeType changeType; // IN or OUT
+    private AdjustmentType adjustmentType; // IN or OUT
 
     private String reason; // e.g., "Stock count adjustment", "Damaged items"
 
