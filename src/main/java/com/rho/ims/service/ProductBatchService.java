@@ -91,6 +91,10 @@ public class ProductBatchService {
         return productBatchRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("product batch id", id.toString()));
     }
 
+    public List<ProductBatch> getProductBatchesFromProduct(Long id){
+        return productBatchRepository.findByProductId(id);
+    }
+
     public ProductBatch updateProductBatch(ProductBatchUpdateDTO productBatchUpdateDTO, Long id){
         ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
 

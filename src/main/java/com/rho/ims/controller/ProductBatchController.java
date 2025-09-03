@@ -36,6 +36,12 @@ public class ProductBatchController {
         return ResponseEntity.ok().body(productBatches);
     }
 
+    @GetMapping("{id}/batches")
+    public ResponseEntity<?> getBatchesFromProduct(@PathVariable Long id){
+        List<ProductBatchResponseDTO> productBatches = productBatchService.getProductBatchesFromProduct(id).stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
+        return ResponseEntity.ok().body(productBatches);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductBatch(@PathVariable Long id){
         ProductBatch productBatch = productBatchService.getProductBatch(id);
