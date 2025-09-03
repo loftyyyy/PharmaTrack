@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class StockAdjustmentResponseDTO {
     private Long stockAdjustmentId;
-    private Long productId;
+    private ProductResponseDTO product;
     private Long productBatchId;
     private ChangeType changeType;
     private Integer quantityChanged;
@@ -17,7 +17,7 @@ public class StockAdjustmentResponseDTO {
 
     public StockAdjustmentResponseDTO(StockAdjustment stockAdjustment){
         this.stockAdjustmentId = stockAdjustment.getId();
-        this.productId = stockAdjustment.getProduct().getId();
+        this.product = new ProductResponseDTO(stockAdjustment.getProduct());
         this.productBatchId = stockAdjustment.getProductBatch().getId();
         this.changeType = stockAdjustment.getChangeType();
         this.quantityChanged = stockAdjustment.getQuantityChanged();
