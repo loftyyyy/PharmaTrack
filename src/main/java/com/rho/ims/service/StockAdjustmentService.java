@@ -36,6 +36,11 @@ public class StockAdjustmentService {
     public StockAdjustment saveStockAdjustment(StockAdjustmentCreateDTO stockAdjustmentCreateDTO) {
         Product product = productRepository.findById(stockAdjustmentCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         ProductBatch productBatch = productBatchRepository.findById(stockAdjustmentCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
+
+        if(!productBatch.getProduct().getId().equals(product.getId())){
+            throw new IllegalArgumentException("Invalid product and batch combination");
+        }
+
         int oldQuantity = productBatch.getQuantity();
         int newQuantity;
         int delta;
