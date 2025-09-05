@@ -56,6 +56,7 @@ public class ProductService {
         product.setCategory(category);
         product.setBarcode(productCreateDTO.getBarcode());
         product.setSku(generateSKU(productCreateDTO));
+        product.setBatchManaged(Boolean.FALSE);
 
         // TODO: Reimplement this <>
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -110,12 +111,6 @@ public class ProductService {
 
     }
 
-    public void deleteProduct(Long id){
-        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product", "product not found"));
-
-        productRepository.delete(product);
-
-    }
 
     private String generateSKU(ProductCreateDTO productCreateDTO){
       String nameAbbr = productCreateDTO.getName().replaceAll("[^A-Za-z]", "")

@@ -13,6 +13,8 @@ public interface ProductBatchRepository extends JpaRepository<ProductBatch, Long
 
     boolean existsByProductIdAndBatchNumber(Long productId, String batchNumber);
 
+    boolean existsByProductId(Long productId);
+
     Optional<ProductBatch> findByBatchNumber(String batchNumber);
 
     List<ProductBatch> findByProductIdAndBatchNumber(Long productId, String batchNumber);

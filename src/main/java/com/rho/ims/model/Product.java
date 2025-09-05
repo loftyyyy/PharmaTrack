@@ -61,6 +61,9 @@ public class Product {
     @Column(length = 50)
     private String sku;
 
+    @Column(name = "batch_managed", nullable = false)
+    private Boolean batchManaged;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

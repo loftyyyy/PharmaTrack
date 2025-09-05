@@ -25,6 +25,7 @@ public class ProductResponseDTO {
     private CategoryResponseDTO category;
     private String barcode;
     private String sku;
+    private Boolean batchManaged;
     private Long createdBy;
 
     public ProductResponseDTO(Product product){
@@ -41,6 +42,7 @@ public class ProductResponseDTO {
         this.minimumStock = product.getMinimumStock();
         this.drugClassification = product.getDrugClassification();
         this.sku = product.getSku();
+        this.batchManaged = product.getBatchManaged();
         this.createdBy = product.getCreatedBy().getId();
     }
 

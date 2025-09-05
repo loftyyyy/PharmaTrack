@@ -63,6 +63,8 @@ public class ProductBatchService {
         productBatch.setManufacturingDate(productBatchCreateDTO.getManufacturingDate());
         productBatch.setLocation(productBatchCreateDTO.getLocation());
         productBatch.setBatchStatus(BatchStatus.AVAILABLE);
+        product.setBatchManaged(Boolean.TRUE);
+        productRepository.save(product);
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         productBatch.setCreatedBy(user);
