@@ -18,8 +18,8 @@ public class InventoryLogResponseDTO {
     private ChangeType changeType;
     private Integer quantityChanged;
     private String reason;
-    private Long saleId;
-    private Long purchaseId;
+    private SaleResponseDTO sale;
+    private PurchaseResponseDTO purchase;
     private String adjustmentReference;
     private LocalDate createdAt;
 
@@ -27,10 +27,11 @@ public class InventoryLogResponseDTO {
         this.product = new ProductResponseDTO(inventoryLog.getProduct());
         this.productBatch = new ProductBatchResponseDTO(inventoryLog.getProductBatch());
         this.changeType = inventoryLog.getChangeType();
+        this.sale = inventoryLog.getSale() != null ? new SaleResponseDTO(inventoryLog.getSale()) : null;
+        this.purchase = inventoryLog.getPurchase() != null ? new PurchaseResponseDTO(inventoryLog.getPurchase()) : null;
         this.quantityChanged = inventoryLog.getQuantityChanged();
-        this.saleId = inventoryLog.getSale().getId();
-        this.purchaseId = inventoryLog.getPurchase().getId();
         this.adjustmentReference = inventoryLog.getAdjustmentReference();
+        this.reason = inventoryLog.getReason();
         this.createdAt = inventoryLog.getCreatedAt();
     }
 
