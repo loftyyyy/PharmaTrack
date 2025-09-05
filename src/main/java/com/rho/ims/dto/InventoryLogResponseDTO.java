@@ -13,8 +13,8 @@ import java.time.LocalDate;
 @Setter
 public class InventoryLogResponseDTO {
 
-    private Long productId;
-    private Long productBatchId;
+    private ProductResponseDTO product;
+    private ProductBatchResponseDTO productBatch;
     private ChangeType changeType;
     private Integer quantityChanged;
     private String reason;
@@ -24,8 +24,8 @@ public class InventoryLogResponseDTO {
     private LocalDate createdAt;
 
     public InventoryLogResponseDTO(InventoryLog inventoryLog){
-        this.productId = inventoryLog.getProduct().getId();
-        this.productBatchId = inventoryLog.getProductBatch().getId();
+        this.product = new ProductResponseDTO(inventoryLog.getProduct());
+        this.productBatch = new ProductBatchResponseDTO(inventoryLog.getProductBatch());
         this.changeType = inventoryLog.getChangeType();
         this.quantityChanged = inventoryLog.getQuantityChanged();
         this.saleId = inventoryLog.getSale().getId();
