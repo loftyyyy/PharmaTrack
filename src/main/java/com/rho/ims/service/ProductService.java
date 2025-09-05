@@ -55,6 +55,7 @@ public class ProductService {
         product.setDescription(productCreateDTO.getDescription());
         product.setCategory(category);
         product.setBarcode(productCreateDTO.getBarcode());
+        product.setSku(generateSKU(productCreateDTO));
 
         // TODO: Reimplement this <>
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -115,4 +116,23 @@ public class ProductService {
         productRepository.delete(product);
 
     }
+
+    private String generateSKU(ProductCreateDTO productCreateDTO){
+      String nameAbbr = productCreateDTO.getName().replaceAll("[^A-Za-z]", "")
+                .substring(0, Math.min(4, productCreateDTO.getName().length()))
+                .toUpperCase();
+
+        String strength = productCreateDTO.getStrength().replaceAll("\\s+", "").toUpperCase();
+
+        String formAbbr = productCreateDTO.getDosageForm()
+                .substring(0, Math.min(3, productCreateDTO.getDosageForm().length()))
+                .toUpperCase();
+
+        String brandAbbr = productCreateDTO.getBrand()
+                .substring(0, Math.min(3, productCreateDTO.getBrand().length()))
+                .toUpperCase();
+
+        return String.format("%s-%s-%s-%s", nameAbbr, strength, formAbbr, brandAbbr);
+    }
+
 }

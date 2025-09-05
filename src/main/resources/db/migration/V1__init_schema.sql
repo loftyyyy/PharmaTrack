@@ -57,6 +57,7 @@ CREATE TABLE products (
                           description TEXT,
                           category_id BIGINT NOT NULL,
                           barcode VARCHAR(50) UNIQUE NOT NULL, -- Assuming barcodes are unique
+                          sku VARCHAR(50) UNIQUE NOT NULL,
                           created_by BIGINT NOT NULL, -- Added: User who created this product record
                           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -58,6 +58,9 @@ public class Product {
     @Column(length = 50, unique = true)
     private String barcode;
 
+    @Column(length = 50)
+    private String sku;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
