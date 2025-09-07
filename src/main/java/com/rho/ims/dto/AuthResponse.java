@@ -6,13 +6,18 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class AuthResponse {
-    private String token;
-    private UserResponseDTO userResponseDTO;
+    private String accessToken;
+    private String refreshToken;
+    private String tokenType = "Bearer";
+    private long expiresIn = 900; // 15 minutes in seconds
+    private UserResponseDTO user;
 
-    public AuthResponse(String token, UserResponseDTO userResponseDTO){
-        this.token = token;
-        this.userResponseDTO = userResponseDTO;
+    public AuthResponse(String accessToken, String refreshToken, UserResponseDTO user) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.user = user;
     }
 
 }

@@ -20,14 +20,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
-    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil,
-                                   UserDetailsService userDetailsService,
-                                   TokenBlacklistService tokenBlacklistService) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
-        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -36,38 +32,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
-        String username = null;
-        String jwt = null;
+        final String jwt;
+        final String username;
 
-        // Check if header has "Bearer ..."
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7); // remove "Bearer "
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-            // Check if token is blacklisted first
-            if (tokenBlacklistService.isTokenBlacklisted(jwt)) {
-                // Token is blacklisted, skip authentication
+        jwt = authHeader.substring(7);
+
+        try {
+            // Only process access tokens for authentication
+            if (!jwtUtil.isAccessToken(jwt)) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
             username = jwtUtil.extractUsername(jwt);
-        }
 
-        // Validate token and set authentication
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            try {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-                if (userDetails != null && jwtUtil.isTokenValid(jwt, userDetails)) {
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                if (jwtUtil.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-            } catch (Exception e) {
-                // Log the exception if needed, but don't authenticate
-                // The token is invalid or user doesn't exist
             }
+        } catch (Exception e) {
+            // Log the exception if needed
+            logger.debug("Cannot set user authentication: {}", e);
         }
 
         filterChain.doFilter(request, response);

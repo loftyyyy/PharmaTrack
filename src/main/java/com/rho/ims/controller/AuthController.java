@@ -1,11 +1,10 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.AuthRequest;
-import com.rho.ims.dto.AuthResponse;
-import com.rho.ims.dto.RegisterRequest;
-import com.rho.ims.dto.UserResponseDTO;
+import com.rho.ims.api.exception.TokenRefreshException;
+import com.rho.ims.dto.*;
 import com.rho.ims.model.User;
 import com.rho.ims.security.JwtUtil;
+import com.rho.ims.service.RefreshTokenService;
 import com.rho.ims.service.UserService;
 import com.rho.ims.service.TokenBlacklistService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,77 +23,95 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-    private final TokenBlacklistService tokenBlacklistService;
+    private final UserService userService;
+    private final RefreshTokenService refreshTokenService;
 
-    public AuthController(UserService userService,
-                          AuthenticationManager authenticationManager,
+    public AuthController(AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil,
-                          TokenBlacklistService tokenBlacklistService) {
-        this.userService = userService;
+                          UserService userService,
+                          RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        this.tokenBlacklistService = tokenBlacklistService;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        User user = userService.saveUser(registerRequest);
-        return ResponseEntity.ok().body(new UserResponseDTO(user));
+        this.userService = userService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@Valid @RequestBody AuthRequest authRequest) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
-            String token = jwtUtil.generateToken(authentication.getName());
-            User user = userService.findByName(authRequest.getUsername());
-            return new AuthResponse(token, new UserResponseDTO(user));
+
+            String username = authentication.getName();
+            String accessToken = jwtUtil.generateAccessToken(username);
+            String refreshToken = jwtUtil.generateRefreshToken(username);
+
+            // Save refresh token to database
+            refreshTokenService.saveRefreshToken(username, refreshToken);
+
+            User user = userService.findByName(username);
+            AuthResponse response = new AuthResponse(accessToken, refreshToken, new UserResponseDTO(user));
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // Always throw BadCredentialsException for security
             throw new BadCredentialsException("Bad credentials");
         }
+    }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenRefreshResponse> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        String refreshToken = request.getRefreshToken();
+
+        try {
+            // Validate the refresh token format and signature
+            if (!jwtUtil.isRefreshToken(refreshToken)) {
+                throw new TokenRefreshException(refreshToken, "Token is not a refresh token!");
+            }
+
+            if (jwtUtil.isTokenExpired(refreshToken)) {
+                refreshTokenService.deleteRefreshToken(refreshToken);
+                throw new TokenRefreshException(refreshToken, "Refresh token was expired. Please make a new signin request");
+            }
+
+            // Check if refresh token exists in database and is valid
+            if (!refreshTokenService.isRefreshTokenValid(refreshToken)) {
+                throw new TokenRefreshException(refreshToken, "Refresh token is not in database!");
+            }
+
+            String username = jwtUtil.extractUsername(refreshToken);
+            String newAccessToken = jwtUtil.generateAccessToken(username);
+
+            return ResponseEntity.ok(new TokenRefreshResponse(newAccessToken, refreshToken));
+
+        } catch (Exception e) {
+            if (e instanceof TokenRefreshException) {
+                throw e;
+            }
+            throw new TokenRefreshException(refreshToken, "Invalid refresh token");
+        }
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
-        String token = extractTokenFromRequest(request);
+        String authHeader = request.getHeader("Authorization");
 
-        if (token != null) {
-            tokenBlacklistService.blacklistToken(token);
-            return ResponseEntity.ok().body(new LogoutResponse("Successfully logged out"));
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String accessToken = authHeader.substring(7);
+
+            try {
+                String username = jwtUtil.extractUsername(accessToken);
+                // Delete all refresh tokens for this user
+                refreshTokenService.deleteAllUserRefreshTokens(username);
+
+                return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(new MessageResponse("Invalid token"));
+            }
         }
 
-        return ResponseEntity.badRequest().body(new LogoutResponse("No valid token found"));
-    }
-
-    private String extractTokenFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-
-    // Response DTO for logout
-    public static class LogoutResponse {
-        private String message;
-
-        public LogoutResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
+        return ResponseEntity.badRequest().body(new MessageResponse("No token provided"));
     }
 }

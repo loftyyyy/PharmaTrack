@@ -243,3 +243,12 @@ CREATE TABLE stock_adjustments (
                                 FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                                 FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
+CREATE TABLE refresh_tokens (
+                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                token VARCHAR(500) NOT NULL UNIQUE,
+                                username VARCHAR(255) NOT NULL,
+                                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                expires_at TIMESTAMP NOT NULL,
+                                INDEX idx_username (username),
+                                INDEX idx_expires_at (expires_at)
+);
