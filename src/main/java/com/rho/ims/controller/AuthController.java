@@ -64,6 +64,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
         String refreshToken = request.getRefreshToken();
+        System.out.println("TOKEN NI NIGGA AY NAG REFRESH BOSS");
 
         try {
             // Validate the refresh token format and signature
