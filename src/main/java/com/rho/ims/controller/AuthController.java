@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -64,7 +66,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
         String refreshToken = request.getRefreshToken();
-        System.out.println("TOKEN NI NIGGA AY NAG REFRESH BOSS");
+        System.out.println("TOKEN REFRESHED at " + LocalDateTime.now());
 
         try {
             // Validate the refresh token format and signature
