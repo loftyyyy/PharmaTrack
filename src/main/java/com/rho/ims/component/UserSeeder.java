@@ -23,6 +23,7 @@ public class UserSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         Role role = roleRepo.findByName("ADMIN").orElseThrow();
+        Role staffRole = roleRepo.findByName("STAFF").orElseThrow();
         if (!userRepo.existsByUsername("admin")) {
             User admin = new User();
             admin.setUsername("admin");
@@ -30,6 +31,14 @@ public class UserSeeder implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setRole(role);
             userRepo.save(admin);
+        }
+        if (!userRepo.existsByUsername("staff")) {
+            User staff = new User();
+            staff.setUsername("staff");
+            staff.setEmail("staff123@gmail.com");
+            staff.setPassword(passwordEncoder.encode("staff123"));
+            staff.setRole(staffRole);
+            userRepo.save(staff);
         }
     }
 }
