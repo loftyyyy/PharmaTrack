@@ -33,6 +33,7 @@ public class SupplierService {
         Supplier supplier = new Supplier();
         supplier.setName(supplierCreateDTO.getName());
         supplier.setEmail(supplierCreateDTO.getEmail());
+        supplier.setContactPerson(supplierCreateDTO.getContactPerson());
         supplier.setPhoneNumber(supplierCreateDTO.getPhoneNumber());
         supplier.setAddressCity(supplierCreateDTO.getAddressCity());
         supplier.setAddressState(supplierCreateDTO.getAddressState());
@@ -83,14 +84,5 @@ public class SupplierService {
 
 
     }
-
-    public void deleteSupplier(Long id){
-        Supplier supplier = supplierRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("supplier", id.toString()));
-        supplierRepository.delete(supplier);
-
-    }
-
-
-
 
 }
