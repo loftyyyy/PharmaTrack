@@ -79,12 +79,4 @@ public class ProductSupplierService {
         return productSupplierRepository.save(productSupplier);
     }
 
-    public void deleteProductSupplier(Long id){
-        ProductSupplier productSupplier = productSupplierRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product supplier", id.toString()));
-        productSupplierRepository.delete(productSupplier);
-    }
-
-
-
-
 }

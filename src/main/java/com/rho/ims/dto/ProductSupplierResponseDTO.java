@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 public class ProductSupplierResponseDTO {
 
     private Long productSupplierId;
-    private Long productId;
-    private Long supplierId;
+    private ProductResponseDTO product;
+    private SupplierResponseDTO supplier;
     private Boolean preferredSupplier;
     private String supplierProductCode;
 
     public ProductSupplierResponseDTO(ProductSupplier productSupplier){
         this.productSupplierId = productSupplier.getId();
-        this.productId = productSupplier.getProduct().getId();
-        this.supplierId = productSupplier.getSupplier().getId();
+        this.product = new ProductResponseDTO(productSupplier.getProduct());
+        this.supplier = new SupplierResponseDTO(productSupplier.getSupplier());
         this.preferredSupplier = productSupplier.getPreferredSupplier();
         this.supplierProductCode = productSupplier.getSupplierProductCode();
     }

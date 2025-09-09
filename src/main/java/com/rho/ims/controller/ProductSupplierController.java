@@ -43,9 +43,4 @@ public class ProductSupplierController {
         return ResponseEntity.ok().body(new ProductSupplierResponseDTO(productSupplier));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProductSupplier(@PathVariable Long id){
-        productSupplierService.deleteProductSupplier(id);
-        return ResponseEntity.ok().body("Product supplier successfully deleted");
-    }
 }
