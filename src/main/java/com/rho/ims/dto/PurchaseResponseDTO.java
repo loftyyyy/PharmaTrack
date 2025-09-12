@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class PurchaseResponseDTO {
 
     private Long purchaseId;
-    private Long supplierId;
+    private SupplierResponseDTO supplier;
     private BigDecimal totalAmount;
     private LocalDate purchaseDate;
     private PurchaseStatus purchaseStatus;
@@ -24,7 +24,7 @@ public class PurchaseResponseDTO {
 
     public PurchaseResponseDTO(Purchase purchase){
         this.purchaseId = purchase.getId();
-        this.supplierId = purchase.getSupplier().getId();
+        this.supplier = new SupplierResponseDTO(purchase.getSupplier());
         this.totalAmount = purchase.getTotalAmount();
         this.purchaseDate = purchase.getPurchaseDate();
         this.purchaseStatus = purchase.getPurchaseStatus();
