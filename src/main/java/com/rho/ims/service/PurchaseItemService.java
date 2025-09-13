@@ -21,19 +21,22 @@ import java.util.Optional;
     private final PurchaseItemRepository purchaseItemRepository;
     private final PurchaseRepository purchaseRepository;
     private final ProductBatchRepository productBatchRepository;
+    private final ProductBatchService productBatchService;
 
-    public PurchaseItemService(PurchaseItemRepository purchaseItemRepository, PurchaseRepository purchaseRepository, ProductBatchRepository productBatchRepository) {
+    public PurchaseItemService(PurchaseItemRepository purchaseItemRepository, PurchaseRepository purchaseRepository, ProductBatchRepository productBatchRepository, ProductBatchService productBatchService) {
         this.purchaseItemRepository = purchaseItemRepository;
         this.purchaseRepository = purchaseRepository;
         this.productBatchRepository = productBatchRepository;
+        this.productBatchService = productBatchService;
     }
 
 
     public PurchaseItem savePurchaseItem(PurchaseItemCreateDTO purchaseItemCreateDTO){
         Purchase purchase = purchaseRepository.findById(purchaseItemCreateDTO.getPurchaseId()).orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
-        ProductBatch productBatch = productBatchRepository.findById(purchaseItemCreateDTO.getProductBatchId()).orElseThrow( () -> new ResourceNotFoundException("product batch not found"));
+        ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItemCreateDTO.getProductBatch());
 
-        Optional<PurchaseItem> existing = purchaseItemRepository.findByPurchaseIdAndProductBatchId(purchaseItemCreateDTO.getPurchaseId(), purchaseItemCreateDTO.getProductBatchId());
+
+        Optional<PurchaseItem> existing = purchaseItemRepository.findByPurchaseIdAndProductBatchId(purchaseItemCreateDTO.getPurchaseId(), productBatch.getId());
 
         if(existing.isPresent()){
             throw new DuplicateCredentialException("Purchase item for this product batch and purchase already exists.");
@@ -46,11 +49,8 @@ import java.util.Optional;
         purchaseItem.setQuantity(purchaseItemCreateDTO.getQuantity());
         purchaseItem.setUnitPrice(purchaseItemCreateDTO.getUnitPrice());
 
-        // TODO: Implement inventory logs
 
         return purchaseItemRepository.save(purchaseItem);
-
-
     }
 
     public List<PurchaseItem> getAll(){

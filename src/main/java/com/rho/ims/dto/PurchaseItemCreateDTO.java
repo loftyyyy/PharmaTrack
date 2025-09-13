@@ -19,7 +19,7 @@ public class PurchaseItemCreateDTO {
     private Long purchaseId;
 
     @NotNull(message = "Product Batch is required")
-    private Long productBatchId;
+    private ProductBatchCreateDTO productBatch;
 
     @NotNull(message = "Quantity is required")
     @Min(1)

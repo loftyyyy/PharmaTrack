@@ -29,13 +29,15 @@ public class PurchaseService {
     private final UserRepository userRepository;
     private final ProductBatchRepository productBatchRepository;
     private final InventoryLogRepository inventoryLogRepository;
+    private final ProductBatchService productBatchService;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository, InventoryLogRepository inventoryLogRepository){
+    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository, InventoryLogRepository inventoryLogRepository, ProductBatchService productBatchService){
         this.purchaseRepository = purchaseRepository;
         this.supplierRepository = supplierRepository;
         this.userRepository = userRepository;
         this.productBatchRepository = productBatchRepository;
         this.inventoryLogRepository = inventoryLogRepository;
+        this.productBatchService = productBatchService;
     }
 
     public Purchase savePurchase(PurchaseCreateDTO purchaseCreateDTO){
@@ -60,15 +62,18 @@ public class PurchaseService {
         BigDecimal totalAmount = BigDecimal.ZERO;
 
         for(PurchaseItemCreateDTO purchaseItem : purchaseCreateDTO.getPurchaseItems()){
-            ProductBatch productBatch = productBatchRepository.findById(purchaseItem.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
 
             //TODO: This is where we decide to either prompt the user to create a new product batch or just automatically create it
 
+           productBatchRepository.existsByProductIdAndBatchNumber(purchaseItem.getProductBatch().getProductId(), purchaseItem.getProductBatch().getBatchNumber());
+
+            ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItem.getProductBatch());
             PurchaseItem item = new PurchaseItem();
             item.setProductBatch(productBatch);
             item.setPurchase(purchase);
             item.setUnitPrice(purchaseItem.getUnitPrice());
             item.setQuantity(purchaseItem.getQuantity());
+
 
             totalAmount = totalAmount.add(purchaseItem.getUnitPrice().multiply(BigDecimal.valueOf(purchaseItem.getQuantity())));
 

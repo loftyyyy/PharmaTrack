@@ -47,7 +47,6 @@ public class ProductBatchService {
         }
 
 
-
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
 
         if(!product.getActive()){
@@ -82,6 +81,36 @@ public class ProductBatchService {
         inventoryLogRepository.save(inventoryLog);
 
        return savedBatch;
+
+    }
+
+    public ProductBatch findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+        Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
+
+        Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
+
+        if(!product.getActive()){
+            throw new IllegalStateException("Product is inactive");
+        }
+
+        if(existing.isPresent()){
+            ProductBatch productBatch = existing.get();
+            productBatch.setQuantity(productBatch.getQuantity() + productBatchCreateDTO.getQuantity());
+
+            User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+            InventoryLog inventoryLog = new InventoryLog();
+            inventoryLog.setChangeType(ChangeType.IN);
+            inventoryLog.setProduct(product);
+            inventoryLog.setProductBatch(productBatch);
+            inventoryLog.setQuantityChanged(productBatchCreateDTO.getQuantity());
+            inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
+            inventoryLog.setAdjustmentReference("PURCHASE-BATCH-" + productBatch.getId());
+            inventoryLog.setCreatedBy(user);
+            inventoryLogRepository.save(inventoryLog);
+            return productBatchRepository.save(productBatch);
+        }else {
+            return saveProductBatch(productBatchCreateDTO);
+        }
 
     }
 
