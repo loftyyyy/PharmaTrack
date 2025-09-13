@@ -15,6 +15,7 @@ import com.rho.ims.respository.InventoryLogRepository;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,7 @@ public class ProductBatchService {
 
     }
 
+    @Transactional
     public ProductBatch findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
         Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
 
