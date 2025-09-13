@@ -63,11 +63,9 @@ public class PurchaseService {
 
         for(PurchaseItemCreateDTO purchaseItem : purchaseCreateDTO.getPurchaseItems()){
 
-            //TODO: This is where we decide to either prompt the user to create a new product batch or just automatically create it
+//            TODO: This is where we decide to either prompt the user to create a new product batch or just automatically create it
 
-           productBatchRepository.existsByProductIdAndBatchNumber(purchaseItem.getProductBatch().getProductId(), purchaseItem.getProductBatch().getBatchNumber());
-
-            ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItem.getProductBatch());
+            ProductBatch productBatch = productBatchService.findOrCreateProductBatch(purchaseItem.getProductBatch());
             PurchaseItem item = new PurchaseItem();
             item.setProductBatch(productBatch);
             item.setPurchase(purchase);
