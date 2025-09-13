@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SupplierResponseDTO {
 
-    private Long id;
+    private Long supplierId;
     private String name;
     private String contactPerson;
     private String phoneNumber;
@@ -19,7 +19,7 @@ public class SupplierResponseDTO {
     private String addressZipCode;
 
     public SupplierResponseDTO(Supplier supplier){
-        this.id = supplier.getId();
+        this.supplierId = supplier.getId();
         this.name = supplier.getName();
         this.contactPerson = supplier.getContactPerson();
         this.phoneNumber = supplier.getPhoneNumber();

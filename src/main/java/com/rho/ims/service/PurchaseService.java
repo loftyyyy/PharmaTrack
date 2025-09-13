@@ -61,11 +61,15 @@ public class PurchaseService {
         List<PurchaseItem> purchaseItems = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
 
+        purchaseRepository.save(purchase);
+
         for(PurchaseItemCreateDTO purchaseItem : purchaseCreateDTO.getPurchaseItems()){
 
 //            TODO: This is where we decide to either prompt the user to create a new product batch or just automatically create it
 
-            ProductBatch productBatch = productBatchService.findOrCreateProductBatch(purchaseItem.getProductBatch());
+            ProductBatch productBatch = productBatchService.findOrCreateProductBatch(purchaseItem.getProductBatch(), purchase);
+
+
             PurchaseItem item = new PurchaseItem();
             item.setProductBatch(productBatch);
             item.setPurchase(purchase);

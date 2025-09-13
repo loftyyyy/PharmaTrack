@@ -33,7 +33,7 @@ import java.util.Optional;
 
     public PurchaseItem savePurchaseItem(PurchaseItemCreateDTO purchaseItemCreateDTO){
         Purchase purchase = purchaseRepository.findById(purchaseItemCreateDTO.getPurchaseId()).orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
-        ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItemCreateDTO.getProductBatch());
+        ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItemCreateDTO.getProductBatch(), purchase);
 
 
         Optional<PurchaseItem> existing = purchaseItemRepository.findByPurchaseIdAndProductBatchId(purchaseItemCreateDTO.getPurchaseId(), productBatch.getId());

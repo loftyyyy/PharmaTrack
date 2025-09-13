@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ProductResponseDTO {
 
-    private Long id;;
+    private Long productId;;
     private String name;
     private String brand;
     private String description;
@@ -29,7 +29,7 @@ public class ProductResponseDTO {
     private Long createdBy;
 
     public ProductResponseDTO(Product product){
-        this.id = product.getId();
+        this.productId = product.getId();
         this.name = product.getName();
         this.brand = product.getBrand();
         this.description = product.getDescription();

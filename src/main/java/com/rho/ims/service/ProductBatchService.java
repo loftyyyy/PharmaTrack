@@ -7,10 +7,7 @@ import com.rho.ims.dto.ProductBatchResponseDTO;
 import com.rho.ims.dto.ProductBatchUpdateDTO;
 import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.enums.ChangeType;
-import com.rho.ims.model.InventoryLog;
-import com.rho.ims.model.Product;
-import com.rho.ims.model.ProductBatch;
-import com.rho.ims.model.User;
+import com.rho.ims.model.*;
 import com.rho.ims.respository.InventoryLogRepository;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
@@ -37,7 +34,7 @@ public class ProductBatchService {
         this.inventoryLogRepository = inventoryLogRepository;
     }
 
-    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO, Purchase purchase){
 
         if (productBatchRepository.existsByProductIdAndBatchNumber(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber())) {
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
@@ -79,6 +76,7 @@ public class ProductBatchService {
         inventoryLog.setReason("Initial stock for new batch");
         inventoryLog.setAdjustmentReference("INITIAL-STOCK-BATCH-" + productBatch.getId());
         inventoryLog.setCreatedBy(user);
+        inventoryLog.setPurchase(purchase);
         inventoryLogRepository.save(inventoryLog);
 
        return savedBatch;
@@ -86,7 +84,7 @@ public class ProductBatchService {
     }
 
     @Transactional
-    public ProductBatch findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+    public ProductBatch findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO, Purchase purchase){
         Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
 
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
@@ -106,12 +104,13 @@ public class ProductBatchService {
             inventoryLog.setProductBatch(productBatch);
             inventoryLog.setQuantityChanged(productBatchCreateDTO.getQuantity());
             inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
+            inventoryLog.setPurchase(purchase);
             inventoryLog.setAdjustmentReference("PURCHASE-BATCH-" + productBatch.getId());
             inventoryLog.setCreatedBy(user);
             inventoryLogRepository.save(inventoryLog);
             return productBatchRepository.save(productBatch);
         }else {
-            return saveProductBatch(productBatchCreateDTO);
+            return saveProductBatch(productBatchCreateDTO, purchase);
         }
 
     }

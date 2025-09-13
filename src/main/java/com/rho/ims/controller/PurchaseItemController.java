@@ -22,11 +22,11 @@ public class PurchaseItemController {
         this.purchaseItemService = purchaseItemService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createPurchaseItem(@Valid @RequestBody PurchaseItemCreateDTO purchaseItemCreateDTO) {
-        PurchaseItem purchaseItem = purchaseItemService.savePurchaseItem(purchaseItemCreateDTO);
-        return ResponseEntity.ok().body(new PurchaseItemResponseDTO(purchaseItem));
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createPurchaseItem(@Valid @RequestBody PurchaseItemCreateDTO purchaseItemCreateDTO) {
+//        PurchaseItem purchaseItem = purchaseItemService.savePurchaseItem(purchaseItemCreateDTO);
+//        return ResponseEntity.ok().body(new PurchaseItemResponseDTO(purchaseItem));
+//    }
 
     @GetMapping
     public ResponseEntity<?> getAllPurchaseItem() {
