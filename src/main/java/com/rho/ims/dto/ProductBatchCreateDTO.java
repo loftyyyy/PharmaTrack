@@ -1,14 +1,13 @@
 package com.rho.ims.dto;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
 public class ProductBatchCreateDTO {

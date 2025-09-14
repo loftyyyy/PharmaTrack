@@ -143,9 +143,18 @@ CREATE TABLE purchases (
 CREATE TABLE purchase_items (
                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                 purchase_id BIGINT NOT NULL,
-                                product_batch_id BIGINT NOT NULL,
+                                product_batch_id BIGINT,
                                 quantity INT NOT NULL CHECK (quantity > 0),
                                 unit_price DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),
+
+                                product_id BIGINT NOT NULL,
+                                batch_number VARCHAR(100) NOT NULL,
+                                batch_quantity INT NOT NULL CHECK (purchase_items.batch_quantity >= 0), -- Quantity should not be negative
+                                purchase_price_per_unit DECIMAL(10,2) NOT NULL,
+                                expiry_date DATE NOT NULL,
+                                manufacturing_date DATE NOT NULL,
+                                location VARCHAR(50),
+                                batch_status ENUM('AVAILABLE', 'UNAVAILABLE', 'SOLD_OUT', 'RECALLED', 'EXPIRED') NOT NULL DEFAULT 'AVAILABLE',
                                 FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE ON UPDATE CASCADE,
                                 FOREIGN KEY (product_batch_id) REFERENCES product_batches(id) ON DELETE RESTRICT ON UPDATE CASCADE,
                                 UNIQUE (purchase_id, product_batch_id) -- A specific batch should only appear once per purchase

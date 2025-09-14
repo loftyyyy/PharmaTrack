@@ -12,6 +12,7 @@ import com.rho.ims.respository.InventoryLogRepository;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.UserRepository;
+import com.rho.ims.wrapper.ProductBatchResult;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class ProductBatchService {
         this.inventoryLogRepository = inventoryLogRepository;
     }
 
-    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO, Purchase purchase){
+    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
 
         if (productBatchRepository.existsByProductIdAndBatchNumber(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber())) {
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
@@ -68,23 +69,13 @@ public class ProductBatchService {
 
         ProductBatch savedBatch = productBatchRepository.save(productBatch);
 
-        InventoryLog inventoryLog = new InventoryLog();
-        inventoryLog.setChangeType(ChangeType.INITIAL);
-        inventoryLog.setProduct(product);
-        inventoryLog.setProductBatch(productBatch);
-        inventoryLog.setQuantityChanged(productBatch.getQuantity());
-        inventoryLog.setReason("Initial stock for new batch");
-        inventoryLog.setAdjustmentReference("INITIAL-STOCK-BATCH-" + productBatch.getId());
-        inventoryLog.setCreatedBy(user);
-        inventoryLog.setPurchase(purchase);
-        inventoryLogRepository.save(inventoryLog);
-
        return savedBatch;
 
     }
 
     @Transactional
-    public ProductBatch findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO, Purchase purchase){
+    public ProductBatchResult findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+        System.out.println("FIND OR CREATE CALLED");
         Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
 
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
@@ -93,24 +84,31 @@ public class ProductBatchService {
             throw new IllegalStateException("Product is inactive");
         }
 
+//        if(existing.isPresent()){
+//            ProductBatch productBatch = existing.get();
+//            productBatch.setQuantity(productBatch.getQuantity() + productBatchCreateDTO.getQuantity());
+//
+//            User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//            InventoryLog inventoryLog = new InventoryLog();
+//            inventoryLog.setChangeType(ChangeType.IN);
+//            inventoryLog.setProduct(product);
+//            inventoryLog.setProductBatch(productBatch);
+//            inventoryLog.setQuantityChanged(productBatchCreateDTO.getQuantity());
+//            inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
+//            inventoryLog.setPurchase(purchase);
+//            inventoryLog.setAdjustmentReference("PURCHASE-BATCH-" + productBatch.getId());
+//            inventoryLog.setCreatedBy(user);
+//            inventoryLogRepository.save(inventoryLog);
+//            return productBatchRepository.save(productBatch);
+//        }else {
+//            return saveProductBatch(productBatchCreateDTO, purchase);
+//        }
+
         if(existing.isPresent()){
             ProductBatch productBatch = existing.get();
-            productBatch.setQuantity(productBatch.getQuantity() + productBatchCreateDTO.getQuantity());
-
-            User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            InventoryLog inventoryLog = new InventoryLog();
-            inventoryLog.setChangeType(ChangeType.IN);
-            inventoryLog.setProduct(product);
-            inventoryLog.setProductBatch(productBatch);
-            inventoryLog.setQuantityChanged(productBatchCreateDTO.getQuantity());
-            inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
-            inventoryLog.setPurchase(purchase);
-            inventoryLog.setAdjustmentReference("PURCHASE-BATCH-" + productBatch.getId());
-            inventoryLog.setCreatedBy(user);
-            inventoryLogRepository.save(inventoryLog);
-            return productBatchRepository.save(productBatch);
-        }else {
-            return saveProductBatch(productBatchCreateDTO, purchase);
+            return new ProductBatchResult(productBatch, false);
+        }else{
+            return new ProductBatchResult(saveProductBatch(productBatchCreateDTO),true);
         }
 
     }

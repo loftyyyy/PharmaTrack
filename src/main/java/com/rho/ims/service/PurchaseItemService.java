@@ -31,27 +31,27 @@ import java.util.Optional;
     }
 
 
-    public PurchaseItem savePurchaseItem(PurchaseItemCreateDTO purchaseItemCreateDTO){
-        Purchase purchase = purchaseRepository.findById(purchaseItemCreateDTO.getPurchaseId()).orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
-        ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItemCreateDTO.getProductBatch(), purchase);
-
-
-        Optional<PurchaseItem> existing = purchaseItemRepository.findByPurchaseIdAndProductBatchId(purchaseItemCreateDTO.getPurchaseId(), productBatch.getId());
-
-        if(existing.isPresent()){
-            throw new DuplicateCredentialException("Purchase item for this product batch and purchase already exists.");
-
-        }
-
-        PurchaseItem purchaseItem = new PurchaseItem();
-        purchaseItem.setPurchase(purchase);
-        purchaseItem.setProductBatch(productBatch);
-        purchaseItem.setQuantity(purchaseItemCreateDTO.getQuantity());
-        purchaseItem.setUnitPrice(purchaseItemCreateDTO.getUnitPrice());
-
-
-        return purchaseItemRepository.save(purchaseItem);
-    }
+//    public PurchaseItem savePurchaseItem(PurchaseItemCreateDTO purchaseItemCreateDTO){
+//        Purchase purchase = purchaseRepository.findById(purchaseItemCreateDTO.getPurchaseId()).orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
+//        ProductBatch productBatch = productBatchService.saveProductBatch(purchaseItemCreateDTO.getProductBatch());
+//
+//
+//        Optional<PurchaseItem> existing = purchaseItemRepository.findByPurchaseIdAndProductBatchId(purchaseItemCreateDTO.getPurchaseId(), productBatch.getId());
+//
+//        if(existing.isPresent()){
+//            throw new DuplicateCredentialException("Purchase item for this product batch and purchase already exists.");
+//
+//        }
+//
+//        PurchaseItem purchaseItem = new PurchaseItem();
+//        purchaseItem.setPurchase(purchase);
+//        purchaseItem.setProductBatch(productBatch);
+//        purchaseItem.setQuantity(purchaseItemCreateDTO.getQuantity());
+//        purchaseItem.setUnitPrice(purchaseItemCreateDTO.getUnitPrice());
+//
+//
+//        return purchaseItemRepository.save(purchaseItem);
+//    }
 
     public List<PurchaseItem> getAll(){
         return purchaseItemRepository.findAll();

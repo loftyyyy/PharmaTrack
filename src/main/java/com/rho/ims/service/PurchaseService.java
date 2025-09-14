@@ -2,13 +2,16 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
+import com.rho.ims.dto.ProductBatchCreateDTO;
 import com.rho.ims.dto.PurchaseCreateDTO;
 import com.rho.ims.dto.PurchaseItemCreateDTO;
 import com.rho.ims.dto.PurchaseUpdateDTO;
+import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.enums.PurchaseStatus;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.*;
+import com.rho.ims.wrapper.ProductBatchResult;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,14 +33,16 @@ public class PurchaseService {
     private final ProductBatchRepository productBatchRepository;
     private final InventoryLogRepository inventoryLogRepository;
     private final ProductBatchService productBatchService;
+    private final ProductRepository productRepository;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository, InventoryLogRepository inventoryLogRepository, ProductBatchService productBatchService){
+    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository, InventoryLogRepository inventoryLogRepository, ProductBatchService productBatchService, ProductRepository productRepository){
         this.purchaseRepository = purchaseRepository;
         this.supplierRepository = supplierRepository;
         this.userRepository = userRepository;
         this.productBatchRepository = productBatchRepository;
         this.inventoryLogRepository = inventoryLogRepository;
         this.productBatchService = productBatchService;
+        this.productRepository = productRepository;
     }
 
     public Purchase savePurchase(PurchaseCreateDTO purchaseCreateDTO){
@@ -63,19 +68,35 @@ public class PurchaseService {
 
         purchaseRepository.save(purchase);
 
+
         for(PurchaseItemCreateDTO purchaseItem : purchaseCreateDTO.getPurchaseItems()){
 
 //            TODO: This is where we decide to either prompt the user to create a new product batch or just automatically create it
 
-            ProductBatch productBatch = productBatchService.findOrCreateProductBatch(purchaseItem.getProductBatch(), purchase);
 
 
             PurchaseItem item = new PurchaseItem();
-            item.setProductBatch(productBatch);
             item.setPurchase(purchase);
             item.setUnitPrice(purchaseItem.getUnitPrice());
             item.setQuantity(purchaseItem.getQuantity());
 
+            //ProductBatch Data
+
+            Product product = productRepository.findById(purchaseItem.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product not found"));
+
+            if(!product.getActive()){
+                throw new IllegalStateException("Product is inactive");
+            }
+
+            item.setProduct(product);
+            item.setBatchNumber(purchaseItem.getBatchNumber());
+            item.setQuantity(purchaseItem.getQuantity());
+            item.setPurchasePricePerUnit(purchaseItem.getPurchasePricePerUnit());
+            item.setExpiryDate(purchaseItem.getExpiryDate());
+            item.setManufacturingDate(purchaseItem.getManufacturingDate());
+            item.setLocation(purchaseItem.getLocation());
+            item.setBatchQuantity(purchaseItem.getBatchQuantity());
+            item.setBatchStatus(BatchStatus.AVAILABLE);
 
             totalAmount = totalAmount.add(purchaseItem.getUnitPrice().multiply(BigDecimal.valueOf(purchaseItem.getQuantity())));
 
@@ -143,6 +164,7 @@ public class PurchaseService {
 
     @Transactional
     public Purchase confirmPurchase(Long id) {
+        System.out.println("CONFIRMED PURCHASE");
         Purchase purchase = purchaseRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("purchase not found"));
 
         if(purchase.getPurchaseStatus() == PurchaseStatus.RECEIVED){
@@ -154,23 +176,39 @@ public class PurchaseService {
         }
 
         for(PurchaseItem purchaseItem : purchase.getPurchaseItems()){
-            ProductBatch productBatch = productBatchRepository.findById(purchaseItem.getProductBatch().getId()).orElseThrow(() -> new ResourceNotFoundException("Product batch now found"));
+            System.out.println("LOOP CALLED");
 
-            productBatch.setQuantity(productBatch.getQuantity() + purchaseItem.getQuantity());
-            productBatchRepository.save(productBatch);
+            ProductBatchCreateDTO productBatch = ProductBatchCreateDTO.builder()
+                    .productId(purchaseItem.getProduct().getId())
+                    .batchNumber(purchaseItem.getBatchNumber())
+                    .quantity(purchaseItem.getBatchQuantity())
+                    .purchasePricePerUnit(purchaseItem.getPurchasePricePerUnit())
+                    .expiryDate(purchaseItem.getExpiryDate())
+                    .manufacturingDate(purchaseItem.getManufacturingDate())
+                    .location(purchaseItem.getLocation())
+                    .build();
+
+            ProductBatchResult productBatchResult = productBatchService.findOrCreateProductBatch(productBatch);
+            purchaseItem.setProductBatch(productBatchResult.getProductBatch());
 
             InventoryLog inventoryLog = new InventoryLog();
-            inventoryLog.setProduct(productBatch.getProduct());
-            inventoryLog.setProductBatch(productBatch);
-            inventoryLog.setChangeType(ChangeType.IN);
-            inventoryLog.setQuantityChanged(purchaseItem.getQuantity());
+            inventoryLog.setProduct(productBatchResult.getProductBatch().getProduct());
+            inventoryLog.setProductBatch(productBatchResult.getProductBatch());
             inventoryLog.setPurchase(purchase);
-            inventoryLog.setReason("Purchase confirmed");
+            inventoryLog.setQuantityChanged(purchaseItem.getQuantity());
+
+            if(productBatchResult.isCreatedNew()){
+                inventoryLog.setChangeType(ChangeType.INITIAL);
+                inventoryLog.setReason("Initial stock for new batch via purchase");
+            }else{
+                inventoryLog.setChangeType(ChangeType.IN);
+                inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
+            }
+
             User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             inventoryLog.setCreatedBy(user);
 
             inventoryLogRepository.save(inventoryLog);
-
         }
 
         purchase.setPurchaseStatus(PurchaseStatus.RECEIVED);

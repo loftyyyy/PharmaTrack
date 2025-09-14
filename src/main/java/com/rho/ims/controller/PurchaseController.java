@@ -45,9 +45,21 @@ public class PurchaseController {
         return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePurchase(@PathVariable Long id){
-        purchaseService.deletePurchase(id);
+    @PutMapping("/{id}/confirm")
+    public ResponseEntity<?> confirmPurchase(@PathVariable Long id){
+        Purchase purchase = purchaseService.confirmPurchase((id));
+        return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
     }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<?> cancelPurchase(@PathVariable Long id){
+        Purchase purchase = purchaseService.cancelPurchase((id));
+        return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
+    }
+
+//    @DeleteMapping("/{id}")
+//    public void deletePurchase(@PathVariable Long id){
+//        purchaseService.deletePurchase(id);
+//    }
 
 }
