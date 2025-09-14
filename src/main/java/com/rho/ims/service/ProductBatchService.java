@@ -75,7 +75,6 @@ public class ProductBatchService {
 
     @Transactional
     public ProductBatchResult findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
-        System.out.println("FIND OR CREATE CALLED");
         Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
 
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
@@ -83,26 +82,6 @@ public class ProductBatchService {
         if(!product.getActive()){
             throw new IllegalStateException("Product is inactive");
         }
-
-//        if(existing.isPresent()){
-//            ProductBatch productBatch = existing.get();
-//            productBatch.setQuantity(productBatch.getQuantity() + productBatchCreateDTO.getQuantity());
-//
-//            User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-//            InventoryLog inventoryLog = new InventoryLog();
-//            inventoryLog.setChangeType(ChangeType.IN);
-//            inventoryLog.setProduct(product);
-//            inventoryLog.setProductBatch(productBatch);
-//            inventoryLog.setQuantityChanged(productBatchCreateDTO.getQuantity());
-//            inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
-//            inventoryLog.setPurchase(purchase);
-//            inventoryLog.setAdjustmentReference("PURCHASE-BATCH-" + productBatch.getId());
-//            inventoryLog.setCreatedBy(user);
-//            inventoryLogRepository.save(inventoryLog);
-//            return productBatchRepository.save(productBatch);
-//        }else {
-//            return saveProductBatch(productBatchCreateDTO, purchase);
-//        }
 
         if(existing.isPresent()){
             ProductBatch productBatch = existing.get();
@@ -139,14 +118,5 @@ public class ProductBatchService {
         return productBatchRepository.save(productBatch);
 
     }
-
-//    public void deleteProductBatch(Long id){
-//        ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
-//        productBatchRepository.delete(productBatch);
-//
-//    }
-
-
-
 
 }

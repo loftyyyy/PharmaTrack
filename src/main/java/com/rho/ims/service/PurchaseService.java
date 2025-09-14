@@ -71,9 +71,6 @@ public class PurchaseService {
 
         for(PurchaseItemCreateDTO purchaseItem : purchaseCreateDTO.getPurchaseItems()){
 
-//            TODO: This is where we decide to either prompt the user to create a new product batch or just automatically create it
-
-
 
             PurchaseItem item = new PurchaseItem();
             item.setPurchase(purchase);
@@ -130,25 +127,30 @@ public class PurchaseService {
     }
 
     @Transactional
-    public Purchase updatePurchase(PurchaseUpdateDTO purchaseUpdateDTO, Long id){
-        Purchase purchase = purchaseRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("purchase not found"));
+    public Purchase updatePurchase(PurchaseUpdateDTO purchaseUpdateDTO, Long id) {
+        Purchase purchase = purchaseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
 
+        PurchaseStatus currentStatus = purchase.getPurchaseStatus();
+        PurchaseStatus newStatus = purchaseUpdateDTO.getPurchaseStatus();
 
-        // Prevents changing status back to pending if another pending purchase exists
-        if(purchaseUpdateDTO.getPurchaseStatus() == PurchaseStatus.PENDING && !purchase.getPurchaseStatus().equals(PurchaseStatus.PENDING)){
-            Optional<Purchase> existing = purchaseRepository.findBySupplierIdAndPurchaseStatus(purchase.getSupplier().getId(), PurchaseStatus.PENDING);
-            if(existing.isPresent() && !existing.get().getId().equals(purchase.getId())){
+        if (newStatus == PurchaseStatus.RECEIVED) {
+            throw new IllegalStateException("Use confirmPurchase() to mark as received.");
+        }
+
+        if (currentStatus == PurchaseStatus.RECEIVED && newStatus == PurchaseStatus.PENDING) {
+            throw new IllegalStateException("Cannot change back to PENDING after marked as RECEIVED.");
+        }
+
+        if (newStatus == PurchaseStatus.PENDING && currentStatus != PurchaseStatus.PENDING) {
+            Optional<Purchase> existing = purchaseRepository.findBySupplierIdAndPurchaseStatus(
+                    purchase.getSupplier().getId(), PurchaseStatus.PENDING);
+            if (existing.isPresent() && !existing.get().getId().equals(purchase.getId())) {
                 throw new DuplicateCredentialException("Supplier already has a different pending purchase.");
             }
-
         }
 
-        if(purchaseUpdateDTO.getPurchaseStatus() == PurchaseStatus.RECEIVED){
-            throw new IllegalStateException("Use confirmPurchase() to mark as received.");
-
-        }
-
-        purchase.setPurchaseStatus(purchaseUpdateDTO.getPurchaseStatus());
+        purchase.setPurchaseStatus(newStatus);
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         purchase.setUpdatedBy(user);
@@ -176,7 +178,6 @@ public class PurchaseService {
         }
 
         for(PurchaseItem purchaseItem : purchase.getPurchaseItems()){
-            System.out.println("LOOP CALLED");
 
             ProductBatchCreateDTO productBatch = ProductBatchCreateDTO.builder()
                     .productId(purchaseItem.getProduct().getId())
