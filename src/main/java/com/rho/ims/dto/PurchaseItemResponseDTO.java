@@ -13,15 +13,15 @@ import java.math.BigDecimal;
 public class PurchaseItemResponseDTO {
 
     private Long purchaseItemId;
-    private Long purchaseId;
-    private Long productBatchId;
+    private PurchaseResponseDTO purchase;
+    private ProductBatchResponseDTO productBatch;
     private Integer quantity;
     private BigDecimal unitPrice;
 
     public PurchaseItemResponseDTO(PurchaseItem purchaseItem){
         this.purchaseItemId = purchaseItem.getId();
-        this.purchaseId = purchaseItem.getPurchase().getId();
-        this.productBatchId = purchaseItem.getProductBatch().getId();
+        this.purchase = new PurchaseResponseDTO(purchaseItem.getPurchase());
+        this.productBatch = new ProductBatchResponseDTO(purchaseItem.getProductBatch());
         this.quantity = purchaseItem.getQuantity();
         this.unitPrice = purchaseItem.getUnitPrice();
     }

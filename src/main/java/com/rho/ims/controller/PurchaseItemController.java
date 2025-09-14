@@ -21,13 +21,7 @@ public class PurchaseItemController {
     public PurchaseItemController( PurchaseItemService purchaseItemService) {
         this.purchaseItemService = purchaseItemService;
     }
-
-//    @PostMapping("/create")
-//    public ResponseEntity<?> createPurchaseItem(@Valid @RequestBody PurchaseItemCreateDTO purchaseItemCreateDTO) {
-//        PurchaseItem purchaseItem = purchaseItemService.savePurchaseItem(purchaseItemCreateDTO);
-//        return ResponseEntity.ok().body(new PurchaseItemResponseDTO(purchaseItem));
-//    }
-
+    
     @GetMapping
     public ResponseEntity<?> getAllPurchaseItem() {
         List<PurchaseItemResponseDTO> purchaseItems = purchaseItemService.getAll().stream().map(purchaseItem -> new PurchaseItemResponseDTO(purchaseItem)).toList();

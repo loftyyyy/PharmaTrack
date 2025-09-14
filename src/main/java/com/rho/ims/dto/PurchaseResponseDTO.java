@@ -20,7 +20,7 @@ public class PurchaseResponseDTO {
     private BigDecimal totalAmount;
     private LocalDate purchaseDate;
     private PurchaseStatus purchaseStatus;
-    private Long createdBy;
+    private String createdBy;
 
     public PurchaseResponseDTO(Purchase purchase){
         this.purchaseId = purchase.getId();
@@ -28,7 +28,7 @@ public class PurchaseResponseDTO {
         this.totalAmount = purchase.getTotalAmount();
         this.purchaseDate = purchase.getPurchaseDate();
         this.purchaseStatus = purchase.getPurchaseStatus();
-        this.createdBy = purchase.getCreatedBy().getId();
+        this.createdBy = purchase.getCreatedBy().getUsername();
     }
 
 }
