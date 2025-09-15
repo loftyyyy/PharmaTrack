@@ -31,8 +31,9 @@ public class PurchaseService {
     private final InventoryLogRepository inventoryLogRepository;
     private final ProductBatchService productBatchService;
     private final ProductRepository productRepository;
+    private final ProductSupplierService productSupplierService;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository, InventoryLogRepository inventoryLogRepository, ProductBatchService productBatchService, ProductRepository productRepository){
+    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, UserRepository userRepository, ProductBatchRepository productBatchRepository, InventoryLogRepository inventoryLogRepository, ProductBatchService productBatchService, ProductRepository productRepository, ProductSupplierService productSupplierService){
         this.purchaseRepository = purchaseRepository;
         this.supplierRepository = supplierRepository;
         this.userRepository = userRepository;
@@ -40,6 +41,7 @@ public class PurchaseService {
         this.inventoryLogRepository = inventoryLogRepository;
         this.productBatchService = productBatchService;
         this.productRepository = productRepository;
+        this.productSupplierService = productSupplierService;
     }
 
     public Purchase savePurchase(PurchaseCreateDTO purchaseCreateDTO){
@@ -191,8 +193,12 @@ public class PurchaseService {
                     .productId(purchaseItem.getProduct().getId())
                     .supplierId(purchase.getSupplier().getId())
                     .preferredSupplier(false)
-                    .supplierProductCode("SUP-" + purchase.getSupplier().getName().replace(' ', '') + "-" + purchaseItem.getProduct().getSku())
+                    .supplierProductCode("SUP-" + purchase.getSupplier().getName().replace("\\s+", "") + "-" + purchaseItem.getProduct().getSku())
                     .build();
+
+
+            // Auto generate product supplier after successful purchase
+            productSupplierService.saveProductSupplier(productSupplierCreateDTO);
 
             ProductBatchResult productBatchResult = productBatchService.findOrCreateProductBatch(productBatch);
             purchaseItem.setProductBatch(productBatchResult.getProductBatch());
