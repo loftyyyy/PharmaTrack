@@ -2,10 +2,7 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.ProductBatchCreateDTO;
-import com.rho.ims.dto.PurchaseCreateDTO;
-import com.rho.ims.dto.PurchaseItemCreateDTO;
-import com.rho.ims.dto.PurchaseUpdateDTO;
+import com.rho.ims.dto.*;
 import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.enums.PurchaseStatus;
@@ -189,6 +186,14 @@ public class PurchaseService {
                     .location(purchaseItem.getLocation())
                     .build();
 
+
+            ProductSupplierCreateDTO productSupplierCreateDTO = ProductSupplierCreateDTO.builder()
+                    .productId(purchaseItem.getProduct().getId())
+                    .supplierId(purchase.getSupplier().getId())
+                    .preferredSupplier(false)
+                    .supplierProductCode("SUP-" + purchase.getSupplier().getName() + "-" + purchaseItem.getProduct().getSku())
+                    .build();
+
             ProductBatchResult productBatchResult = productBatchService.findOrCreateProductBatch(productBatch);
             purchaseItem.setProductBatch(productBatchResult.getProductBatch());
 
@@ -208,6 +213,8 @@ public class PurchaseService {
 
             User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             inventoryLog.setCreatedBy(user);
+
+
 
             inventoryLogRepository.save(inventoryLog);
         }

@@ -3,19 +3,18 @@ package com.rho.ims.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Getter
 @Setter
 public class ProductSupplierCreateDTO {
 
     @NotNull(message = "Product is required")
     private Long productId;
-    @NotNull(message = "Supplier is required")
 
+    @NotNull(message = "Supplier is required")
     private Long supplierId;
 
     private Boolean preferredSupplier = false;
