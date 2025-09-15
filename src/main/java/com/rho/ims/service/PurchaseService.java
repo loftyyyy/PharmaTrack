@@ -94,7 +94,7 @@ public class PurchaseService {
             item.setBatchQuantity(purchaseItem.getBatchQuantity());
             item.setBatchStatus(BatchStatus.AVAILABLE);
 
-            totalAmount = totalAmount.add(purchaseItem.getUnitPrice().multiply(BigDecimal.valueOf(purchaseItem.getQuantity())));
+            totalAmount = totalAmount.add(purchaseItem.getPurchasePricePerUnit().multiply(BigDecimal.valueOf(purchaseItem.getQuantity())));
 
             purchaseItems.add(item);
 
