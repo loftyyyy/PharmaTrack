@@ -25,13 +25,21 @@ public class SupplierService {
         this.userRepository = userRepository;
     }
 
-    public Supplier saveSupplier(SupplierCreateDTO supplierCreateDTO){
-        if(supplierRepository.existsByName(supplierCreateDTO.getName())){
-            throw new DuplicateCredentialException("name", supplierCreateDTO.getName());
+    public Supplier saveSupplier(SupplierCreateDTO supplierCreateDTO) {
+        String normalizedName = supplierCreateDTO.getName().trim();
+
+        if (supplierRepository.existsByNameIgnoreCase(normalizedName)) {
+            throw new DuplicateCredentialException("name", normalizedName);
+        }
+
+        String supplierCode = generateSupplierCode(normalizedName);
+
+        if (supplierRepository.existsBySupplierCode(supplierCode)) {
+            throw new DuplicateCredentialException("supplierCode", supplierCode);
         }
 
         Supplier supplier = new Supplier();
-        supplier.setName(supplierCreateDTO.getName());
+        supplier.setName(normalizedName);
         supplier.setEmail(supplierCreateDTO.getEmail());
         supplier.setContactPerson(supplierCreateDTO.getContactPerson());
         supplier.setPhoneNumber(supplierCreateDTO.getPhoneNumber());
@@ -39,15 +47,15 @@ public class SupplierService {
         supplier.setAddressState(supplierCreateDTO.getAddressState());
         supplier.setAddressStreet(supplierCreateDTO.getAddressStreet());
         supplier.setAddressZipCode(supplierCreateDTO.getAddressZipCode());
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        supplier.setSupplierCode(supplierCode);
 
-        if(user == null){
-            throw new ResourceNotFoundException("User doesn't exists, make sure you are logged in");
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user == null) {
+            throw new ResourceNotFoundException("User doesn't exist, make sure you are logged in");
         }
         supplier.setCreatedBy(user);
 
         return supplierRepository.save(supplier);
-
     }
 
     public List<Supplier> getAll(){
@@ -83,6 +91,15 @@ public class SupplierService {
 
 
 
+    }
+
+    public static String generateSupplierCode(String supplierName) {
+        String[] words = supplierName.split("\\s+");
+        StringBuilder acronym = new StringBuilder();
+        for (String word : words) {
+            acronym.append(Character.toUpperCase(word.charAt(0)));
+        }
+        return acronym.toString();
     }
 
 }

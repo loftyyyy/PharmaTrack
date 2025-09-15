@@ -44,6 +44,9 @@ public class Supplier {
     @Column(name = "address_zip_code")
     private String addressZipCode;
 
+    @Column(name = "supplier_code", nullable = false, unique = true)
+    private String supplierCode;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -191,7 +191,7 @@ public class PurchaseService {
                     .productId(purchaseItem.getProduct().getId())
                     .supplierId(purchase.getSupplier().getId())
                     .preferredSupplier(false)
-                    .supplierProductCode("SUP-" + purchase.getSupplier().getName() + "-" + purchaseItem.getProduct().getSku())
+                    .supplierProductCode("SUP-" + purchase.getSupplier().getName().replace(' ', '') + "-" + purchaseItem.getProduct().getSku())
                     .build();
 
             ProductBatchResult productBatchResult = productBatchService.findOrCreateProductBatch(productBatch);
