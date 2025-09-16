@@ -2,6 +2,7 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
+import com.rho.ims.dto.ProductBatchCheckRequestDTO;
 import com.rho.ims.dto.ProductBatchCreateDTO;
 import com.rho.ims.dto.ProductBatchResponseDTO;
 import com.rho.ims.dto.ProductBatchUpdateDTO;
@@ -117,6 +118,10 @@ public class ProductBatchService {
         productBatch.setUpdatedBy(user);
         return productBatchRepository.save(productBatch);
 
+    }
+
+    public boolean isExistingProductIdAndBatchNumber(ProductBatchCheckRequestDTO productBatchCheckRequestDTO) {
+        return productBatchRepository.existsByProductIdAndBatchNumber(productBatchCheckRequestDTO.getProductId(), productBatchCheckRequestDTO.getBatchNumber());
     }
 
 }

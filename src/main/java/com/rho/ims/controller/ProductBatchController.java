@@ -1,9 +1,6 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.ProductBatchCreateDTO;
-import com.rho.ims.dto.ProductBatchResponseDTO;
-import com.rho.ims.dto.ProductBatchUpdateDTO;
-import com.rho.ims.dto.ProductResponseDTO;
+import com.rho.ims.dto.*;
 import com.rho.ims.model.Product;
 import com.rho.ims.model.ProductBatch;
 import com.rho.ims.respository.ProductBatchRepository;
@@ -52,6 +49,15 @@ public class ProductBatchController {
     public ResponseEntity<?> updateProductBatch(@Valid @RequestBody ProductBatchUpdateDTO productBatchUpdateDTO, @PathVariable Long id){
         ProductBatch productBatch = productBatchService.updateProductBatch(productBatchUpdateDTO, id);
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
+    }
+
+
+    @PostMapping("/check")
+    public ResponseEntity<?> checkProductBatchExists(@Valid @RequestBody ProductBatchCheckRequestDTO productBatchCheckRequestDTO){
+        System.out.println("Called");
+        boolean existing = productBatchService.isExistingProductIdAndBatchNumber(productBatchCheckRequestDTO);
+        System.out.println(existing);
+        return ResponseEntity.ok().body(new ProductBatchCheckResponseDTO(existing));
     }
 
 //    @DeleteMapping("/{id}")

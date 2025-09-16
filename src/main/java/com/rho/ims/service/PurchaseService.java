@@ -193,7 +193,7 @@ public class PurchaseService {
                     .productId(purchaseItem.getProduct().getId())
                     .supplierId(purchase.getSupplier().getId())
                     .preferredSupplier(false)
-                    .supplierProductCode("SUP-" + purchase.getSupplier().getName().replace("\\s+", "") + "-" + purchaseItem.getProduct().getSku())
+                    .supplierProductCode("SUP-" + purchase.getSupplier().getName().replace("\\s+", "-") + "-" + purchaseItem.getProduct().getSku())
                     .build();
 
 
@@ -245,6 +245,22 @@ public class PurchaseService {
 
         if(purchase.getPurchaseStatus() == PurchaseStatus.CANCELLED) {
             throw new IllegalStateException("Purchase already cancelled");
+        }
+
+        for(PurchaseItem purchaseItem : purchase.getPurchaseItems()){
+
+            ProductBatchCreateDTO productBatch = ProductBatchCreateDTO.builder()
+                    .productId(purchaseItem.getProduct().getId())
+                    .batchNumber(purchaseItem.getBatchNumber())
+                    .quantity(purchaseItem.getBatchQuantity())
+                    .purchasePricePerUnit(purchaseItem.getPurchasePricePerUnit())
+                    .expiryDate(purchaseItem.getExpiryDate())
+                    .manufacturingDate(purchaseItem.getManufacturingDate())
+                    .location(purchaseItem.getLocation())
+                    .build();
+
+            ProductBatchResult productBatchResult = productBatchService.findOrCreateProductBatch(productBatch);
+            purchaseItem.setProductBatch(productBatchResult.getProductBatch());
         }
 
         purchase.setPurchaseStatus(PurchaseStatus.CANCELLED);
