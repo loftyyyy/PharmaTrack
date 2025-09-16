@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -21,7 +22,7 @@ public class InventoryLogResponseDTO {
     private SaleResponseDTO sale;
     private PurchaseResponseDTO purchase;
     private String adjustmentReference;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     public InventoryLogResponseDTO(InventoryLog inventoryLog){
         this.product = new ProductResponseDTO(inventoryLog.getProduct());
