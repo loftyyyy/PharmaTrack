@@ -212,9 +212,11 @@ public class PurchaseService {
             if(productBatchResult.isCreatedNew()){
                 inventoryLog.setChangeType(ChangeType.INITIAL);
                 inventoryLog.setReason("Initial stock for new batch via purchase");
+                inventoryLog.setAdjustmentReference("PURCHASE-" + purchase.getId());
             }else{
                 inventoryLog.setChangeType(ChangeType.IN);
                 inventoryLog.setReason("Stock replenishment (existing batch via purchase)");
+                inventoryLog.setAdjustmentReference("PURCHASE-" + purchase.getId());
             }
 
             User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
