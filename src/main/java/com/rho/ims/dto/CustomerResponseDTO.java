@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -18,6 +20,7 @@ public class CustomerResponseDTO {
     private String addressCity;
     private String addressState;
     private String addressZipCode;
+    private LocalDateTime createdAt;
 
     public CustomerResponseDTO(Customer customer){
         this.customerId = customer.getId();
@@ -28,6 +31,7 @@ public class CustomerResponseDTO {
         this.addressCity = customer.getAddressCity();
         this.addressState = customer.getAddressState();
         this.addressZipCode = customer.getAddressZipCode();
+        this.createdAt = customer.getCreatedAt();
     }
 
 }

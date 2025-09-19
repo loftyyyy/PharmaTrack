@@ -47,6 +47,8 @@ public class Customer {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    //TODO: Implement created by?
+
     @UpdateTimestamp
     @Column(name = "updated_at", updatable = false, nullable = false)
     private LocalDateTime updatedAt;
