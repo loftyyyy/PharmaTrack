@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class PurchaseItemResponseDTO {
 
     private Long purchaseItemId;
-    private PurchaseResponseDTO purchase;
+    private Long purchaseId;
     private ProductBatchResponseDTO productBatch;
     private Integer quantity;
     private BigDecimal unitPrice;
@@ -21,7 +21,7 @@ public class PurchaseItemResponseDTO {
 
     public PurchaseItemResponseDTO(PurchaseItem purchaseItem){
         this.purchaseItemId = purchaseItem.getId();
-        this.purchase = new PurchaseResponseDTO(purchaseItem.getPurchase());
+        this.purchaseId = purchaseItem.getPurchase().getId();
         this.productBatch = new ProductBatchResponseDTO(purchaseItem.getProductBatch());
         this.quantity = purchaseItem.getQuantity();
         this.unitPrice = purchaseItem.getUnitPrice();

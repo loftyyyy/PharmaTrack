@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -20,6 +21,7 @@ public class PurchaseResponseDTO {
     private BigDecimal totalAmount;
     private LocalDate purchaseDate;
     private PurchaseStatus purchaseStatus;
+    private List<PurchaseItemResponseDTO> purchaseItems;
     private String createdBy;
 
     public PurchaseResponseDTO(Purchase purchase){
@@ -29,6 +31,7 @@ public class PurchaseResponseDTO {
         this.purchaseDate = purchase.getPurchaseDate();
         this.purchaseStatus = purchase.getPurchaseStatus();
         this.createdBy = purchase.getCreatedBy().getUsername();
+        this.purchaseItems = purchase.getPurchaseItems().stream().map(purchaseItem -> new PurchaseItemResponseDTO(purchaseItem)).toList();
     }
 
 }
