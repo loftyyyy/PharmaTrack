@@ -14,7 +14,8 @@ public class PurchaseItemResponseDTO {
 
     private Long purchaseItemId;
     private Long purchaseId;
-    private ProductBatchResponseDTO productBatch;
+    private String batchNumber;
+    private String productName;
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal purchasePricePerUnit;
@@ -22,7 +23,8 @@ public class PurchaseItemResponseDTO {
     public PurchaseItemResponseDTO(PurchaseItem purchaseItem){
         this.purchaseItemId = purchaseItem.getId();
         this.purchaseId = purchaseItem.getPurchase().getId();
-        this.productBatch = new ProductBatchResponseDTO(purchaseItem.getProductBatch());
+        this.productName = purchaseItem.getProduct().getName();
+        this.batchNumber = purchaseItem.getProductBatch().getBatchNumber();
         this.quantity = purchaseItem.getQuantity();
         this.unitPrice = purchaseItem.getUnitPrice();
         this.purchasePricePerUnit = purchaseItem.getPurchasePricePerUnit();
