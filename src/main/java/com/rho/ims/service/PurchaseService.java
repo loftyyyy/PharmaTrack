@@ -84,8 +84,10 @@ public class PurchaseService {
                 throw new IllegalStateException("Product is inactive");
             }
 
+            System.out.println("Yes, this was the cause");
             item.setProduct(product);
             item.setBatchNumber(purchaseItem.getBatchNumber());
+            item.setProductBatch(null);
             item.setQuantity(purchaseItem.getQuantity());
             item.setPurchasePricePerUnit(purchaseItem.getPurchasePricePerUnit());
             item.setExpiryDate(purchaseItem.getExpiryDate());
