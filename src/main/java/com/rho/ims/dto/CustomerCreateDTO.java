@@ -24,16 +24,16 @@ public class CustomerCreateDTO {
     @Size(max = 100, message = "Email must not exceed 100 characters")
     private String email;
 
-    @Size(max = 255, message = "Street address must not exceed 255 characters")
-    private String addressStreet;
+    @Size(max = 255, message = "Street address or Barangay must not exceed 255 characters")
+    private String addressStreetBarangay;
 
-    @Size(max = 100, message = "City must not exceed 100 characters")
-    private String addressCity;
+    @Size(max = 100, message = "City or Municipality must not exceed 100 characters")
+    private String addressCityMunicipality;
 
-    @Size(max = 100, message = "State must not exceed 100 characters")
-    private String addressState;
+    @Size(max = 100, message = "Province must not exceed 100 characters")
+    private String addressProvince;
 
-    @Size(max = 20, message = "Zip code must not exceed 20 characters")
-    private String addressZipCode;
+    @Size(max = 20, message = "Postal code must not exceed 20 characters")
+    private String addressPostalCode;
 
 }

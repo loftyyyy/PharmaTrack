@@ -31,17 +31,17 @@ public class Customer {
     @Column(length = 100)
     private String email;
 
-    @Column(name = "address_street", length = 255)
-    private String addressStreet;
+    @Column(name = "address_street_barangay", length = 255)
+    private String addressStreetBarangay;
 
-    @Column(name = "address_city", length = 100)
-    private String addressCity;
+    @Column(name = "address_city_municipality", length = 100)
+    private String addressCityMunicipality;
 
-    @Column(name = "address_state", length = 100)
-    private String addressState;
+    @Column(name = "address_province", length = 100)
+    private String addressProvince;
 
-    @Column(name = "address_zip_code", length = 20)
-    private String addressZipCode;
+    @Column(name = "address_postal_code", length = 20)
+    private String addressPostalCode;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

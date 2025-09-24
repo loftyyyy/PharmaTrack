@@ -29,10 +29,10 @@ public class CustomerService {
         customer.setName(customerCreateDTO.getName());
         customer.setEmail(customerCreateDTO.getEmail());
         customer.setPhoneNumber(customerCreateDTO.getPhoneNumber());
-        customer.setAddressCity(customerCreateDTO.getAddressCity());
-        customer.setAddressState(customerCreateDTO.getAddressState());
-        customer.setAddressStreet(customerCreateDTO.getAddressStreet());
-        customer.setAddressZipCode(customerCreateDTO.getAddressZipCode());
+        customer.setAddressStreetBarangay(customer.getAddressStreetBarangay());
+        customer.setAddressCityMunicipality(customerCreateDTO.getAddressCityMunicipality());
+        customer.setAddressProvince(customerCreateDTO.getAddressProvince());
+        customer.setAddressPostalCode(customerCreateDTO.getAddressPostalCode());
         return customerRepository.save(customer);
 
     }
@@ -58,10 +58,10 @@ public class CustomerService {
         customer.setName(customerUpdateDTO.getName());
         customer.setEmail(customerUpdateDTO.getEmail());
         customer.setPhoneNumber(customerUpdateDTO.getPhoneNumber());
-        customer.setAddressCity(customerUpdateDTO.getAddressCity());
-        customer.setAddressState(customerUpdateDTO.getAddressState());
-        customer.setAddressStreet(customerUpdateDTO.getAddressStreet());
-        customer.setAddressZipCode(customerUpdateDTO.getAddressZipCode());
+        customer.setAddressStreetBarangay(customer.getAddressStreetBarangay());
+        customer.setAddressCityMunicipality(customerUpdateDTO.getAddressCityMunicipality());
+        customer.setAddressProvince(customerUpdateDTO.getAddressProvince());
+        customer.setAddressPostalCode(customerUpdateDTO.getAddressPostalCode());
         return customerRepository.save(customer);
     }
 

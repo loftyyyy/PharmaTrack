@@ -16,10 +16,10 @@ public class CustomerResponseDTO {
     private String name;
     private String phoneNumber;
     private String email;
-    private String addressStreet;
-    private String addressCity;
-    private String addressState;
-    private String addressZipCode;
+    private String addressStreetBarangay;
+    private String addressCityMunicipality;
+    private String addressProvince;
+    private String addressPostalCode;
     private LocalDateTime createdAt;
 
     public CustomerResponseDTO(Customer customer){
@@ -27,10 +27,10 @@ public class CustomerResponseDTO {
         this.name = customer.getName();
         this.phoneNumber = customer.getPhoneNumber();
         this.email = customer.getEmail();
-        this.addressStreet = customer.getAddressStreet();
-        this.addressCity = customer.getAddressCity();
-        this.addressState = customer.getAddressState();
-        this.addressZipCode = customer.getAddressZipCode();
+        this.addressStreetBarangay = customer.getAddressStreetBarangay();
+        this.addressCityMunicipality = customer.getAddressCityMunicipality();
+        this.addressProvince = customer.getAddressProvince();
+        this.addressPostalCode = customer.getAddressPostalCode();
         this.createdAt = customer.getCreatedAt();
     }
 
