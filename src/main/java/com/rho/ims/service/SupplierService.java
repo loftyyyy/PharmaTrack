@@ -43,10 +43,10 @@ public class SupplierService {
         supplier.setEmail(supplierCreateDTO.getEmail());
         supplier.setContactPerson(supplierCreateDTO.getContactPerson());
         supplier.setPhoneNumber(supplierCreateDTO.getPhoneNumber());
-        supplier.setAddressCity(supplierCreateDTO.getAddressCity());
-        supplier.setAddressState(supplierCreateDTO.getAddressState());
-        supplier.setAddressStreet(supplierCreateDTO.getAddressStreet());
-        supplier.setAddressZipCode(supplierCreateDTO.getAddressZipCode());
+        supplier.setAddressStreetBarangay(supplierCreateDTO.getAddressStreetBarangay());
+        supplier.setAddressCityMunicipality(supplierCreateDTO.getAddressCityMunicipality());
+        supplier.setAddressProvince(supplierCreateDTO.getAddressProvince());
+        supplier.setAddressPostalCode(supplierCreateDTO.getAddressPostalCode());
         supplier.setSupplierCode(supplierCode);
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -79,10 +79,11 @@ public class SupplierService {
         supplier.setPhoneNumber(supplierUpdateDTO.getPhoneNumber());
         supplier.setContactPerson(supplierUpdateDTO.getContactPerson());
         supplier.setEmail(supplierUpdateDTO.getEmail());
-        supplier.setAddressCity(supplierUpdateDTO.getAddressCity());
-        supplier.setAddressZipCode(supplierUpdateDTO.getAddressZipCode());
-        supplier.setAddressState(supplierUpdateDTO.getAddressState());
-        supplier.setAddressStreet(supplierUpdateDTO.getAddressStreet());
+        supplier.setAddressStreetBarangay(supplierUpdateDTO.getAddressStreetBarangay());
+        supplier.setAddressCityMunicipality(supplierUpdateDTO.getAddressCityMunicipality());
+        supplier.setAddressProvince(supplierUpdateDTO.getAddressProvince());
+        supplier.setAddressPostalCode(supplierUpdateDTO.getAddressPostalCode());
+        supplier.setSupplierCode(generateSupplierCode(supplierUpdateDTO.getName()));
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         supplier.setUpdatedBy(user);

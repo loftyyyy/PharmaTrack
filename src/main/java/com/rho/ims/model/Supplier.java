@@ -32,17 +32,17 @@ public class Supplier {
 
     private String email;
 
-    @Column(name = "address_street")
-    private String addressStreet;
+    @Column(name = "address_street_barangay", length = 255)
+    private String addressStreetBarangay;
 
-    @Column(name = "address_city")
-    private String addressCity;
+    @Column(name = "address_city_municipality", length = 100)
+    private String addressCityMunicipality;
 
-    @Column(name = "address_state")
-    private String addressState;
+    @Column(name = "address_province", length = 100)
+    private String addressProvince;
 
-    @Column(name = "address_zip_code")
-    private String addressZipCode;
+    @Column(name = "address_postal_code", length = 20)
+    private String addressPostalCode;
 
     @Column(name = "supplier_code", nullable = false, unique = true)
     private String supplierCode;

@@ -4,6 +4,8 @@ import com.rho.ims.model.Supplier;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 public class SupplierResponseDTO {
@@ -13,10 +15,11 @@ public class SupplierResponseDTO {
     private String contactPerson;
     private String phoneNumber;
     private String email;
-    private String addressStreet;
-    private String addressCity;
-    private String addressState;
-    private String addressZipCode;
+    private String addressStreetBarangay;
+    private String addressCityMunicipality;
+    private String addressProvince;
+    private String addressPostalCode;
+    private LocalDateTime createdAt;
 
     public SupplierResponseDTO(Supplier supplier){
         this.supplierId = supplier.getId();
@@ -24,10 +27,11 @@ public class SupplierResponseDTO {
         this.contactPerson = supplier.getContactPerson();
         this.phoneNumber = supplier.getPhoneNumber();
         this.email = supplier.getEmail();
-        this.addressStreet = supplier.getAddressStreet();
-        this.addressCity = supplier.getAddressCity();
-        this.addressState = supplier.getAddressState();
-        this.addressZipCode = supplier.getAddressZipCode();
+        this.addressStreetBarangay = supplier.getAddressStreetBarangay();
+        this.addressCityMunicipality = supplier.getAddressCityMunicipality();
+        this.addressProvince = supplier.getAddressProvince();
+        this.addressPostalCode = supplier.getAddressPostalCode();
+        this.createdAt = supplier.getCreatedAt();
     }
 
 }
