@@ -171,6 +171,7 @@ CREATE TABLE customers (
                            address_city_municipality VARCHAR(100),
                            address_province VARCHAR(100),
                            address_postal_code VARCHAR(20),
+                           is_active BOOLEAN DEFAULT TRUE,
                            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                            updated_by BIGINT,

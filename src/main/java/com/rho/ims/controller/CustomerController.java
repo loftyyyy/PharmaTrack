@@ -39,16 +39,18 @@ public class CustomerController {
         return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
     }
 
+
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveCustomer(){
+        List<CustomerResponseDTO> activeCustomers = customerService.getActiveCustomers().stream().map(customer -> new CustomerResponseDTO(customer)).toList();
+        return ResponseEntity.ok().body(activeCustomers);
+    }
+
     @PostMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerUpdateDTO customerUpdateDTO, @PathVariable Long id){
         Customer customer = customerService.updateCustomer(customerUpdateDTO, id);
         return ResponseEntity.ok().body(customer);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable Long id){
-        customerService.deleteCustomer(id);
-        return ResponseEntity.ok().body("Customer deleted successfully");
-    }
 
 }

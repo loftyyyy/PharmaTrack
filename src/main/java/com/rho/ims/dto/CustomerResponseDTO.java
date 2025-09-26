@@ -20,6 +20,7 @@ public class CustomerResponseDTO {
     private String addressCityMunicipality;
     private String addressProvince;
     private String addressPostalCode;
+    private Boolean isActive;
     private LocalDateTime createdAt;
 
     public CustomerResponseDTO(Customer customer){
@@ -31,6 +32,7 @@ public class CustomerResponseDTO {
         this.addressCityMunicipality = customer.getAddressCityMunicipality();
         this.addressProvince = customer.getAddressProvince();
         this.addressPostalCode = customer.getAddressPostalCode();
+        this.isActive = customer.getIsActive();
         this.createdAt = customer.getCreatedAt();
     }
 

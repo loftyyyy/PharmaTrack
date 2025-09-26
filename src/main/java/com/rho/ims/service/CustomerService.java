@@ -31,6 +31,7 @@ public class CustomerService {
         customer.setPhoneNumber(customerCreateDTO.getPhoneNumber());
         customer.setAddressStreetBarangay(customer.getAddressStreetBarangay());
         customer.setAddressCityMunicipality(customerCreateDTO.getAddressCityMunicipality());
+        customer.setIsActive(Boolean.TRUE);
         customer.setAddressProvince(customerCreateDTO.getAddressProvince());
         customer.setAddressPostalCode(customerCreateDTO.getAddressPostalCode());
         return customerRepository.save(customer);
@@ -62,14 +63,15 @@ public class CustomerService {
         customer.setAddressCityMunicipality(customerUpdateDTO.getAddressCityMunicipality());
         customer.setAddressProvince(customerUpdateDTO.getAddressProvince());
         customer.setAddressPostalCode(customerUpdateDTO.getAddressPostalCode());
+        customer.setIsActive(customerUpdateDTO.getIsActive());
         return customerRepository.save(customer);
     }
 
-    public void deleteCustomer(Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-        customerRepository.delete(customer);
-
+    public List<Customer> getActiveCustomers(){
+        List<Customer> activeCustomers = customerRepository.findByIsActive(Boolean.TRUE);
+        return activeCustomers;
     }
+
 
 
 

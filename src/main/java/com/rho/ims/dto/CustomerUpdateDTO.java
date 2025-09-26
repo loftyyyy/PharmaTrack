@@ -35,4 +35,6 @@ public class CustomerUpdateDTO {
     @Size(max = 20, message = "Postal code must not exceed 20 characters")
     private String addressPostalCode;
 
+    private Boolean isActive;
+
 }

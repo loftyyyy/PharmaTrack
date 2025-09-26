@@ -43,6 +43,9 @@ public class Customer {
     @Column(name = "address_postal_code", length = 20)
     private String addressPostalCode;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
