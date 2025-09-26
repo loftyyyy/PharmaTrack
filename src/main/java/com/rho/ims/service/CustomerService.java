@@ -72,6 +72,17 @@ public class CustomerService {
         return activeCustomers;
     }
 
+    public void deactivateCustomer(Long id){
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        customer.setIsActive(Boolean.FALSE);
+        customerRepository.save(customer);
+    }
+
+    public void activateCustomer(Long id){
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        customer.setIsActive(Boolean.TRUE);
+        customerRepository.save(customer);
+    }
 
 
 

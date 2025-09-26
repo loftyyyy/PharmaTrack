@@ -52,5 +52,16 @@ public class CustomerController {
         return ResponseEntity.ok().body(customer);
     }
 
+    @PutMapping("/deactivate/{id}")
+    public ResponseEntity<?> deactivateCustomer(@PathVariable Long id){
+        customerService.deactivateCustomer(id);
+        System.out.println("Customer Deactivated");
+        return ResponseEntity.ok().body("Customer deactivated successfully");
+    }
 
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<?> activateCustomer(@PathVariable Long id){
+        customerService.activateCustomer(id);
+        return ResponseEntity.ok().body("Customer activated successfully");
+    }
 }
