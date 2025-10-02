@@ -27,12 +27,6 @@ public class UserController {
             return ResponseEntity.ok("User created successfully");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
-        User user = userService.loginUser(loginDTO);
-        return ResponseEntity.ok("Login Successfully");
-    }
-
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
@@ -56,12 +50,6 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable long id, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
         User updatedUser = userService.updateUser(id, userUpdateDTO);
         return ResponseEntity.ok().body("Successfully updated profile");
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
     }
 
 }

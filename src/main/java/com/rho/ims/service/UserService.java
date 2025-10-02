@@ -49,13 +49,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User loginUser(LoginDTO loginDTO) {
-        User existingUser = userRepository.findByUsernameOrEmail(loginDTO.getUsername(), loginDTO.getUsername());
-        if (existingUser == null || !passwordEncoder.matches(loginDTO.getPassword(), existingUser.getPassword())) {
-            throw new RuntimeException("Invalid username or password");
-        }
-        return existingUser;
-    }
 
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
@@ -115,11 +108,6 @@ public class UserService {
         }
 
         return userRepository.save(existingUser);
-    }
-
-    public void deleteUser(Long id) {
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.delete(existingUser);
     }
 
 }
