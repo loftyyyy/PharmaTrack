@@ -1,18 +1,24 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
+import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.RoleCreateDTO;
 import com.rho.ims.dto.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.respository.RoleRepository;
+import com.rho.ims.respository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RoleService {
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
-    public RoleService(RoleRepository roleRepository) {
+    public RoleService(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
     }
 
     public Role findById(Long id) {
@@ -30,11 +36,14 @@ public class RoleService {
         return roleRepository.save(newRole);
     }
 
-    public void deleteRole(Long id){
-        Role existingRole = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
+    public List<Role> getAll() {
+        return roleRepository.findAll();
+    }
 
-        roleRepository.delete(existingRole);
-
+    public Long countUsersInRole(Long id) {
+        roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+        Long count = userRepository.countByRoleId(id);
+        return count;
     }
 
     public Role updateRole(Long id, RoleUpdateDTO roleUpdateDTO){
