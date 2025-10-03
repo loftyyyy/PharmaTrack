@@ -1,6 +1,7 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
+import com.rho.ims.api.exception.InvalidDateException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.ProductBatchCheckRequestDTO;
 import com.rho.ims.dto.ProductBatchCreateDTO;
@@ -19,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,21 +39,45 @@ public class ProductBatchService {
         this.inventoryLogRepository = inventoryLogRepository;
     }
 
-    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+    public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO) {
 
-        if (productBatchRepository.existsByProductIdAndBatchNumber(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber())) {
+        if (productBatchRepository.existsByProductIdAndBatchNumber(
+                productBatchCreateDTO.getProductId(),
+                productBatchCreateDTO.getBatchNumber())) {
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
         }
 
-        if(productBatchRepository.existsByBatchNumber(productBatchCreateDTO.getBatchNumber())) {
+        if (productBatchRepository.existsByBatchNumber(productBatchCreateDTO.getBatchNumber())) {
             throw new DuplicateCredentialException("batch number", productBatchCreateDTO.getBatchNumber());
         }
 
+        Product product = productRepository.findById(productBatchCreateDTO.getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "product", productBatchCreateDTO.getProductId().toString()));
 
-        Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
-
-        if(!product.getActive()){
+        if (!Boolean.TRUE.equals(product.getActive())) {
             throw new IllegalStateException("Product is inactive");
+        }
+
+        LocalDate manufacturingDate = productBatchCreateDTO.getManufacturingDate();
+        LocalDate expiryDate = productBatchCreateDTO.getExpiryDate();
+        LocalDate today = LocalDate.now();
+
+        if (manufacturingDate.isAfter(today)) {
+            throw new InvalidDateException("Manufacturing date cannot be in the future.");
+        }
+
+        if (!expiryDate.isAfter(manufacturingDate)) {
+            throw new InvalidDateException("Expiry date must be after manufacturing date.");
+        }
+
+        if (expiryDate.isBefore(today)) {
+            throw new InvalidDateException("Expiry date cannot be in the past.");
+        }
+
+        // (Optional rule) Require minimum shelf life of 6 months
+        if (ChronoUnit.MONTHS.between(manufacturingDate, expiryDate) < 6) {
+            throw new InvalidDateException("Expiry date must be at least 6 months after manufacturing date.");
         }
 
         ProductBatch productBatch = new ProductBatch();
@@ -59,20 +86,19 @@ public class ProductBatchService {
         productBatch.setQuantity(productBatchCreateDTO.getQuantity());
         productBatch.setPurchasePricePerUnit(productBatchCreateDTO.getPurchasePricePerUnit());
         productBatch.setSellingPricePerUnit(productBatchCreateDTO.getSellingPricePerUnit());
-        productBatch.setExpiryDate(productBatchCreateDTO.getExpiryDate());
-        productBatch.setManufacturingDate(productBatchCreateDTO.getManufacturingDate());
+        productBatch.setExpiryDate(expiryDate);
+        productBatch.setManufacturingDate(manufacturingDate);
         productBatch.setLocation(productBatchCreateDTO.getLocation());
         productBatch.setBatchStatus(BatchStatus.AVAILABLE);
+
         product.setBatchManaged(Boolean.TRUE);
         productRepository.save(product);
 
-        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = userRepository.findByUsername(
+                SecurityContextHolder.getContext().getAuthentication().getName());
         productBatch.setCreatedBy(user);
 
-        ProductBatch savedBatch = productBatchRepository.save(productBatch);
-
-       return savedBatch;
-
+        return productBatchRepository.save(productBatch);
     }
 
     @Transactional
