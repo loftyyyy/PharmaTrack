@@ -29,7 +29,7 @@ public class CustomerService {
         customer.setName(customerCreateDTO.getName());
         customer.setEmail(customerCreateDTO.getEmail());
         customer.setPhoneNumber(customerCreateDTO.getPhoneNumber());
-        customer.setAddressStreetBarangay(customer.getAddressStreetBarangay());
+        customer.setAddressStreetBarangay(customerCreateDTO.getAddressStreetBarangay());
         customer.setAddressCityMunicipality(customerCreateDTO.getAddressCityMunicipality());
         customer.setIsActive(Boolean.TRUE);
         customer.setAddressProvince(customerCreateDTO.getAddressProvince());
@@ -55,11 +55,11 @@ public class CustomerService {
             throw new DuplicateCredentialException("Email already exists");
         }
 
-        Customer customer = new Customer();
+        Customer customer = existing.get();
         customer.setName(customerUpdateDTO.getName());
         customer.setEmail(customerUpdateDTO.getEmail());
         customer.setPhoneNumber(customerUpdateDTO.getPhoneNumber());
-        customer.setAddressStreetBarangay(customer.getAddressStreetBarangay());
+        customer.setAddressStreetBarangay(customerUpdateDTO.getAddressStreetBarangay());
         customer.setAddressCityMunicipality(customerUpdateDTO.getAddressCityMunicipality());
         customer.setAddressProvince(customerUpdateDTO.getAddressProvince());
         customer.setAddressPostalCode(customerUpdateDTO.getAddressPostalCode());
