@@ -185,6 +185,7 @@ public class PurchaseService {
                     .batchNumber(purchaseItem.getBatchNumber())
                     .quantity(purchaseItem.getBatchQuantity())
                     .purchasePricePerUnit(purchaseItem.getPurchasePricePerUnit())
+                    .sellingPricePerUnit(purchaseItem.getUnitPrice())
                     .expiryDate(purchaseItem.getExpiryDate())
                     .manufacturingDate(purchaseItem.getManufacturingDate())
                     .location(purchaseItem.getLocation())

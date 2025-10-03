@@ -33,7 +33,13 @@ public class ProductBatchController {
         return ResponseEntity.ok().body(productBatches);
     }
 
-    @GetMapping("{id}/batches")
+    @GetMapping("/earliest")
+    public ResponseEntity<?> getAllEarliestBatchForAllProducts(){
+       List<ProductBatchResponseDTO> earliestProductBatches = productBatchService.getEarliestBatchForAllProducts().stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
+       return ResponseEntity.ok().body(earliestProductBatches);
+    }
+
+    @GetMapping("/{id}/batches")
     public ResponseEntity<?> getBatchesFromProduct(@PathVariable Long id){
         List<ProductBatchResponseDTO> productBatches = productBatchService.getProductBatchesFromProduct(id).stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
         return ResponseEntity.ok().body(productBatches);
@@ -59,11 +65,5 @@ public class ProductBatchController {
         System.out.println(existing);
         return ResponseEntity.ok().body(new ProductBatchCheckResponseDTO(existing));
     }
-
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
-//        productBatchService.deleteProductBatch(id);
-//        return ResponseEntity.ok().body("Product batch successfully deleted");
-//    }
 
 }

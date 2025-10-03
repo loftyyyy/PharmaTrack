@@ -20,11 +20,13 @@ public class ProductBatchResponseDTO {
     private String batchNumber;
     private Integer quantity;
     private BigDecimal purchasePricePerUnit;
+    private BigDecimal sellingPricePerUnit;
     private LocalDate expiryDate;
     private BatchStatus status;
     private LocalDate manufacturingDate;
     private String location;
 
+    private LocalDate expirationDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long createdById;
@@ -35,10 +37,12 @@ public class ProductBatchResponseDTO {
         this.batchNumber = productBatch.getBatchNumber();
         this.quantity = productBatch.getQuantity();
         this. purchasePricePerUnit = productBatch.getPurchasePricePerUnit();
+        this.sellingPricePerUnit = productBatch.getSellingPricePerUnit();
         this.status = productBatch.getBatchStatus();
         this.expiryDate = productBatch.getExpiryDate();
         this.manufacturingDate = productBatch.getManufacturingDate();
         this.location = productBatch.getLocation();
+        this.expirationDate = productBatch.getExpiryDate();
         this.createdAt = productBatch.getCreatedAt();
         this.updatedAt = productBatch.getUpdatedAt();
         this.createdById = productBatch.getCreatedBy().getId();

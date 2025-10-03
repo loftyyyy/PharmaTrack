@@ -58,6 +58,7 @@ public class ProductBatchService {
         productBatch.setBatchNumber(productBatchCreateDTO.getBatchNumber());
         productBatch.setQuantity(productBatchCreateDTO.getQuantity());
         productBatch.setPurchasePricePerUnit(productBatchCreateDTO.getPurchasePricePerUnit());
+        productBatch.setSellingPricePerUnit(productBatchCreateDTO.getSellingPricePerUnit());
         productBatch.setExpiryDate(productBatchCreateDTO.getExpiryDate());
         productBatch.setManufacturingDate(productBatchCreateDTO.getManufacturingDate());
         productBatch.setLocation(productBatchCreateDTO.getLocation());
@@ -110,6 +111,7 @@ public class ProductBatchService {
 
         productBatch.setQuantity(productBatchUpdateDTO.getQuantity());
         productBatch.setPurchasePricePerUnit(productBatchUpdateDTO.getPurchasePricePerUnit());
+        productBatch.setSellingPricePerUnit(productBatchUpdateDTO.getSellingPricePerUnit());
         productBatch.setExpiryDate(productBatchUpdateDTO.getExpiryDate());
         productBatch.setManufacturingDate(productBatchUpdateDTO.getManufacturingDate());
         productBatch.setLocation(productBatchUpdateDTO.getLocation());
@@ -122,6 +124,10 @@ public class ProductBatchService {
 
     public boolean isExistingProductIdAndBatchNumber(ProductBatchCheckRequestDTO productBatchCheckRequestDTO) {
         return productBatchRepository.existsByProductIdAndBatchNumber(productBatchCheckRequestDTO.getProductId(), productBatchCheckRequestDTO.getBatchNumber());
+    }
+
+    public List<ProductBatch> getEarliestBatchForAllProducts(){
+        return productBatchRepository.findEarliestBatchForEachProduct();
     }
 
 }

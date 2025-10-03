@@ -40,6 +40,9 @@ public class ProductBatch {
     @Column(name = "purchase_price_per_unit", precision = 10, scale = 2, nullable = false)
     private BigDecimal purchasePricePerUnit;
 
+    @Column(name = "selling_price_per_unit", precision = 10, scale = 2, nullable = false)
+    private BigDecimal sellingPricePerUnit;
+
     @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
 

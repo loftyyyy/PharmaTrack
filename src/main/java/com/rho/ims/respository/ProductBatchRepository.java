@@ -3,6 +3,7 @@ package com.rho.ims.respository;
 import com.rho.ims.model.Product;
 import com.rho.ims.model.ProductBatch;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -26,4 +27,17 @@ public interface ProductBatchRepository extends JpaRepository<ProductBatch, Long
     List<ProductBatch> findByProductIdAndBatchNumber(Long productId, String batchNumber);
 
     List<ProductBatch> findByProductId(Long id);
+
+    @Query(value = """
+    SELECT pb.* 
+    FROM product_batches pb
+    INNER JOIN (
+        SELECT product_id, MIN(expiry_date) AS earliest_expiry
+        FROM product_batches
+        GROUP BY product_id
+    ) grouped 
+    ON pb.product_id = grouped.product_id 
+    AND pb.expiry_date = grouped.earliest_expiry
+""", nativeQuery = true)
+    List<ProductBatch> findEarliestBatchForEachProduct();
 }

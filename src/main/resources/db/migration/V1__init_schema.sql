@@ -75,6 +75,7 @@ CREATE TABLE product_batches (
                                  batch_number VARCHAR(100) NOT NULL,
                                  quantity INT NOT NULL CHECK (product_batches.quantity >= 0), -- Quantity should not be negative
                                  purchase_price_per_unit DECIMAL(10,2) NOT NULL,
+                                 selling_price_per_unit DECIMAL(10,2) NOT NULL,
                                  expiry_date DATE NOT NULL,
                                  manufacturing_date DATE NOT NULL,
                                  location VARCHAR(50),

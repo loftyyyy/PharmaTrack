@@ -22,6 +22,10 @@ public class ProductBatchUpdateDTO {
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal purchasePricePerUnit;
 
+    @NotNull(message = "Purchase price per unit is required")
+    @DecimalMin(value = "0.0", inclusive = false)
+    private BigDecimal sellingPricePerUnit;
+
     @NotNull(message = "Expiry date is required")
     private LocalDate expiryDate;
 
