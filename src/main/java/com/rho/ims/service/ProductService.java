@@ -41,6 +41,14 @@ public class ProductService {
             throw new DuplicateCredentialException("barcode", productCreateDTO.getBarcode());
         }
 
+        String sku = generateSKU(productCreateDTO);
+        Optional<Product> existingProductSku = productRepository.findBySku(sku);
+
+        if(existingProductSku.isPresent() && existingProductSku.get().getBarcode().equals(productCreateDTO.getBarcode())){
+            return existingProductSku.get();
+        }
+
+
         Category category = categoryRepository.findById(productCreateDTO.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         Product product = new Product();
@@ -55,10 +63,9 @@ public class ProductService {
         product.setDescription(productCreateDTO.getDescription());
         product.setCategory(category);
         product.setBarcode(productCreateDTO.getBarcode());
-        product.setSku(generateSKU(productCreateDTO));
+        product.setSku(sku);
         product.setBatchManaged(Boolean.FALSE);
 
-        // TODO: Reimplement this <>
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         product.setCreatedBy(user);
@@ -103,7 +110,6 @@ public class ProductService {
         product.setActive(productUpdateDTO.getActive());
         product.setCategory(category);
 
-        //TODO: Reimplement this. Used for testing phase only
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         product.setUpdatedBy(user);
 

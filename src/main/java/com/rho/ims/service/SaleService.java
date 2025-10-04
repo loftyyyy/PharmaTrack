@@ -125,6 +125,7 @@ public class SaleService {
             inventoryLog.setQuantityChanged(saleItem.getQuantity());
             inventoryLog.setChangeType(ChangeType.OUT);
             inventoryLog.setPurchase(null);
+            inventoryLog.setAdjustmentReference("Sale-" + saleItem.getSale().getId());
             inventoryLog.setReason("Sale confirmed");
             User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             inventoryLog.setCreatedBy(user);
