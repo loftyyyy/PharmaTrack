@@ -46,7 +46,7 @@ public class SaleService {
                     .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
             sale.setCustomer(customer);
         } else {
-            Customer walkIn = customerRepository.findByName("Walk-in Customer");
+            Customer walkIn = customerRepository.findByName("Walk-in");
             if (walkIn == null) {
                 throw new ResourceNotFoundException("Walk-in customer not found");
             }

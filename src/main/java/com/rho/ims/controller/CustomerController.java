@@ -39,6 +39,11 @@ public class CustomerController {
         return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
     }
 
+    @GetMapping("/walkIn")
+    public ResponseEntity<?> getWalkInCustomer(){
+        Customer customer = customerService.getWalkInCustomer();
+        return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
+    }
 
     @GetMapping("/active")
     public ResponseEntity<?> getActiveCustomer(){

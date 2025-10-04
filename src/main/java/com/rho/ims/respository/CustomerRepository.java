@@ -17,4 +17,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Customer findByName(String name);
 
     List<Customer> findByIsActive(Boolean isActive);
+
+    boolean existsByName(String name);
 }

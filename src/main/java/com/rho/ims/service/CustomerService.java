@@ -78,11 +78,17 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
+    public Customer getWalkInCustomer(){
+        Customer walkInCustomer = customerRepository.findByName("Walk-In");
+        return walkInCustomer;
+    }
+
     public void activateCustomer(Long id){
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
         customer.setIsActive(Boolean.TRUE);
         customerRepository.save(customer);
     }
+
 
 
 
