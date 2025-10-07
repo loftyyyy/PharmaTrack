@@ -1,6 +1,7 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
+import com.rho.ims.api.exception.InvalidDateException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.*;
 import com.rho.ims.enums.BatchStatus;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.security.Security;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +47,7 @@ public class PurchaseService {
         this.productSupplierService = productSupplierService;
     }
 
+    @Transactional
     public Purchase savePurchase(PurchaseCreateDTO purchaseCreateDTO){
 
         Optional<Purchase> existing = purchaseRepository.findBySupplierIdAndPurchaseStatus(purchaseCreateDTO.getSupplierId(), PurchaseStatus.PENDING);
@@ -84,7 +88,28 @@ public class PurchaseService {
                 throw new IllegalStateException("Product is inactive");
             }
 
-            System.out.println("Yes, this was the cause");
+
+            LocalDate manufacturingDate = purchaseItem.getManufacturingDate();
+            LocalDate expiryDate = purchaseItem.getExpiryDate();
+            LocalDate today = LocalDate.now();
+
+            if (manufacturingDate.isAfter(today)) {
+                throw new InvalidDateException("Manufacturing date cannot be in the future.");
+            }
+
+            if (!expiryDate.isAfter(manufacturingDate)) {
+                throw new InvalidDateException("Expiry date must be after manufacturing date.");
+            }
+
+            if (expiryDate.isBefore(today)) {
+                throw new InvalidDateException("Expiry date cannot be in the past.");
+            }
+
+            // (Optional rule) Require minimum shelf life of 6 months
+            if (ChronoUnit.MONTHS.between(manufacturingDate, expiryDate) < 6) {
+                throw new InvalidDateException("Expiry date must be at least 6 months after manufacturing date.");
+            }
+
             item.setProduct(product);
             item.setBatchNumber(purchaseItem.getBatchNumber());
             item.setProductBatch(null);
