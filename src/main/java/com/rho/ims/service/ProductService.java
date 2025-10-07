@@ -44,10 +44,16 @@ public class ProductService {
         String sku = generateSKU(productCreateDTO);
         Optional<Product> existingProductSku = productRepository.findBySku(sku);
 
-        if(existingProductSku.isPresent() && existingProductSku.get().getBarcode().equals(productCreateDTO.getBarcode())){
-            return existingProductSku.get();
+        // TODO: To fix, not sure about this one
+        if (existingProductSku.isPresent()) {
+            Product existing = existingProductSku.get();
+            if (existing.getBarcode().equals(productCreateDTO.getBarcode())) {
+                return existing; // same product
+            } else {
+                // same SKU base, but different barcode → create new product
+                sku = sku + "-" + System.currentTimeMillis(); // or generate a variant SKU
+            }
         }
-
 
         Category category = categoryRepository.findById(productCreateDTO.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
