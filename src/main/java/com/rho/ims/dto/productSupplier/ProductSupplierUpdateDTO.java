@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.productSupplier;
 
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

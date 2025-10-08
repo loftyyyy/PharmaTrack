@@ -1,6 +1,8 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.*;
+import com.rho.ims.dto.productSupplier.ProductSupplierCreateDTO;
+import com.rho.ims.dto.productSupplier.ProductSupplierResponseDTO;
+import com.rho.ims.dto.productSupplier.ProductSupplierUpdateDTO;
 import com.rho.ims.model.ProductSupplier;
 import com.rho.ims.service.ProductSupplierService;
 import jakarta.validation.Valid;
@@ -38,7 +40,7 @@ public class ProductSupplierController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProductSupplier(@Valid @RequestBody ProductSupplierUpdateDTO productSupplierUpdateDTO,@PathVariable Long id){
+    public ResponseEntity<?> updateProductSupplier(@Valid @RequestBody ProductSupplierUpdateDTO productSupplierUpdateDTO, @PathVariable Long id){
         ProductSupplier productSupplier = productSupplierService.updateProductSupplier(productSupplierUpdateDTO, id);
         return ResponseEntity.ok().body(new ProductSupplierResponseDTO(productSupplier));
     }

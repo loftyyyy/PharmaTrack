@@ -2,8 +2,8 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.ProductSupplierCreateDTO;
-//import com.rho.ims.dto.ProductSupplierUpdateDTO;
+//import com.rho.ims.dto.productSupplier.ProductSupplierCreateDTO;
+//import com.rho.ims.dto.productSupplier.ProductSupplierUpdateDTO;
 //import com.rho.ims.model.*;
 //import com.rho.ims.respository.*;
 //import org.junit.jupiter.api.BeforeEach;
