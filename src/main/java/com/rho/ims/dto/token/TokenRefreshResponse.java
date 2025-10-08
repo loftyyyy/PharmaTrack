@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.token;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
