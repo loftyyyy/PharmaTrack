@@ -1,7 +1,7 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.StockAdjustmentCreateDTO;
-import com.rho.ims.dto.StockAdjustmentResponseDTO;
+import com.rho.ims.dto.stockAdjustment.StockAdjustmentCreateDTO;
+import com.rho.ims.dto.stockAdjustment.StockAdjustmentResponseDTO;
 import com.rho.ims.model.StockAdjustment;
 import com.rho.ims.service.StockAdjustmentService;
 import jakarta.validation.Valid;

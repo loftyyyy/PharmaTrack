@@ -1,17 +1,15 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.StockAdjustmentCreateDTO;
+import com.rho.ims.dto.stockAdjustment.StockAdjustmentCreateDTO;
 import com.rho.ims.enums.AdjustmentType;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

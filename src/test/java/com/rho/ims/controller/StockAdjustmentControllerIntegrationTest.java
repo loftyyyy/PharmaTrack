@@ -2,7 +2,7 @@ package com.rho.ims.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
-import com.rho.ims.dto.StockAdjustmentCreateDTO;
+import com.rho.ims.dto.stockAdjustment.StockAdjustmentCreateDTO;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.*;
@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

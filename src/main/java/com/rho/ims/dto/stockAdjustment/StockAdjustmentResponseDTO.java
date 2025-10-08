@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.stockAdjustment;
 
 import com.rho.ims.dto.product.ProductResponseDTO;
 import com.rho.ims.enums.AdjustmentType;
