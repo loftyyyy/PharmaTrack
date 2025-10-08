@@ -2,9 +2,9 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.SaleCreateDTO;
+//import com.rho.ims.dto.sale.SaleCreateDTO;
 //import com.rho.ims.dto.SaleItemCreateDTO;
-//import com.rho.ims.dto.SaleVoidDTO;
+//import com.rho.ims.dto.sale.SaleVoidDTO;
 //import com.rho.ims.enums.PaymentMethod;
 //import com.rho.ims.enums.SaleStatus;
 //import com.rho.ims.model.*;

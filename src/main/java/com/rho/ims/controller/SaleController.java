@@ -1,10 +1,9 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.SaleCreateDTO;
-import com.rho.ims.dto.SaleResponseDTO;
-import com.rho.ims.dto.SaleVoidDTO;
+import com.rho.ims.dto.sale.SaleCreateDTO;
+import com.rho.ims.dto.sale.SaleResponseDTO;
+import com.rho.ims.dto.sale.SaleVoidDTO;
 import com.rho.ims.model.Sale;
-import com.rho.ims.respository.SaleRepository;
 import com.rho.ims.service.SaleService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

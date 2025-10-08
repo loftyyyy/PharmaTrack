@@ -1,5 +1,6 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.sale;
 
+import com.rho.ims.dto.SaleItemResponseDTO;
 import com.rho.ims.enums.PaymentMethod;
 import com.rho.ims.enums.SaleStatus;
 import com.rho.ims.model.Sale;

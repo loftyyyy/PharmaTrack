@@ -1,9 +1,9 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.SaleCreateDTO;
+import com.rho.ims.dto.sale.SaleCreateDTO;
 import com.rho.ims.dto.SaleItemCreateDTO;
-import com.rho.ims.dto.SaleVoidDTO;
+import com.rho.ims.dto.sale.SaleVoidDTO;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.enums.SaleStatus;
 import com.rho.ims.model.*;
