@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.user;
 
 import com.rho.ims.dto.role.RoleResponseDTO;
 import com.rho.ims.model.User;

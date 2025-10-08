@@ -1,7 +1,8 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.*;
 import com.rho.ims.dto.auth.RegisterRequest;
+import com.rho.ims.dto.user.UserResponseDTO;
+import com.rho.ims.dto.user.UserUpdateDTO;
 import com.rho.ims.model.User;
 import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;

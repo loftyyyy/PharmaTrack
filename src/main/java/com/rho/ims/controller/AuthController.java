@@ -1,12 +1,12 @@
 package com.rho.ims.controller;
 
 import com.rho.ims.api.exception.TokenRefreshException;
-import com.rho.ims.dto.*;
 import com.rho.ims.dto.auth.AuthRequest;
 import com.rho.ims.dto.auth.AuthResponse;
 import com.rho.ims.dto.message.MessageResponse;
 import com.rho.ims.dto.token.TokenRefreshRequest;
 import com.rho.ims.dto.token.TokenRefreshResponse;
+import com.rho.ims.dto.user.UserResponseDTO;
 import com.rho.ims.model.User;
 import com.rho.ims.security.JwtUtil;
 import com.rho.ims.service.RefreshTokenService;

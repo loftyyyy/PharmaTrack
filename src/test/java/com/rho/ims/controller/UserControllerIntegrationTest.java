@@ -2,7 +2,7 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.UserUpdateDTO;
+//import com.rho.ims.dto.user.UserUpdateDTO;
 //import com.rho.ims.model.Role;
 //import com.rho.ims.model.User;
 //import com.rho.ims.respository.RoleRepository;
