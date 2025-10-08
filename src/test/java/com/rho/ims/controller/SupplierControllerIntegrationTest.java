@@ -2,9 +2,9 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.SupplierCreateDTO;
-//import com.rho.ims.dto.SupplierResponseDTO;
-//import com.rho.ims.dto.SupplierUpdateDTO;
+//import com.rho.ims.dto.supplier.SupplierCreateDTO;
+//import com.rho.ims.dto.supplier.SupplierResponseDTO;
+//import com.rho.ims.dto.supplier.SupplierUpdateDTO;
 //import com.rho.ims.model.Role;
 //import com.rho.ims.model.Supplier;
 //import com.rho.ims.model.User;

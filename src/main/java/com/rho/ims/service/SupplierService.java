@@ -2,8 +2,8 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.SupplierCreateDTO;
-import com.rho.ims.dto.SupplierUpdateDTO;
+import com.rho.ims.dto.supplier.SupplierCreateDTO;
+import com.rho.ims.dto.supplier.SupplierUpdateDTO;
 import com.rho.ims.model.Supplier;
 import com.rho.ims.model.User;
 import com.rho.ims.respository.SupplierRepository;
@@ -11,7 +11,6 @@ import com.rho.ims.respository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Security;
 import java.util.List;
 import java.util.Optional;
 

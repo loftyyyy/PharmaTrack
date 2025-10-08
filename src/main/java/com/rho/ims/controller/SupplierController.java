@@ -1,8 +1,8 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.SupplierCreateDTO;
-import com.rho.ims.dto.SupplierResponseDTO;
-import com.rho.ims.dto.SupplierUpdateDTO;
+import com.rho.ims.dto.supplier.SupplierCreateDTO;
+import com.rho.ims.dto.supplier.SupplierResponseDTO;
+import com.rho.ims.dto.supplier.SupplierUpdateDTO;
 import com.rho.ims.model.Supplier;
 import com.rho.ims.service.SupplierService;
 import jakarta.validation.Valid;

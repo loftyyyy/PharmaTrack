@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.supplier;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

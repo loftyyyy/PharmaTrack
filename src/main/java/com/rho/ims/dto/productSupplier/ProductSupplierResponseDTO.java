@@ -1,6 +1,6 @@
 package com.rho.ims.dto.productSupplier;
 
-import com.rho.ims.dto.SupplierResponseDTO;
+import com.rho.ims.dto.supplier.SupplierResponseDTO;
 import com.rho.ims.dto.product.ProductResponseDTO;
 import com.rho.ims.model.ProductSupplier;
 import lombok.Getter;
