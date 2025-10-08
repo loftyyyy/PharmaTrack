@@ -1,14 +1,11 @@
 package com.rho.ims.dto;
 
 
+import com.rho.ims.dto.category.CategoryResponseDTO;
 import com.rho.ims.enums.DrugClassification;
-import com.rho.ims.model.Category;
 import com.rho.ims.model.Product;
-import com.rho.ims.respository.CategoryRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter

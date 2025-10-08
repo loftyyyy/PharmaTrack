@@ -1,5 +1,6 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.auth;
 
+import com.rho.ims.dto.UserResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

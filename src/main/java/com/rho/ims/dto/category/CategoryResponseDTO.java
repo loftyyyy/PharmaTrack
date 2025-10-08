@@ -1,7 +1,6 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.category;
 
 import com.rho.ims.model.Category;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

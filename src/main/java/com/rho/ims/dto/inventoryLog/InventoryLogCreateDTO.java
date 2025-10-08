@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.inventoryLog;
 
 import com.rho.ims.enums.ChangeType;
 import jakarta.validation.constraints.NotNull;

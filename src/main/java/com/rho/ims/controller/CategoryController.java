@@ -1,9 +1,9 @@
 package com.rho.ims.controller;
 
 
-import com.rho.ims.dto.CategoryCreateDTO;
-import com.rho.ims.dto.CategoryResponseDTO;
-import com.rho.ims.dto.CategoryUpdateDTO;
+import com.rho.ims.dto.category.CategoryCreateDTO;
+import com.rho.ims.dto.category.CategoryResponseDTO;
+import com.rho.ims.dto.category.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import com.rho.ims.service.CategoryService;

@@ -1,7 +1,7 @@
 package com.rho.ims.service;
 
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.InventoryLogCreateDTO;
+import com.rho.ims.dto.inventoryLog.InventoryLogCreateDTO;
 import com.rho.ims.model.*;
 import com.rho.ims.respository.*;
 import org.springframework.security.core.context.SecurityContextHolder;

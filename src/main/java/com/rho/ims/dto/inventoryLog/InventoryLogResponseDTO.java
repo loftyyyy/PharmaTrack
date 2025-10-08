@@ -1,12 +1,15 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.inventoryLog;
 
+import com.rho.ims.dto.ProductBatchResponseDTO;
+import com.rho.ims.dto.ProductResponseDTO;
+import com.rho.ims.dto.PurchaseResponseDTO;
+import com.rho.ims.dto.SaleResponseDTO;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.InventoryLog;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor

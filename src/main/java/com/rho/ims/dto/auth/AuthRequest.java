@@ -1,6 +1,5 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.auth;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

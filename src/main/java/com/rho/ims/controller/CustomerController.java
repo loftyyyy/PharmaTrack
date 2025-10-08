@@ -1,8 +1,8 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.CustomerCreateDTO;
-import com.rho.ims.dto.CustomerResponseDTO;
-import com.rho.ims.dto.CustomerUpdateDTO;
+import com.rho.ims.dto.customer.CustomerCreateDTO;
+import com.rho.ims.dto.customer.CustomerResponseDTO;
+import com.rho.ims.dto.customer.CustomerUpdateDTO;
 import com.rho.ims.model.Customer;
 import com.rho.ims.service.CustomerService;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.message;
 
 public class MessageResponse {
     private String message;

@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.customer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CustomerUpdateDTO {
+public class CustomerCreateDTO {
 
     @NotBlank(message = "Name is required")
     @Size(max = 100, message = "Name must not exceed 100 characters")
@@ -34,7 +34,5 @@ public class CustomerUpdateDTO {
 
     @Size(max = 20, message = "Postal code must not exceed 20 characters")
     private String addressPostalCode;
-
-    private Boolean isActive;
 
 }

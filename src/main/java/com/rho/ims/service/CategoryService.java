@@ -2,8 +2,8 @@ package com.rho.ims.service;
 
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
-import com.rho.ims.dto.CategoryCreateDTO;
-import com.rho.ims.dto.CategoryUpdateDTO;
+import com.rho.ims.dto.category.CategoryCreateDTO;
+import com.rho.ims.dto.category.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.respository.CategoryRepository;
 import org.springframework.stereotype.Service;

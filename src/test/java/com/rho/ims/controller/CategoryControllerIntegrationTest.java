@@ -2,8 +2,8 @@ package com.rho.ims.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
-import com.rho.ims.dto.CategoryCreateDTO;
-import com.rho.ims.dto.CategoryUpdateDTO;
+import com.rho.ims.dto.category.CategoryCreateDTO;
+import com.rho.ims.dto.category.CategoryUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.model.Role;
 import com.rho.ims.model.User;

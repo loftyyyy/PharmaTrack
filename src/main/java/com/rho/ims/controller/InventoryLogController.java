@@ -1,7 +1,7 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.InventoryLogCreateDTO;
-import com.rho.ims.dto.InventoryLogResponseDTO;
+import com.rho.ims.dto.inventoryLog.InventoryLogCreateDTO;
+import com.rho.ims.dto.inventoryLog.InventoryLogResponseDTO;
 import com.rho.ims.model.InventoryLog;
 import com.rho.ims.service.InventoryLogService;
 import jakarta.validation.Valid;

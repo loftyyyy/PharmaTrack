@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.category;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

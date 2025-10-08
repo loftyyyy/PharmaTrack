@@ -2,8 +2,8 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.CustomerCreateDTO;
-import com.rho.ims.dto.CustomerUpdateDTO;
+import com.rho.ims.dto.customer.CustomerCreateDTO;
+import com.rho.ims.dto.customer.CustomerUpdateDTO;
 import com.rho.ims.model.Customer;
 import com.rho.ims.respository.CustomerRepository;
 import org.springframework.stereotype.Service;

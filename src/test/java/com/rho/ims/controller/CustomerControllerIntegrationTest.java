@@ -2,8 +2,8 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.CustomerCreateDTO;
-//import com.rho.ims.dto.CustomerUpdateDTO;
+//import com.rho.ims.dto.customer.CustomerCreateDTO;
+//import com.rho.ims.dto.customer.CustomerUpdateDTO;
 //import com.rho.ims.model.Customer;
 //import com.rho.ims.model.User;
 //import com.rho.ims.respository.CustomerRepository;

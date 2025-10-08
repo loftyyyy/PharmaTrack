@@ -2,7 +2,7 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.InventoryLogCreateDTO;
+//import com.rho.ims.dto.inventoryLog.InventoryLogCreateDTO;
 //import com.rho.ims.enums.ChangeType;
 //import com.rho.ims.enums.PaymentMethod;
 //import com.rho.ims.enums.PurchaseStatus;
