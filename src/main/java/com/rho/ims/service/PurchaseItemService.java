@@ -1,20 +1,14 @@
 package com.rho.ims.service;
 
-import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.PurchaseItemCreateDTO;
-import com.rho.ims.dto.PurchaseItemUpdateDTO;
-import com.rho.ims.model.ProductBatch;
-import com.rho.ims.model.Purchase;
+import com.rho.ims.dto.purchaseItem.PurchaseItemUpdateDTO;
 import com.rho.ims.model.PurchaseItem;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.PurchaseItemRepository;
 import com.rho.ims.respository.PurchaseRepository;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
  public class PurchaseItemService {

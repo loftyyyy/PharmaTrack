@@ -1,6 +1,6 @@
 package com.rho.ims.dto.purchase;
 
-import com.rho.ims.dto.PurchaseItemResponseDTO;
+import com.rho.ims.dto.purchaseItem.PurchaseItemResponseDTO;
 import com.rho.ims.dto.SupplierResponseDTO;
 import com.rho.ims.enums.PurchaseStatus;
 import com.rho.ims.model.Purchase;

@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.purchaseItem;
 
 import com.rho.ims.model.PurchaseItem;
 import lombok.Getter;

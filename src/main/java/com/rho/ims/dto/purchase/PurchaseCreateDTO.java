@@ -1,6 +1,6 @@
 package com.rho.ims.dto.purchase;
 
-import com.rho.ims.dto.PurchaseItemCreateDTO;
+import com.rho.ims.dto.purchaseItem.PurchaseItemCreateDTO;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;

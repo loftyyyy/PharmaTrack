@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.purchaseItem;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
