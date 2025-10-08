@@ -1,6 +1,6 @@
 package com.rho.ims.dto.inventoryLog;
 
-import com.rho.ims.dto.ProductBatchResponseDTO;
+import com.rho.ims.dto.productBatch.ProductBatchResponseDTO;
 import com.rho.ims.dto.ProductResponseDTO;
 import com.rho.ims.dto.PurchaseResponseDTO;
 import com.rho.ims.dto.SaleResponseDTO;

@@ -1,9 +1,9 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.productBatch;
 
 
+import com.rho.ims.dto.ProductResponseDTO;
 import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.model.ProductBatch;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

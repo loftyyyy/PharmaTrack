@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.productBatch;
 
 import jakarta.validation.constraints.*;
 import lombok.*;

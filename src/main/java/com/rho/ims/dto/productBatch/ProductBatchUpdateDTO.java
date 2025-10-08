@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.productBatch;
 
 import com.rho.ims.enums.BatchStatus;
 import jakarta.validation.constraints.*;

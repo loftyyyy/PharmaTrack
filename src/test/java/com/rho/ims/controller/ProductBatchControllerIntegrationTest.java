@@ -2,8 +2,8 @@
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.rho.ims.config.SecurityConfig;
-//import com.rho.ims.dto.ProductBatchCreateDTO;
-//import com.rho.ims.dto.ProductBatchUpdateDTO;
+//import com.rho.ims.dto.productBatch.ProductBatchCreateDTO;
+//import com.rho.ims.dto.productBatch.ProductBatchUpdateDTO;
 //import com.rho.ims.model.*;
 //import com.rho.ims.respository.*;
 //import org.hibernate.grammars.hql.HqlParser;

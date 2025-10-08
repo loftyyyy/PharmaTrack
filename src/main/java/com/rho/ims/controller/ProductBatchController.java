@@ -1,9 +1,10 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.*;
-import com.rho.ims.model.Product;
+import com.rho.ims.dto.productBatch.ProductBatchCheckRequestDTO;
+import com.rho.ims.dto.productBatch.ProductBatchCheckResponseDTO;
+import com.rho.ims.dto.productBatch.ProductBatchResponseDTO;
+import com.rho.ims.dto.productBatch.ProductBatchUpdateDTO;
 import com.rho.ims.model.ProductBatch;
-import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.service.ProductBatchService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

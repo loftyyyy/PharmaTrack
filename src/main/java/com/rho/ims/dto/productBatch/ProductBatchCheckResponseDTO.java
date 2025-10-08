@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.productBatch;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
