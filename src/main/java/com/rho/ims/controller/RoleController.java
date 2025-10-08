@@ -1,8 +1,8 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.RoleCreateDTO;
-import com.rho.ims.dto.RoleResponseDTO;
-import com.rho.ims.dto.RoleUpdateDTO;
+import com.rho.ims.dto.role.RoleCreateDTO;
+import com.rho.ims.dto.role.RoleResponseDTO;
+import com.rho.ims.dto.role.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.service.RoleService;
 import jakarta.validation.Valid;

@@ -2,8 +2,8 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.RoleCreateDTO;
-import com.rho.ims.dto.RoleUpdateDTO;
+import com.rho.ims.dto.role.RoleCreateDTO;
+import com.rho.ims.dto.role.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.respository.RoleRepository;
 import com.rho.ims.respository.UserRepository;

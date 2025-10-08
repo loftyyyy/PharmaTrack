@@ -1,8 +1,7 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.role;
 
 
 import com.rho.ims.model.Role;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

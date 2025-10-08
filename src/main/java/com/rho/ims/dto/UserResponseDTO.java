@@ -1,13 +1,10 @@
 package com.rho.ims.dto;
 
-import com.rho.ims.model.Role;
+import com.rho.ims.dto.role.RoleResponseDTO;
 import com.rho.ims.model.User;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor

@@ -2,7 +2,7 @@ package com.rho.ims.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
-import com.rho.ims.dto.RoleUpdateDTO;
+import com.rho.ims.dto.role.RoleUpdateDTO;
 import com.rho.ims.model.Role;
 import com.rho.ims.respository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
