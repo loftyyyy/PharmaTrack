@@ -1,9 +1,6 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.saleItem;
 
 import com.rho.ims.model.SaleItem;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

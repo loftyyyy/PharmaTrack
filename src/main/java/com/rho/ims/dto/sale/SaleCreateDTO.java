@@ -1,6 +1,6 @@
 package com.rho.ims.dto.sale;
 
-import com.rho.ims.dto.SaleItemCreateDTO;
+import com.rho.ims.dto.saleItem.SaleItemCreateDTO;
 import com.rho.ims.enums.PaymentMethod;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

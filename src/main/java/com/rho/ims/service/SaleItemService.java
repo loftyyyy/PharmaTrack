@@ -1,21 +1,13 @@
 package com.rho.ims.service;
 
-import com.rho.ims.api.exception.InsufficientStockException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.SaleItemCreateDTO;
-import com.rho.ims.dto.SaleItemResponseDTO;
-import com.rho.ims.model.Product;
-import com.rho.ims.model.ProductBatch;
-import com.rho.ims.model.Sale;
 import com.rho.ims.model.SaleItem;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.SaleItemRepository;
 import com.rho.ims.respository.SaleRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
