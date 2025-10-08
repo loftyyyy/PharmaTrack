@@ -2,8 +2,8 @@ package com.rho.ims.service;
 
 import com.rho.ims.api.exception.DuplicateCredentialException;
 import com.rho.ims.api.exception.ResourceNotFoundException;
-import com.rho.ims.dto.ProductCreateDTO;
-import com.rho.ims.dto.ProductUpdateDTO;
+import com.rho.ims.dto.product.ProductCreateDTO;
+import com.rho.ims.dto.product.ProductUpdateDTO;
 import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.model.Category;
 import com.rho.ims.model.Product;
@@ -13,11 +13,8 @@ import com.rho.ims.respository.CategoryRepository;
 import com.rho.ims.respository.ProductBatchRepository;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;

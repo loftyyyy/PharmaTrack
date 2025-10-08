@@ -2,8 +2,8 @@ package com.rho.ims.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rho.ims.config.SecurityConfig;
-import com.rho.ims.dto.ProductCreateDTO;
-import com.rho.ims.dto.ProductUpdateDTO;
+import com.rho.ims.dto.product.ProductCreateDTO;
+import com.rho.ims.dto.product.ProductUpdateDTO;
 import com.rho.ims.model.Category;
 import com.rho.ims.model.Product;
 import com.rho.ims.model.Role;
@@ -32,8 +32,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc

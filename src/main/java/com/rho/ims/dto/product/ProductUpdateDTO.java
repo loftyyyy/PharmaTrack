@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.product;
 
 import com.rho.ims.enums.DrugClassification;
 import jakarta.validation.constraints.Min;

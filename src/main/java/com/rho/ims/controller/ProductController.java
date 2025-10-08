@@ -1,16 +1,13 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.ProductCreateDTO;
-import com.rho.ims.dto.ProductResponseDTO;
-import com.rho.ims.dto.ProductUpdateDTO;
+import com.rho.ims.dto.product.ProductCreateDTO;
+import com.rho.ims.dto.product.ProductResponseDTO;
+import com.rho.ims.dto.product.ProductUpdateDTO;
 import com.rho.ims.model.Product;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.service.ProductService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

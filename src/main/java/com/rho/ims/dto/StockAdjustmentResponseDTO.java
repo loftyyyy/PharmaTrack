@@ -1,7 +1,7 @@
 package com.rho.ims.dto;
 
+import com.rho.ims.dto.product.ProductResponseDTO;
 import com.rho.ims.enums.AdjustmentType;
-import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.StockAdjustment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
