@@ -6,6 +6,8 @@ import com.rho.ims.api.exception.ResourceNotFoundException;
 import com.rho.ims.dto.*;
 import com.rho.ims.dto.productBatch.ProductBatchCreateDTO;
 import com.rho.ims.dto.productSupplier.ProductSupplierCreateDTO;
+import com.rho.ims.dto.purchase.PurchaseCreateDTO;
+import com.rho.ims.dto.purchase.PurchaseUpdateDTO;
 import com.rho.ims.enums.BatchStatus;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.enums.PurchaseStatus;

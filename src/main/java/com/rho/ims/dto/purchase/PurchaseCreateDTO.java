@@ -1,7 +1,6 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.purchase;
 
-import com.rho.ims.enums.PurchaseStatus;
-import com.rho.ims.model.PurchaseItem;
+import com.rho.ims.dto.PurchaseItemCreateDTO;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;

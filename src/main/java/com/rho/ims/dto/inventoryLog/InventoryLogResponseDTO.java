@@ -2,7 +2,7 @@ package com.rho.ims.dto.inventoryLog;
 
 import com.rho.ims.dto.productBatch.ProductBatchResponseDTO;
 import com.rho.ims.dto.product.ProductResponseDTO;
-import com.rho.ims.dto.PurchaseResponseDTO;
+import com.rho.ims.dto.purchase.PurchaseResponseDTO;
 import com.rho.ims.dto.SaleResponseDTO;
 import com.rho.ims.enums.ChangeType;
 import com.rho.ims.model.InventoryLog;

@@ -1,4 +1,4 @@
-package com.rho.ims.dto;
+package com.rho.ims.dto.purchase;
 
 import com.rho.ims.enums.PurchaseStatus;
 import jakarta.validation.constraints.NotNull;

@@ -1,11 +1,9 @@
 package com.rho.ims.controller;
 
-import com.rho.ims.dto.PurchaseCreateDTO;
-import com.rho.ims.dto.PurchaseResponseDTO;
-import com.rho.ims.dto.PurchaseUpdateDTO;
-import com.rho.ims.dto.SupplierResponseDTO;
+import com.rho.ims.dto.purchase.PurchaseCreateDTO;
+import com.rho.ims.dto.purchase.PurchaseResponseDTO;
+import com.rho.ims.dto.purchase.PurchaseUpdateDTO;
 import com.rho.ims.model.Purchase;
-import com.rho.ims.respository.PurchaseRepository;
 import com.rho.ims.service.PurchaseService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
