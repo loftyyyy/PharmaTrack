@@ -11,4 +11,6 @@ public class InventoryReportService {
     public InventoryReportService(InventoryLogRepository inventoryLogRepository){
         this.inventoryLogRepository = inventoryLogRepository;
     }
+
+    public
 }
