@@ -271,8 +271,11 @@ CREATE TABLE low_stock_alert(
                                 time_of_alert DATETIME NOT NULL,
                                 resolved BOOLEAN NOT NULL,
                                 severity VARCHAR(30),
-                                resolved_at DATETIME NULL,
-                                resolved_by BIGINT NULL,
+                                resolved_at DATETIME,
+                                resolved_by BIGINT,
+                                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
                                 FOREIGN KEY (product_batch_id) REFERENCES product_batches(id),
                                 FOREIGN KEY (resolved_by) REFERENCES users(id)
 );
