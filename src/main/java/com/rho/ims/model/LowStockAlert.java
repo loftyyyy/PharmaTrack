@@ -1,10 +1,13 @@
 package com.rho.ims.model;
 
+import com.rho.ims.enums.Severity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"productBatch", "resolvedBy"})
+@EntityListeners(AuditingEntityListener.class)
 public class LowStockAlert {
 
     @Id
@@ -30,7 +35,8 @@ public class LowStockAlert {
     @Builder.Default
     private Boolean resolved = false;
 
-    private String severity;
+    @Enumerated(EnumType.STRING)
+    private Severity severity;
 
     @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
@@ -38,5 +44,13 @@ public class LowStockAlert {
     @ManyToOne
     @JoinColumn(name = "resolved_by")
     private User resolvedBy;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
 }
