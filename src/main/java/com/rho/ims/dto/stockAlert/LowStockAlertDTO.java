@@ -1,4 +1,4 @@
-package com.rho.ims.dto.report;
+package com.rho.ims.dto.stockAlert;
 
 
 import com.rho.ims.dto.product.ProductResponseDTO;
@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LowStockDTO {
+public class LowStockAlertDTO {
     private ProductResponseDTO product;
     private ProductBatchResponseDTO productBatch;
     private LocalDateTime timeOfAlert;
     private LocalDateTime resolvedAt;
 
-    public LowStockDTO(ProductBatch productBatch){
+    public LowStockAlertDTO(ProductBatch productBatch){
         this.product = new ProductResponseDTO(productBatch.getProduct());
         this.productBatch = new ProductBatchResponseDTO(productBatch);
         this.timeOfAlert = LocalDateTime.now();
