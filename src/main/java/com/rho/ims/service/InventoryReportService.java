@@ -12,5 +12,4 @@ public class InventoryReportService {
         this.inventoryLogRepository = inventoryLogRepository;
     }
 
-    public
 }

@@ -264,3 +264,15 @@ CREATE TABLE refresh_tokens (
                                 INDEX idx_username (username),
                                 INDEX idx_expires_at (expires_at)
 );
+
+CREATE TABLE low_stock_alert(
+                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                product_batch_id BIGINT NOT NULL,
+                                time_of_alert DATETIME NOT NULL,
+                                resolved BOOLEAN NOT NULL,
+                                severity VARCHAR(30),
+                                resolved_at DATETIME NULL,
+                                resolved_by BIGINT NULL,
+                                FOREIGN KEY (product_batch_id) REFERENCES product_batches(id),
+                                FOREIGN KEY (resolved_by) REFERENCES users(id)
+);
