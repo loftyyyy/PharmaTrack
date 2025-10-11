@@ -3,6 +3,7 @@ package com.rho.ims.dto.stockAlert;
 
 import com.rho.ims.dto.product.ProductResponseDTO;
 import com.rho.ims.dto.productBatch.ProductBatchResponseDTO;
+import com.rho.ims.model.LowStockAlert;
 import com.rho.ims.model.ProductBatch;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +19,13 @@ public class LowStockAlertDTO {
     private ProductBatchResponseDTO productBatch;
     private LocalDateTime timeOfAlert;
     private LocalDateTime resolvedAt;
+    private Boolean resolved;
 
-    public LowStockAlertDTO(ProductBatch productBatch){
-        this.product = new ProductResponseDTO(productBatch.getProduct());
-        this.productBatch = new ProductBatchResponseDTO(productBatch);
-        this.timeOfAlert = LocalDateTime.now();
+    public LowStockAlertDTO(LowStockAlert lowStockAlert){
+        this.product = new ProductResponseDTO(lowStockAlert.getProductBatch().getProduct());
+        this.productBatch = new ProductBatchResponseDTO(lowStockAlert.getProductBatch());
+        this.timeOfAlert = lowStockAlert.getTimeOfAlert();
+        this.resolved = lowStockAlert.getResolved();
     }
 
 }
