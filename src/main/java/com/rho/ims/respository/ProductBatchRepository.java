@@ -28,6 +28,8 @@ public interface ProductBatchRepository extends JpaRepository<ProductBatch, Long
 
     List<ProductBatch> findByProductId(Long id);
 
+    List<ProductBatch> findByQuantityLessThan(Integer quantity);
+
     @Query(value = """
     SELECT pb.* 
     FROM product_batches pb
