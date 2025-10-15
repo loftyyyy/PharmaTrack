@@ -5,10 +5,14 @@ import com.rho.ims.model.ProductBatch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface LowStockAlertRepository extends JpaRepository<LowStockAlert, Long> {
 
     boolean existsByProductBatchAndResolvedFalse(ProductBatch productBatch);
 
     boolean existsByProductBatch(ProductBatch productBatch);
+
+    Optional<LowStockAlert> findByProductBatch(ProductBatch productBatch);
 }
