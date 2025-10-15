@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface LowStockAlertRepository extends JpaRepository<LowStockAlert, Long> {
 
     boolean existsByProductBatchAndResolvedFalse(ProductBatch productBatch);
+
+    boolean existsByProductBatch(ProductBatch productBatch);
 }
