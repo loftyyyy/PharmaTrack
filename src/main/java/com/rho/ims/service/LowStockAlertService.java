@@ -26,7 +26,7 @@ public class LowStockAlertService {
     }
 
     @Transactional
-    public void checkAndCreateLowStockAlerts(){
+    public void updateOrCreateLowStockAlerts(){
         List<ProductBatch> productBatch = productBatchRepository.findAll();
 
         for(ProductBatch pb : productBatch){
