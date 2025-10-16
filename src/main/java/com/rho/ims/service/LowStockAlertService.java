@@ -74,9 +74,15 @@ public class LowStockAlertService {
         lowStockAlertRepository.save(lowStockAlert);
     }
 
-    public List<LowStockAlert> getUnresolvedAlert(){
+    public List<LowStockAlert> getUnresolvedAlerts(){
        List<LowStockAlert> unresolvedAlerts = lowStockAlertRepository.findAllByResolved(false);
        return unresolvedAlerts;
+    }
+
+
+    public List<LowStockAlert> getResolvedAlerts(){
+        List<LowStockAlert> unresolvedAlerts = lowStockAlertRepository.findAllByResolved(true);
+        return unresolvedAlerts;
     }
 
     public boolean checkStockAlertForProductBatch(Long productBatchId){
