@@ -39,7 +39,7 @@ public class LowStockAlertController {
     @PutMapping("/{id}/resolve")
     public ResponseEntity<?> resolveAlert(@PathVariable Long id){
         lowStockAlertService.resolveAlert(id);
-        return ResponseEntity.ok().body("Alert resvoled successfully");
+        return ResponseEntity.ok().body("Alert resolved successfully");
     }
 
     @PostMapping("/createOrUpdate")
