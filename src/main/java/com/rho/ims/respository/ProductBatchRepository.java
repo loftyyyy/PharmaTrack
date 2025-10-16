@@ -42,4 +42,7 @@ public interface ProductBatchRepository extends JpaRepository<ProductBatch, Long
     AND pb.expiry_date = grouped.earliest_expiry
 """, nativeQuery = true)
     List<ProductBatch> findEarliestBatchForEachProduct();
+
+    @Query("SELECT pb FROM ProductBatch pb WHERE pb.quantity <= pb.product.minimumStock")
+    List<ProductBatch> findAllBelowMinimumStock();
 }

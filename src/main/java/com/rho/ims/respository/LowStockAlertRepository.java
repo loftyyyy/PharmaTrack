@@ -18,6 +18,5 @@ public interface LowStockAlertRepository extends JpaRepository<LowStockAlert, Lo
 
     Optional<LowStockAlert> findByProductBatch(ProductBatch productBatch);
 
-    @Query("SELECT pb FROM ProductBatch pb WHERE pb.quantity <= pb.product.minimumStock")
-    List<ProductBatch> findAllBelowMinimumStock();
+    List<LowStockAlert> findAllByResolved(Boolean resolved);
 }

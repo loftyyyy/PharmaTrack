@@ -74,6 +74,11 @@ public class LowStockAlertService {
         lowStockAlertRepository.save(lowStockAlert);
     }
 
+    public List<LowStockAlert> getUnresolvedAlert(){
+       List<LowStockAlert> unresolvedAlerts = lowStockAlertRepository.findAllByResolved(false);
+       return unresolvedAlerts;
+    }
+
     public boolean checkStockAlertForProductBatch(Long productBatchId){
         ProductBatch productBatch = productBatchRepository.findById(productBatchId).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
         return lowStockAlertRepository.existsByProductBatch(productBatch);

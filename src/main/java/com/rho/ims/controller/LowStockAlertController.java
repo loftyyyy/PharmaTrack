@@ -22,7 +22,9 @@ public class LowStockAlertController {
         lowStockAlertService.updateOrCreateLowStockAlerts();
     }
 
+    @GetMapping("/unresolved")
+    public ResponseEntity<?> getUnresolvedAlerts(){
 
-
+    }
 
 }
