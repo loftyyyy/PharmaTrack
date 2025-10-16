@@ -18,9 +18,10 @@ public class LowStockAlertController {
         this.lowStockAlertService = lowStockAlertService;
     }
 
-    @GetMapping
-    public void createOrUpdateAlerts(){
-        lowStockAlertService.updateOrCreateLowStockAlerts();
+    @GetMapping("/count")
+    public ResponseEntity<?> getUnresolvedAlertCount(){
+        Integer alertCount = lowStockAlertService.unresolvedAlertCount();
+        return ResponseEntity.ok().body(alertCount);
     }
 
     @GetMapping("/unresolved")
@@ -39,6 +40,11 @@ public class LowStockAlertController {
     public ResponseEntity<?> resolveAlert(@PathVariable Long id){
         lowStockAlertService.resolveAlert(id);
         return ResponseEntity.ok().body("Alert resvoled successfully");
+    }
+
+    @PostMapping("/createOrUpdate")
+    public void createOrUpdateAlerts(){
+        lowStockAlertService.updateOrCreateLowStockAlerts();
     }
 
 }

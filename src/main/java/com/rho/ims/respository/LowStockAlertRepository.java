@@ -19,4 +19,6 @@ public interface LowStockAlertRepository extends JpaRepository<LowStockAlert, Lo
     Optional<LowStockAlert> findByProductBatch(ProductBatch productBatch);
 
     List<LowStockAlert> findAllByResolved(Boolean resolved);
+
+    Integer countByResolved(Boolean resolved);
 }
