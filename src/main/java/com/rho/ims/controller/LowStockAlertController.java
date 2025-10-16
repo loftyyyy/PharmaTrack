@@ -22,4 +22,7 @@ public class LowStockAlertController {
         lowStockAlertService.updateOrCreateLowStockAlerts();
     }
 
+
+
+
 }

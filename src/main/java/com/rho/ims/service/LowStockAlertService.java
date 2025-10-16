@@ -5,9 +5,12 @@ import com.rho.ims.dto.stockAlert.LowStockAlertDTO;
 import com.rho.ims.enums.Severity;
 import com.rho.ims.model.LowStockAlert;
 import com.rho.ims.model.ProductBatch;
+import com.rho.ims.model.User;
 import com.rho.ims.respository.LowStockAlertRepository;
 import com.rho.ims.respository.ProductBatchRepository;
+import com.rho.ims.respository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,10 +22,12 @@ import java.util.Optional;
 public class LowStockAlertService {
     private final LowStockAlertRepository lowStockAlertRepository;
     private final ProductBatchRepository productBatchRepository;
+    private final UserRepository userRepository;
 
-    public LowStockAlertService(LowStockAlertRepository lowStockAlertRepository, ProductBatchRepository productBatchRepository){
+    public LowStockAlertService(LowStockAlertRepository lowStockAlertRepository, ProductBatchRepository productBatchRepository, UserRepository userRepository){
         this.lowStockAlertRepository = lowStockAlertRepository;
         this.productBatchRepository = productBatchRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -59,6 +64,16 @@ public class LowStockAlertService {
         }
     }
 
+    @Transactional
+    public void resolveAlert(Long id){
+        User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        LowStockAlert lowStockAlert = lowStockAlertRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Stock alert not found") );
+        lowStockAlert.setResolved(Boolean.TRUE);
+        lowStockAlert.setResolvedBy(user);
+        lowStockAlert.setResolvedAt(LocalDateTime.now());
+        lowStockAlertRepository.save(lowStockAlert);
+    }
+
     public boolean checkStockAlertForProductBatch(Long productBatchId){
         ProductBatch productBatch = productBatchRepository.findById(productBatchId).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
         return lowStockAlertRepository.existsByProductBatch(productBatch);
@@ -78,4 +93,5 @@ public class LowStockAlertService {
             return null;
         }
     }
+
 }
