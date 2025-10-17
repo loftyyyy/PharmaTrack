@@ -5,9 +5,7 @@ import com.rho.ims.service.LowStockAlertService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/v1/alerts")
@@ -46,6 +44,5 @@ public class LowStockAlertController {
     public void createOrUpdateAlerts(){
         lowStockAlertService.updateOrCreateLowStockAlerts();
     }
-
 
 }
