@@ -10,6 +10,7 @@ import com.rho.ims.dto.user.UserResponseDTO;
 import com.rho.ims.model.User;
 import com.rho.ims.security.JwtUtil;
 import com.rho.ims.service.RefreshTokenService;
+import com.rho.ims.service.TokenBlacklistService;
 import com.rho.ims.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -33,15 +34,18 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final RefreshTokenService refreshTokenService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil,
                           UserService userService,
-                          RefreshTokenService refreshTokenService) {
+                          RefreshTokenService refreshTokenService,
+                          TokenBlacklistService tokenBlacklistService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userService = userService;
         this.refreshTokenService = refreshTokenService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @PostMapping("/login")
@@ -110,6 +114,8 @@ public class AuthController {
 
             try {
                 String username = jwtUtil.extractUsername(accessToken);
+                // Blacklist the access token
+                tokenBlacklistService.blacklistToken(accessToken);
                 // Delete all refresh tokens for this user
                 refreshTokenService.deleteAllUserRefreshTokens(username);
 
