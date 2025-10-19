@@ -15,18 +15,24 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private final SecretKey SECRET_KEY;
-    private final long ACCESS_TOKEN_EXPIRATION = 900000; // 15 minutes
-    private final long REFRESH_TOKEN_EXPIRATION = 604800000; // 7 days
+    private final long ACCESS_TOKEN_EXPIRATION;
+    private final long REFRESH_TOKEN_EXPIRATION;
 
-    public JwtUtil(@Value("${jwt.secret}") String secretString) {
+    public JwtUtil(@Value("${jwt.secret}") String secretString,
+                   @Value("${jwt.access-token-expiration:900000}") long accessTokenExpiration,
+                   @Value("${jwt.refresh-token-expiration:604800000}") long refreshTokenExpiration) {
         this.SECRET_KEY = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
+        this.ACCESS_TOKEN_EXPIRATION = accessTokenExpiration;
+        this.REFRESH_TOKEN_EXPIRATION = refreshTokenExpiration;
     }
 
     public String generateAccessToken(String username) {
+        System.out.println("Access Token Generated");
         return generateToken(username, ACCESS_TOKEN_EXPIRATION, "ACCESS");
     }
 
     public String generateRefreshToken(String username) {
+        System.out.println("Refresh Token Generated");
         return generateToken(username, REFRESH_TOKEN_EXPIRATION, "REFRESH");
     }
 
@@ -106,7 +112,10 @@ public class JwtUtil {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
-            return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+            return (username.equals(userDetails.getUsername())) && 
+                   !isTokenExpired(token) && 
+                   isTokenSignatureValid(token) &&
+                   isTokenNotBeforeValid(token);
         } catch (Exception e) {
             return false; // Invalid token
         }
@@ -115,9 +124,66 @@ public class JwtUtil {
     public boolean isTokenValid(String token, String username) {
         try {
             final String tokenUsername = extractUsername(token);
-            return (tokenUsername.equals(username)) && !isTokenExpired(token);
+            return (tokenUsername.equals(username)) && 
+                   !isTokenExpired(token) && 
+                   isTokenSignatureValid(token) &&
+                   isTokenNotBeforeValid(token);
         } catch (Exception e) {
             return false; // Invalid token
+        }
+    }
+
+    /**
+     * Validate token signature
+     */
+    public boolean isTokenSignatureValid(String token) {
+        try {
+            Jwts.parser()
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Check if token is not used before its issued time
+     */
+    public boolean isTokenNotBeforeValid(String token) {
+        try {
+            Date notBefore = extractAllClaims(token).getNotBefore();
+            if (notBefore == null) {
+                return true; // No notBefore claim means it's valid
+            }
+            return !notBefore.after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Extract issued at time from token
+     */
+    public Date extractIssuedAt(String token) {
+        try {
+            return extractAllClaims(token).getIssuedAt();
+        } catch (JwtException e) {
+            throw new RuntimeException("Invalid JWT token", e);
+        }
+    }
+
+    /**
+     * Check if token was issued recently (within last 24 hours for security)
+     */
+    public boolean isTokenRecentlyIssued(String token) {
+        try {
+            Date issuedAt = extractIssuedAt(token);
+            long timeDiff = System.currentTimeMillis() - issuedAt.getTime();
+            return timeDiff <= 86400000; // 24 hours in milliseconds
+        } catch (Exception e) {
+            return false;
         }
     }
 
