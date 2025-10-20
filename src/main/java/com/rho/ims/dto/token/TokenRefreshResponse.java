@@ -3,6 +3,7 @@ package com.rho.ims.dto.token;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 @NoArgsConstructor
 @Getter
@@ -11,7 +12,8 @@ public class TokenRefreshResponse {
     private String accessToken;
     private String refreshToken;
     private String tokenType = "Bearer";
-    private long expiresIn = 900; // 15 minutes in seconds
+    @Value("${jwt.access-token-expiration}")
+    private long expiresIn;
 
 
     public TokenRefreshResponse(String accessToken, String refreshToken) {

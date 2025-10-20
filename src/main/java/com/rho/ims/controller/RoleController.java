@@ -51,11 +51,4 @@ public class RoleController {
         roleService.updateRole(id, roleUpdateDTO);
         return ResponseEntity.ok().body("Role Updated Successfully");
     }
-
-
-
-
-
-    
-    
 }

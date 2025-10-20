@@ -55,9 +55,4 @@ public class PurchaseController {
         return ResponseEntity.ok().body(new PurchaseResponseDTO(purchase));
     }
 
-//    @DeleteMapping("/{id}")
-//    public void deletePurchase(@PathVariable Long id){
-//        purchaseService.deletePurchase(id);
-//    }
-
 }

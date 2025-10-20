@@ -21,7 +21,6 @@ public class InventoryLogController {
 
     public InventoryLogController(InventoryLogService inventoryLogService){
         this.inventoryLogService = inventoryLogService;
-
     }
     
     @RequestMapping("/create")
