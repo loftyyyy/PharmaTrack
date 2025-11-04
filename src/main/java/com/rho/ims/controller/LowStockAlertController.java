@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/alerts")
 public class LowStockAlertController {
+
     private final LowStockAlertService lowStockAlertService;
 
     public LowStockAlertController(LowStockAlertService lowStockAlertService){
