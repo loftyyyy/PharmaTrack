@@ -32,9 +32,9 @@ public class ProductSupplierService {
         Product product = productRepository.findById(productSupplierCreateDTO.getProductId()).orElseThrow( () -> new ResourceNotFoundException("product", productSupplierCreateDTO.getProductId().toString()));
         Supplier supplier = supplierRepository.findById(productSupplierCreateDTO.getSupplierId()).orElseThrow( () -> new ResourceNotFoundException("supplier", productSupplierCreateDTO.getSupplierId().toString()));
 
-        boolean exists = productSupplierRepository.existsByProductIdAndSupplierId(productSupplierCreateDTO.getProductId(), productSupplierCreateDTO.getSupplierId());
-        if(exists){
-            throw new DuplicateCredentialException("product supplier already exists");
+        Optional<ProductSupplier> exists = productSupplierRepository.findByProductIdAndSupplierId(productSupplierCreateDTO.getProductId(), productSupplierCreateDTO.getSupplierId());
+        if(exists.isPresent()){
+            return exists.get();
         }
 
         Optional<ProductSupplier> existing = productSupplierRepository.findBySupplierIdAndSupplierProductCode(productSupplierCreateDTO.getSupplierId(), productSupplierCreateDTO.getSupplierProductCode());
