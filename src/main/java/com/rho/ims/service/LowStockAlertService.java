@@ -54,7 +54,6 @@ public class LowStockAlertService {
 
                     if (severity.compareTo(lowStockAlert.getSeverity()) > 0 || Boolean.TRUE.equals(lowStockAlert.getResolved())) {
                         lowStockAlert.setSeverity(severity);
-                        lowStockAlert.setResolved(false);
                         lowStockAlert.setTimeOfAlert(LocalDateTime.now());
                         lowStockAlertRepository.save(lowStockAlert);
                     }
@@ -108,5 +107,7 @@ public class LowStockAlertService {
             return null;
         }
     }
+
+    // TODO: Has to implement this ASAP
 
 }

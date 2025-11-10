@@ -19,7 +19,7 @@ public class PurchaseItemController {
     public PurchaseItemController( PurchaseItemService purchaseItemService) {
         this.purchaseItemService = purchaseItemService;
     }
-    
+
     @GetMapping
     public ResponseEntity<?> getAllPurchaseItem() {
         List<PurchaseItemResponseDTO> purchaseItems = purchaseItemService.getAll().stream().map(purchaseItem -> new PurchaseItemResponseDTO(purchaseItem)).toList();

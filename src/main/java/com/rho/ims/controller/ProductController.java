@@ -22,8 +22,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-
-    // CRUD
     @PostMapping("/create")
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO){
         Product product = productService.saveProduct(productCreateDTO);
@@ -48,12 +46,5 @@ public class ProductController {
         Product product = productService.updateProduct(id, productUpdateDTO);
         return ResponseEntity.ok().body(new ProductResponseDTO(product));
     }
-
-
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deleteProduct(@PathVariable Long id){
-//        productService.deleteProduct(id);
-//        return ResponseEntity.ok().body("Product deleted successfully");
-//    }
 
 }

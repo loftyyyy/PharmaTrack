@@ -58,14 +58,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .headers(headers -> headers
+                        .frameOptions().deny()
+                        .contentTypeOptions().and()
+                        .httpStrictTransportSecurity(hstsConfig -> hstsConfig
+                                .maxAgeInSeconds(31536000)
+                                .includeSubDomains(true)
+                        )
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/roles/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/products/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/productBatches/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/productBatches/**").hasAnyRole("STAFF","ADMIN")
+                        .requestMatchers("/api/v1/customers/**").hasAnyRole("STAFF","ADMIN")
                         .requestMatchers("/api/v1/stockAdjustments/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/sales/**", "/api/v1/inventory/**").hasAnyRole("STAFF", "ADMIN")
                         .requestMatchers(("/api/v1/inventoryLogs/**")).hasRole("ADMIN")
@@ -88,7 +96,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
     @Bean
     public AuditorAware<String> auditorProvider() {
