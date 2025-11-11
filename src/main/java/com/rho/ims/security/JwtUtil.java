@@ -11,9 +11,13 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 @Component
 public class JwtUtil {
+    private final Logger logger = Logger.getLogger(JwtUtil.class.getName());
+
     private final SecretKey SECRET_KEY;
     private final long ACCESS_TOKEN_EXPIRATION;
     private final long REFRESH_TOKEN_EXPIRATION;
@@ -27,12 +31,12 @@ public class JwtUtil {
     }
 
     public String generateAccessToken(String username) {
-        System.out.println("Access Token Generated");
+        logger.info("Access Token Generated");
         return generateToken(username, ACCESS_TOKEN_EXPIRATION, "ACCESS");
     }
 
     public String generateRefreshToken(String username) {
-        System.out.println("Refresh Token Generated");
+        logger.info("Refresh Token Generated");
         return generateToken(username, REFRESH_TOKEN_EXPIRATION, "REFRESH");
     }
 
