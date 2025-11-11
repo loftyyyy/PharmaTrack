@@ -34,7 +34,7 @@ public class ProductSupplierService {
 
         Optional<ProductSupplier> exists = productSupplierRepository.findByProductIdAndSupplierId(productSupplierCreateDTO.getProductId(), productSupplierCreateDTO.getSupplierId());
         if(exists.isPresent()){
-            return exists.get();
+            throw new DuplicateCredentialException("Product Supplier relationship already exists");
         }
 
         Optional<ProductSupplier> existing = productSupplierRepository.findBySupplierIdAndSupplierProductCode(productSupplierCreateDTO.getSupplierId(), productSupplierCreateDTO.getSupplierProductCode());
@@ -51,6 +51,10 @@ public class ProductSupplierService {
         productSupplier.setSupplierProductCode(productSupplierCreateDTO.getSupplierProductCode());
 
         return productSupplierRepository.save(productSupplier);
+    }
+
+    public ProductSupplier findOrCreateProductSupplier(ProductSupplierCreateDTO productSupplierCreateDTO){
+        return productSupplierRepository.findByProductIdAndSupplierId(productSupplierCreateDTO.getProductId(), productSupplierCreateDTO.getSupplierId()).orElseGet(() -> saveProductSupplier(productSupplierCreateDTO));
     }
 
     public List<ProductSupplier> getAll(){

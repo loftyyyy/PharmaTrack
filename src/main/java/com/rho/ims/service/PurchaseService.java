@@ -227,7 +227,7 @@ public class PurchaseService {
 
 
             // Auto generate product supplier after successful purchase
-            productSupplierService.saveProductSupplier(productSupplierCreateDTO);
+            productSupplierService.findOrCreateProductSupplier(productSupplierCreateDTO);
 
             ProductBatchResult productBatchResult = productBatchService.findOrCreateProductBatch(productBatch);
             purchaseItem.setProductBatch(productBatchResult.getProductBatch());
