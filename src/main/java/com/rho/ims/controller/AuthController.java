@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
@@ -184,17 +185,24 @@ public class AuthController {
     /**
      * Extract client IP address from request
      */
+    private static final Set<String> TRUSTED_PROXIES = Set.of("127.0.0.1", "::1", "10.0.0.5");
+
     private String getClientIpAddress(HttpServletRequest request) {
-        String xForwardedFor = request.getHeader("X-Forwarded-For");
-        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-            return xForwardedFor.split(",")[0].trim();
+        String remoteAddr = request.getRemoteAddr();
+
+        if (TRUSTED_PROXIES.contains(remoteAddr)) {
+            String xForwardedFor = request.getHeader("X-Forwarded-For");
+            if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+                String clientIp = xForwardedFor.split(",")[0].trim();
+                return clientIp;
+            }
+
+            String xRealIp = request.getHeader("X-Real-IP");
+            if (xRealIp != null && !xRealIp.isEmpty()) {
+                return xRealIp.trim();
+            }
         }
-        
-        String xRealIp = request.getHeader("X-Real-IP");
-        if (xRealIp != null && !xRealIp.isEmpty()) {
-            return xRealIp;
-        }
-        
-        return request.getRemoteAddr();
+
+        return remoteAddr;
     }
 }
