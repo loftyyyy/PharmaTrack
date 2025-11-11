@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,6 +43,9 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final TokenBlacklistService tokenBlacklistService;
     private final RateLimitingService rateLimitingService;
+
+    @Value("${jwt.access-token-expiration}")
+    private long expiresIn;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil,
@@ -140,7 +144,7 @@ public class AuthController {
             refreshTokenService.saveRefreshToken(username, newRefreshToken);
 
             logger.info("Successful token refresh for user: {}", username);
-            return ResponseEntity.ok(new TokenRefreshResponse(newAccessToken, newRefreshToken));
+            return ResponseEntity.ok(new TokenRefreshResponse(newAccessToken, newRefreshToken, expiresIn));
 
         } catch (TokenRefreshException e) {
             logger.warn("Token refresh failed: {}", e.getMessage());

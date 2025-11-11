@@ -12,12 +12,12 @@ public class TokenRefreshResponse {
     private String accessToken;
     private String refreshToken;
     private String tokenType = "Bearer";
-    @Value("${jwt.access-token-expiration}")
     private long expiresIn;
 
 
-    public TokenRefreshResponse(String accessToken, String refreshToken) {
+    public TokenRefreshResponse(String accessToken, String refreshToken, long expiresIn) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.expiresIn = expiresIn;
     }
 }
