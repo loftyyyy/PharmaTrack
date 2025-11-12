@@ -8,6 +8,7 @@ import com.rho.ims.dto.message.MessageResponse;
 import com.rho.ims.dto.token.TokenRefreshRequest;
 import com.rho.ims.dto.token.TokenRefreshResponse;
 import com.rho.ims.dto.user.UserResponseDTO;
+import com.rho.ims.tools.ClientIpResolver;
 import com.rho.ims.model.User;
 import com.rho.ims.security.JwtUtil;
 import com.rho.ims.service.RefreshTokenService;
@@ -44,6 +45,7 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final TokenBlacklistService tokenBlacklistService;
     private final RateLimitingService rateLimitingService;
+    private final ClientIpResolver clientIpResolver;
 
     @Value("${security.trusted-proxies}")
     private Set<String> trustedProxies;
@@ -56,18 +58,21 @@ public class AuthController {
                           UserService userService,
                           RefreshTokenService refreshTokenService,
                           TokenBlacklistService tokenBlacklistService,
-                          RateLimitingService rateLimitingService) {
+                          RateLimitingService rateLimitingService,
+                          ClientIpResolver clientIpResolver) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userService = userService;
         this.refreshTokenService = refreshTokenService;
         this.tokenBlacklistService = tokenBlacklistService;
         this.rateLimitingService = rateLimitingService;
+        this.clientIpResolver = clientIpResolver;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest, HttpServletRequest request) {
-        String clientIp = getClientIpAddress(request);
+//        String clientIp = getClientIpAddress(request);
+        String clientIp = clientIpResolver.getClientIp(request);
         logger.info("Login attempt for user: {} from IP: {}", authRequest.getUsername(), clientIp);
         
         // Check rate limiting
@@ -112,7 +117,8 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@Valid @RequestBody TokenRefreshRequest request, HttpServletRequest httpRequest) {
         String refreshToken = request.getRefreshToken();
-        String clientIp = getClientIpAddress(httpRequest);
+//        String clientIp = getClientIpAddress(httpRequest);
+        String clientIp = clientIpResolver.getClientIp(httpRequest);
         logger.info("Token refresh attempt at {} from IP: {}", LocalDateTime.now(), clientIp);
 
         // Check rate limiting
@@ -185,26 +191,31 @@ public class AuthController {
         return ResponseEntity.badRequest().body(new MessageResponse("No token provided"));
     }
 
-    /**
-     * Extract client IP address from request
-     */
-
-    private String getClientIpAddress(HttpServletRequest request) {
-        String remoteAddr = request.getRemoteAddr();
-
-        if (trustedProxies.contains(remoteAddr)) {
-            String xForwardedFor = request.getHeader("X-Forwarded-For");
-            if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-                String clientIp = xForwardedFor.split(",")[0].trim();
-                return clientIp;
-            }
-
-            String xRealIp = request.getHeader("X-Real-IP");
-            if (xRealIp != null && !xRealIp.isEmpty()) {
-                return xRealIp.trim();
-            }
-        }
-
-        return remoteAddr;
-    }
+//    /**
+//     * Extract client IP address from request
+//     */
+//
+//    public String getClientIpAddress(HttpServletRequest request) {
+//        String remoteAddr = request.getRemoteAddr();
+//
+//        if (trustedProxies.contains(remoteAddr)) {
+//            String xForwardedFor = request.getHeader("X-Forwarded-For");
+//
+//            if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+//                String[] ips = xForwardedFor.split(",");
+//
+//                // Work backwards from the rightmost IP (closest to us)
+//                for (int i = ips.length - 1; i >= 0; i--) {
+//                    String ip = ips[i].trim();
+//
+//                    if (isValidIpAddress(ip) && !trustedProxies.contains(ip)) {
+//                        // First IP that's valid and NOT a trusted proxy
+//                        return ip;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return isValidIpAddress(remoteAddr) ? remoteAddr : "unknown";
+//    }
 }
