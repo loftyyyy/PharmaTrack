@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,7 +30,7 @@ public class ClientIpResolver {
 
     private final Set<String> trustedProxies;
 
-    public ClientIpResolver(Set<String> trustedProxies) {
+    public ClientIpResolver(@Value("${security.trusted-proxies}") Set<String> trustedProxies) {
         this.trustedProxies = trustedProxies;
     }
 
