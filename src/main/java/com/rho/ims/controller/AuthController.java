@@ -1,5 +1,6 @@
 package com.rho.ims.controller;
 
+import java.util.Set;
 import com.rho.ims.api.exception.TokenRefreshException;
 import com.rho.ims.dto.auth.AuthRequest;
 import com.rho.ims.dto.auth.AuthResponse;
@@ -31,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
@@ -44,6 +44,9 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final TokenBlacklistService tokenBlacklistService;
     private final RateLimitingService rateLimitingService;
+
+    @Value("${security.trusted-proxies}")
+    private Set<String> trustedProxies;
 
     @Value("${jwt.access-token-expiration}")
     private long expiresIn;
@@ -185,12 +188,11 @@ public class AuthController {
     /**
      * Extract client IP address from request
      */
-    private static final Set<String> TRUSTED_PROXIES = Set.of("127.0.0.1", "::1", "10.0.0.5");
 
     private String getClientIpAddress(HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
 
-        if (TRUSTED_PROXIES.contains(remoteAddr)) {
+        if (trustedProxies.contains(remoteAddr)) {
             String xForwardedFor = request.getHeader("X-Forwarded-For");
             if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
                 String clientIp = xForwardedFor.split(",")[0].trim();
