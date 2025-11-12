@@ -39,6 +39,9 @@ public class RateLimitingService {
     @Value("${security.token-cleanup.enabled:true}")
     private boolean cleanupEnabled;
 
+    @Value("${security.token-cleanup.retention-hours}")
+    private long retentionHours;
+
     private Bandwidth loginBandwidth;
     private Bandwidth refreshBandwidth;
 
@@ -74,7 +77,7 @@ public class RateLimitingService {
     @Scheduled(fixedRateString = "${security.token-cleanup.interval:3600000}")
     @ConditionalOnProperty(name = "security.token-cleanup.enabled", havingValue = "true", matchIfMissing = true)
     public void cleanupOldBuckets() {
-        long cutoffTime = System.currentTimeMillis() - (2 * 3600000); // 2 hours old
+        long cutoffTime = System.currentTimeMillis() - (retentionHours * 3600000); // 2 hours old
         int removedCount = 0;
 
         for (Map.Entry<String, BucketEntry> entry : buckets.entrySet()) {

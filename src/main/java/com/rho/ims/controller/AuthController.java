@@ -47,9 +47,6 @@ public class AuthController {
     private final RateLimitingService rateLimitingService;
     private final ClientIpResolver clientIpResolver;
 
-    @Value("${security.trusted-proxies}")
-    private Set<String> trustedProxies;
-
     @Value("${jwt.access-token-expiration}")
     private long expiresIn;
 
