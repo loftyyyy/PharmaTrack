@@ -10,6 +10,7 @@ import com.rho.ims.model.Supplier;
 import com.rho.ims.respository.ProductRepository;
 import com.rho.ims.respository.ProductSupplierRepository;
 import com.rho.ims.respository.SupplierRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,8 +54,20 @@ public class ProductSupplierService {
         return productSupplierRepository.save(productSupplier);
     }
 
-    public ProductSupplier findOrCreateProductSupplier(ProductSupplierCreateDTO productSupplierCreateDTO){
-        return productSupplierRepository.findByProductIdAndSupplierId(productSupplierCreateDTO.getProductId(), productSupplierCreateDTO.getSupplierId()).orElseGet(() -> saveProductSupplier(productSupplierCreateDTO));
+    public ProductSupplier findOrCreateProductSupplier(ProductSupplierCreateDTO dto){
+        return productSupplierRepository
+                .findByProductIdAndSupplierId(dto.getProductId(), dto.getSupplierId())
+                .orElseGet(() -> {
+                    try {
+                        return saveProductSupplier(dto);
+                    } catch (DuplicateCredentialException | DataIntegrityViolationException e) {
+                        // Race condition: another thread created it
+                        return productSupplierRepository
+                                .findByProductIdAndSupplierId(dto.getProductId(), dto.getSupplierId())
+                                .orElseThrow(() -> new IllegalStateException(
+                                        "ProductSupplier creation failed and record not found"));
+                    }
+                });
     }
 
     public List<ProductSupplier> getAll(){

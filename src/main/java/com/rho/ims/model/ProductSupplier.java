@@ -7,11 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "product_suppliers")
+@Table(name = "product_suppliers", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"product_id", "supplier_id"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class ProductSupplier {
 
     @Id
