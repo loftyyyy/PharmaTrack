@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class RateLimitingService {
@@ -25,11 +26,11 @@ public class RateLimitingService {
     // Inner class to track last access
     private static class BucketEntry {
         final Bucket bucket;
-        volatile long lastAccessTime;
+        final AtomicLong lastAccessTime;
 
         BucketEntry(Bucket bucket) {
             this.bucket = bucket;
-            this.lastAccessTime = System.currentTimeMillis();
+            this.lastAccessTime = new AtomicLong(System.currentTimeMillis());
         }
     }
 
@@ -39,7 +40,7 @@ public class RateLimitingService {
         long cutoffTime = System.currentTimeMillis() - (2 * 3600000); // 2 hours old
 
         buckets.entrySet().removeIf(entry -> {
-            if (entry.getValue().lastAccessTime < cutoffTime) {
+            if (entry.getValue().lastAccessTime.get() < cutoffTime) {
                 logger.debug("Removed stale rate limit bucket for: {}", entry.getKey());
                 return true;
             }
@@ -51,7 +52,7 @@ public class RateLimitingService {
         BucketEntry entry = buckets.computeIfAbsent(clientIp + "_login",
                 k -> new BucketEntry(Bucket.builder().addLimit(loginBandwidth).build()));
 
-        entry.lastAccessTime = System.currentTimeMillis();
+        entry.lastAccessTime.set(System.currentTimeMillis());
         boolean allowed = entry.bucket.tryConsume(1);
 
         if (!allowed) {
@@ -64,7 +65,7 @@ public class RateLimitingService {
         BucketEntry entry = buckets.computeIfAbsent(clientIp + "_refresh",
                 k -> new BucketEntry(Bucket.builder().addLimit(refreshBandwidth).build()));
 
-        entry.lastAccessTime = System.currentTimeMillis();
+        entry.lastAccessTime.set(System.currentTimeMillis());
         boolean allowed = entry.bucket.tryConsume(1);
 
         if (!allowed) {
