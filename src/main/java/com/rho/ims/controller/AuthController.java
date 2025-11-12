@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -47,6 +49,9 @@ public class AuthController {
 
     @Value("${jwt.access-token-expiration}")
     private long expiresIn;
+
+    @Value("${security.trusted-proxies:127.0.0.1,::1}")
+    private String trustedProxiesConfig;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil,
@@ -185,12 +190,11 @@ public class AuthController {
     /**
      * Extract client IP address from request
      */
-    private static final Set<String> TRUSTED_PROXIES = Set.of("127.0.0.1", "::1", "10.0.0.5");
-
     private String getClientIpAddress(HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
+        Set<String> trustedProxies = parseTrustedProxies();
 
-        if (TRUSTED_PROXIES.contains(remoteAddr)) {
+        if (trustedProxies.contains(remoteAddr)) {
             String xForwardedFor = request.getHeader("X-Forwarded-For");
             if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
                 String clientIp = xForwardedFor.split(",")[0].trim();
@@ -204,5 +208,19 @@ public class AuthController {
         }
 
         return remoteAddr;
+    }
+
+    /**
+     * Parse trusted proxies from configuration string
+     */
+    private Set<String> parseTrustedProxies() {
+        if (trustedProxiesConfig == null || trustedProxiesConfig.trim().isEmpty()) {
+            return Set.of();
+        }
+        return new HashSet<>(Arrays.asList(trustedProxiesConfig.split(",")))
+                .stream()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(java.util.stream.Collectors.toSet());
     }
 }
