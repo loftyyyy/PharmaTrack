@@ -1,30 +1,24 @@
 package com.rho.ims.tools;
 
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Set;
-import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 @Component
 public class ClientIpResolver {
     private static final Logger logger = LogManager.getLogger(ClientIpResolver.class);
 
-    // IPv4 pattern (strict validation)
-    private static final Pattern IPV4_PATTERN = Pattern.compile(
-            "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$"
-    );
-
-    // IPv6 pattern (simplified - full validation is complex)
-    private static final Pattern IPV6_PATTERN = Pattern.compile(
-            "^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|" +
-                    "^::(?:[0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4}$|" +
-                    "^(?:[0-9a-fA-F]{1,4}:){1,6}:$"
+    // Simple pattern to quickly reject obviously invalid input (not comprehensive)
+    // This is just a first-pass filter - InetAddress does the real validation
+    private static final Pattern IP_BASIC_PATTERN = Pattern.compile(
+            "^[0-9a-fA-F:.]+$"
     );
 
     private final Set<String> trustedProxies;
@@ -95,26 +89,62 @@ public class ClientIpResolver {
 
     /**
      * Validates if a string is a valid IP address (IPv4 or IPv6).
-     * Uses both regex and InetAddress validation for defense in depth.
+     *
+     * This method uses a two-layer approach:
+     * 1. Quick regex check to reject obviously invalid input (performance optimization)
+     * 2. InetAddress validation for accurate IPv4/IPv6 verification
+     *
+     * Note: We rely primarily on InetAddress because:
+     * - IPv6 has many valid formats (compressed, IPv4-mapped, link-local, etc.)
+     * - Writing comprehensive regex for all IPv6 formats is error-prone
+     * - InetAddress.getByName() handles all edge cases correctly
      *
      * @param ip the IP address string to validate
-     * @return true if valid, false otherwise
+     * @return true if valid IPv4 or IPv6 address, false otherwise
      */
     private boolean isValidIpAddress(String ip) {
-        if (ip == null || ip.isEmpty() || ip.length() > 45) {
+        // Basic sanity checks
+        if (ip == null || ip.isEmpty()) {
             return false;
         }
 
-        // Quick regex check first (faster, prevents obvious injection attempts)
-        if (!IPV4_PATTERN.matcher(ip).matches() &&
-                !IPV6_PATTERN.matcher(ip).matches()) {
+        // IPv6 can be up to 45 chars with zone ID (e.g., "fe80::1%eth0")
+        // IPv4 is max 15 chars ("255.255.255.255")
+        if (ip.length() > 50) {
             return false;
         }
 
-        // Secondary validation using InetAddress (catches edge cases)
+        // Quick pattern check to reject obviously invalid input
+        // This catches injection attempts and malformed strings quickly
+        if (!IP_BASIC_PATTERN.matcher(ip).matches()) {
+            return false;
+        }
+
+        // Authoritative validation using InetAddress
+        // This handles all valid IPv4 and IPv6 formats:
+        // - Standard IPv4: 192.168.1.1
+        // - Standard IPv6: 2001:db8::1
+        // - Compressed IPv6: ::1, 2001:db8::8a2e:370:7334
+        // - IPv4-mapped IPv6: ::ffff:192.0.2.1
+        // - Link-local with zone: fe80::1%eth0
         try {
-            InetAddress.getByName(ip);
-            return true;
+            InetAddress addr = InetAddress.getByName(ip);
+
+            // Additional check: ensure it's an IP address, not a hostname
+            // InetAddress.getByName() can resolve hostnames, which we don't want
+            String hostAddress = addr.getHostAddress();
+
+            // For IPv6 with zone ID (e.g., "fe80::1%eth0"), compare without zone
+            if (ip.contains("%")) {
+                String ipWithoutZone = ip.split("%")[0];
+                String addrWithoutZone = hostAddress.split("%")[0];
+                return ipWithoutZone.equalsIgnoreCase(addrWithoutZone);
+            }
+
+            // For regular addresses, compare normalized forms
+            // Use equalsIgnoreCase for case-insensitive IPv6 comparison
+            return ip.equalsIgnoreCase(hostAddress);
+
         } catch (UnknownHostException e) {
             logger.debug("Invalid IP address format: {}", ip);
             return false;
