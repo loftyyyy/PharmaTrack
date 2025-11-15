@@ -81,7 +81,6 @@ public class SaleService {
             items.add(saleItem);
         }
 
-        //TODO: Ewan bakit Total amount is null
         sale.setSaleItems(items);
         sale.setTotalAmount(totalAmount.subtract(sale.getDiscountAmount()));
 
