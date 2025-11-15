@@ -4,6 +4,7 @@ import com.rho.ims.dto.auth.RegisterRequest;
 import com.rho.ims.dto.user.UserResponseDTO;
 import com.rho.ims.dto.user.UserUpdateDTO;
 import com.rho.ims.model.User;
+import com.rho.ims.service.OtpService;
 import com.rho.ims.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final OtpService otpService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, OtpService otpService) {
         this.userService = userService;
+        this.otpService = otpService;
     }
 
     @PostMapping("/signup")
@@ -28,6 +31,18 @@ public class UserController {
             return ResponseEntity.ok("User created successfully");
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email){
+
+        if(!userService.existsByEmail(email)){
+            return ResponseEntity.badRequest().body("Email not found");
+        }
+
+        String otp = otpService.generateOtp(email);
+
+
+        return ResponseEntity.ok().body("OTP sent successfully!");
+    }
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
