@@ -64,6 +64,12 @@ public class UserService {
 
     }
 
+    public User changePassword(String email, String newPassword){
+        User user = userRepository.findByEmail(email);
+        user.setPassword(newPassword);
+        return userRepository.save(user);
+    }
+
     public User updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
