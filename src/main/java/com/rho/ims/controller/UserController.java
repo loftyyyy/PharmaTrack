@@ -44,6 +44,22 @@ public class UserController {
         return ResponseEntity.ok().body("OTP sent successfully!");
     }
 
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp){
+
+        if(otp.isBlank()){
+            return ResponseEntity.badRequest().body("OTP not found");
+        }
+
+        boolean isValid = otpService.verifyOtp(email, otp);
+
+        if(!isValid){
+            return ResponseEntity.badRequest().body("OTP is invalid or expired");
+        }
+
+        return ResponseEntity.ok().body("OTP verified!");
+    }
+
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
         User user = userService.findByName(authentication.getName());
