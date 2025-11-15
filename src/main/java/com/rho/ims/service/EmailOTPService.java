@@ -45,7 +45,7 @@ public class EmailOTPService {
         <div class="header">Password Reset Request</div>
 
         <p>Hello,</p>
-        <p>We received a request to reset the password for your <strong>YourCompany</strong> account.</p>
+        <p>We received a request to reset the password for your <strong>PharmaTrack</strong> account.</p>
 
         <p>Please use the one-time password (OTP) below to reset your password. This OTP is valid for <strong>5 minutes</strong>.</p>
 

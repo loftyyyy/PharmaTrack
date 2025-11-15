@@ -5,8 +5,10 @@ import com.rho.ims.dto.user.PasswordResetRequestDTO;
 import com.rho.ims.dto.user.UserResponseDTO;
 import com.rho.ims.dto.user.UserUpdateDTO;
 import com.rho.ims.model.User;
+import com.rho.ims.service.EmailOTPService;
 import com.rho.ims.service.OtpService;
 import com.rho.ims.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +23,12 @@ public class UserController {
 
     private final UserService userService;
     private final OtpService otpService;
+    private final EmailOTPService emailOTPService;
 
-    public UserController(UserService userService, OtpService otpService) {
+    public UserController(UserService userService, OtpService otpService, EmailOTPService emailOTPService) {
         this.userService = userService;
         this.otpService = otpService;
+        this.emailOTPService = emailOTPService;
     }
 
     @PostMapping("/signup")
@@ -34,13 +38,15 @@ public class UserController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email){
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) throws MessagingException {
 
         if(!userService.existsByEmail(email)){
             return ResponseEntity.badRequest().body("Email not found");
         }
 
         String otp = otpService.generateOtp(email);
+
+        emailOTPService.sendEmail(otp, email);
 
 
         return ResponseEntity.ok().body("OTP sent successfully!");
