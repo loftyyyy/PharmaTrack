@@ -54,7 +54,7 @@ public class EmailOTPService {
         <p>If you did not request a password reset, please ignore this email. Your account will remain secure.</p>
 
         <div class="footer">
-            &copy; 2025 YourCompany. All rights reserved.
+            &copy; 2025 PharmaTrack. All rights reserved.
         </div>
     </div>
 </body>
