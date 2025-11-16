@@ -64,7 +64,7 @@ public class EmailOTPService {
         helper.setSubject(subject);
         helper.setText(htmlBody.replace("123456", otp),true);
 
-        helper.setFrom("botfarg123@gmail.com");
+        helper.setFrom("beyondsagi@gmail.com");
         javaMailSender.send(message);
     }
 }

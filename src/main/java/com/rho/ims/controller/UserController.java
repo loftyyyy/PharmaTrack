@@ -22,65 +22,15 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final OtpService otpService;
-    private final EmailOTPService emailOTPService;
 
-    public UserController(UserService userService, OtpService otpService, EmailOTPService emailOTPService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.otpService = otpService;
-        this.emailOTPService = emailOTPService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@Valid @RequestBody RegisterRequest registerRequest) {
             userService.saveUser(registerRequest);
             return ResponseEntity.ok("User created successfully");
-    }
-
-    @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email) throws MessagingException {
-
-        if(!userService.existsByEmail(email)){
-            return ResponseEntity.badRequest().body("Email not found");
-        }
-
-        String otp = otpService.generateOtp(email);
-
-        emailOTPService.sendEmail(otp, email);
-
-
-        return ResponseEntity.ok().body("OTP sent successfully!");
-    }
-
-    @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp){
-
-        if(otp.isBlank()){
-            return ResponseEntity.badRequest().body("OTP not found");
-        }
-
-        boolean isValid = otpService.verifyOtp(email, otp);
-
-        if(!isValid){
-            return ResponseEntity.badRequest().body("OTP is invalid or expired");
-        }
-
-        return ResponseEntity.ok().body("OTP verified!");
-    }
-
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO){
-
-        boolean isValid = otpService.verifyOtp(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getOtp());
-
-        if(!isValid){
-            return ResponseEntity.badRequest().body("OTP is invalid or expired");
-        }
-        userService.changePassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getPassword());
-
-        otpService.deleteOtp(passwordResetRequestDTO.getEmail());
-
-        return ResponseEntity.ok("Password reset successful");
     }
 
     @GetMapping("/me")
