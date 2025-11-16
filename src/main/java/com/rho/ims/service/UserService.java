@@ -33,7 +33,7 @@ public class UserService {
         if (userRepository.existsByUsername(signupDTO.getUsername())) {
             throw new DuplicateCredentialException("username", signupDTO.getUsername());
         }
-        if (userRepository.existsByEmail(signupDTO.getEmail())) {
+        if (existsByEmail(signupDTO.getEmail())) {
             throw new DuplicateCredentialException("email", signupDTO.getEmail());
         }
 
@@ -64,6 +64,12 @@ public class UserService {
 
     }
 
+    public User changePassword(String email, String newPassword){
+        User user = userRepository.findByEmail(email);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userRepository.save(user);
+    }
+
     public User updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
@@ -87,7 +93,7 @@ public class UserService {
         // Check email duplication
         if (userUpdateDTO.getEmail() != null &&
                 !userUpdateDTO.getEmail().equals(existingUser.getEmail())) {
-            if (userRepository.existsByEmail(userUpdateDTO.getEmail())) {
+            if (existsByEmail(userUpdateDTO.getEmail())) {
                 duplicates.put("email", userUpdateDTO.getEmail());
             }
         }
@@ -108,6 +114,10 @@ public class UserService {
         }
 
         return userRepository.save(existingUser);
+    }
+
+    public boolean existsByEmail(String email){
+        return userRepository.existsByEmail(email);
     }
 
 }

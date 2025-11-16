@@ -1,11 +1,16 @@
 package com.rho.ims.controller;
 
 import com.rho.ims.dto.auth.RegisterRequest;
+import com.rho.ims.dto.user.PasswordResetRequestDTO;
 import com.rho.ims.dto.user.UserResponseDTO;
 import com.rho.ims.dto.user.UserUpdateDTO;
 import com.rho.ims.model.User;
+import com.rho.ims.service.EmailOTPService;
+import com.rho.ims.service.OtpService;
 import com.rho.ims.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +32,6 @@ public class UserController {
             userService.saveUser(registerRequest);
             return ResponseEntity.ok("User created successfully");
     }
-
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {

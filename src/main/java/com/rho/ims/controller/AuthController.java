@@ -1,25 +1,26 @@
 package com.rho.ims.controller;
 
-import java.util.Set;
 import com.rho.ims.api.exception.TokenRefreshException;
 import com.rho.ims.dto.auth.AuthRequest;
 import com.rho.ims.dto.auth.AuthResponse;
 import com.rho.ims.dto.message.MessageResponse;
 import com.rho.ims.dto.token.TokenRefreshRequest;
 import com.rho.ims.dto.token.TokenRefreshResponse;
+import com.rho.ims.dto.user.ForgotPasswordDTO;
+import com.rho.ims.dto.user.OTPRequestDTO;
+import com.rho.ims.dto.user.PasswordResetRequestDTO;
 import com.rho.ims.dto.user.UserResponseDTO;
+import com.rho.ims.service.*;
 import com.rho.ims.tools.ClientIpResolver;
 import com.rho.ims.model.User;
 import com.rho.ims.security.JwtUtil;
-import com.rho.ims.service.RefreshTokenService;
-import com.rho.ims.service.RateLimitingService;
-import com.rho.ims.service.TokenBlacklistService;
-import com.rho.ims.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,11 +28,9 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
 @RestController
@@ -46,6 +45,8 @@ public class AuthController {
     private final TokenBlacklistService tokenBlacklistService;
     private final RateLimitingService rateLimitingService;
     private final ClientIpResolver clientIpResolver;
+    private final OtpService otpService;
+    private final EmailOTPService emailOTPService;
 
     @Value("${jwt.access-token-expiration}")
     private long expiresIn;
@@ -56,7 +57,9 @@ public class AuthController {
                           RefreshTokenService refreshTokenService,
                           TokenBlacklistService tokenBlacklistService,
                           RateLimitingService rateLimitingService,
-                          ClientIpResolver clientIpResolver) {
+                          ClientIpResolver clientIpResolver,
+                          OtpService otpService,
+                          EmailOTPService emailOTPService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userService = userService;
@@ -64,6 +67,8 @@ public class AuthController {
         this.tokenBlacklistService = tokenBlacklistService;
         this.rateLimitingService = rateLimitingService;
         this.clientIpResolver = clientIpResolver;
+        this.otpService = otpService;
+        this.emailOTPService = emailOTPService;
     }
 
     @PostMapping("/login")
@@ -188,31 +193,59 @@ public class AuthController {
         return ResponseEntity.badRequest().body(new MessageResponse("No token provided"));
     }
 
-//    /**
-//     * Extract client IP address from request
-//     */
-//
-//    public String getClientIpAddress(HttpServletRequest request) {
-//        String remoteAddr = request.getRemoteAddr();
-//
-//        if (trustedProxies.contains(remoteAddr)) {
-//            String xForwardedFor = request.getHeader("X-Forwarded-For");
-//
-//            if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-//                String[] ips = xForwardedFor.split(",");
-//
-//                // Work backwards from the rightmost IP (closest to us)
-//                for (int i = ips.length - 1; i >= 0; i--) {
-//                    String ip = ips[i].trim();
-//
-//                    if (isValidIpAddress(ip) && !trustedProxies.contains(ip)) {
-//                        // First IP that's valid and NOT a trusted proxy
-//                        return ip;
-//                    }
-//                }
-//            }
-//        }
-//
-//        return isValidIpAddress(remoteAddr) ? remoteAddr : "unknown";
-//    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+
+        if(userService.existsByEmail(forgotPasswordDTO.getEmail())){
+
+            try {
+                String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
+
+                emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
+                return ResponseEntity.ok().body("OTP sent successfully!");
+
+            }catch (MessagingException | UnsupportedEncodingException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. Please try again");
+            }
+
+        }
+
+        return ResponseEntity.badRequest().body("Email not found");
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@Valid @RequestBody OTPRequestDTO otp){
+
+
+        boolean isValid = otpService.verifyOtp(otp.getEmail(), otp.getOtp());
+
+        if(!isValid){
+            return ResponseEntity.badRequest().body("OTP is invalid or expired");
+        }
+
+        return ResponseEntity.ok().body("OTP verified!");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordResetRequestDTO passwordResetRequestDTO){
+
+        boolean isValid = otpService.verifyOtp(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getOtp());
+
+        if(!isValid){
+            return ResponseEntity.badRequest().body("OTP is invalid or expired");
+        }
+
+        try{
+            userService.changePassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getPassword());
+
+            otpService.deleteOtp(passwordResetRequestDTO.getEmail());
+
+            return ResponseEntity.ok("Password reset successful");
+        }catch (Exception e){
+            logger.error("Failed to reset password for email {}: {}", passwordResetRequestDTO.getEmail(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password. Please try again");
+        }
+
+    }
+
 }
