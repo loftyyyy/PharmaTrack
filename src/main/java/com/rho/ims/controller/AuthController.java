@@ -1,6 +1,5 @@
 package com.rho.ims.controller;
 
-import java.util.Set;
 import com.rho.ims.api.exception.TokenRefreshException;
 import com.rho.ims.dto.auth.AuthRequest;
 import com.rho.ims.dto.auth.AuthResponse;
@@ -236,31 +235,4 @@ public class AuthController {
         return ResponseEntity.ok("Password reset successful");
     }
 
-//    /**
-//     * Extract client IP address from request
-//     */
-//
-//    public String getClientIpAddress(HttpServletRequest request) {
-//        String remoteAddr = request.getRemoteAddr();
-//
-//        if (trustedProxies.contains(remoteAddr)) {
-//            String xForwardedFor = request.getHeader("X-Forwarded-For");
-//
-//            if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-//                String[] ips = xForwardedFor.split(",");
-//
-//                // Work backwards from the rightmost IP (closest to us)
-//                for (int i = ips.length - 1; i >= 0; i--) {
-//                    String ip = ips[i].trim();
-//
-//                    if (isValidIpAddress(ip) && !trustedProxies.contains(ip)) {
-//                        // First IP that's valid and NOT a trusted proxy
-//                        return ip;
-//                    }
-//                }
-//            }
-//        }
-//
-//        return isValidIpAddress(remoteAddr) ? remoteAddr : "unknown";
-//    }
 }
