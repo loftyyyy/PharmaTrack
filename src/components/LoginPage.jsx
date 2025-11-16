@@ -35,6 +35,8 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
   })
   const [forgotPasswordError, setForgotPasswordError] = useState('')
   const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [otpResendCooldown, setOtpResendCooldown] = useState(() => {
     const saved = localStorage.getItem('pharma_forgot_password_cooldown')
     const savedTime = saved ? parseInt(saved, 10) : 0
@@ -430,7 +432,7 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
       setForgotPasswordError('')
       // Clear OTP inputs
       otpInputRefs.current.forEach(ref => ref?.clear?.() || (ref && (ref.value = '')))
-    } catch (err) {
+    } catch {
       setForgotPasswordError('❌ Failed to resend OTP. Please try again.')
     } finally {
       setForgotPasswordLoading(false)
@@ -704,8 +706,6 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
                 <div className="flex items-center mb-6 w-full">
                   {[1, 2, 3].map((step, index) => {
                     const isCompleted = forgotPasswordStep > step
-                    const isCurrent = forgotPasswordStep === step
-                    const isPending = forgotPasswordStep < step
                     
                     return (
                       <React.Fragment key={step}>
@@ -932,24 +932,49 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
                       }`}>
                         New Password
                       </label>
-                      <input
-                        type="password"
-                        required
-                        value={forgotPasswordData.password}
-                        onChange={(e) => {
-                          setForgotPasswordData({ ...forgotPasswordData, password: e.target.value })
-                          setForgotPasswordError('')
-                        }}
-                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pharma-medium ${
-                          isDarkMode 
-                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-pharma-medium' 
-                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-pharma-medium'
-                        }`}
-                        placeholder="Enter new password (min. 8 characters)"
-                        disabled={forgotPasswordLoading}
-                        autoFocus
-                        minLength={8}
-                      />
+                      <div className="relative">
+                        <input
+                          type={showNewPassword ? "text" : "password"}
+                          required
+                          value={forgotPasswordData.password}
+                          onChange={(e) => {
+                            setForgotPasswordData({ ...forgotPasswordData, password: e.target.value })
+                            setForgotPasswordError('')
+                          }}
+                          className={`w-full px-4 py-3 pr-12 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pharma-medium ${
+                            isDarkMode 
+                              ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-pharma-medium' 
+                              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-pharma-medium'
+                          }`}
+                          placeholder="Enter new password (min. 8 characters)"
+                          disabled={forgotPasswordLoading}
+                          autoFocus
+                          minLength={8}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          className={`absolute inset-y-0 right-0 pr-3 flex items-center transition-colors duration-200 ${
+                            isDarkMode 
+                              ? 'text-gray-400 hover:text-gray-300' 
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
+                          disabled={forgotPasswordLoading}
+                        >
+                          {showNewPassword ? (
+                            // Eye Slash Icon (Hide Password)
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                            </svg>
+                          ) : (
+                            // Eye Icon (Show Password)
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                          )}
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label className={`block text-sm font-medium mb-2 transition-colors duration-200 ${
@@ -957,23 +982,48 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
                       }`}>
                         Confirm Password
                       </label>
-                      <input
-                        type="password"
-                        required
-                        value={forgotPasswordData.confirmPassword}
-                        onChange={(e) => {
-                          setForgotPasswordData({ ...forgotPasswordData, confirmPassword: e.target.value })
-                          setForgotPasswordError('')
-                        }}
-                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pharma-medium ${
-                          isDarkMode 
-                            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-pharma-medium' 
-                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-pharma-medium'
-                        }`}
-                        placeholder="Confirm new password"
-                        disabled={forgotPasswordLoading}
-                        minLength={8}
-                      />
+                      <div className="relative">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          required
+                          value={forgotPasswordData.confirmPassword}
+                          onChange={(e) => {
+                            setForgotPasswordData({ ...forgotPasswordData, confirmPassword: e.target.value })
+                            setForgotPasswordError('')
+                          }}
+                          className={`w-full px-4 py-3 pr-12 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pharma-medium ${
+                            isDarkMode 
+                              ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-pharma-medium' 
+                              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-pharma-medium'
+                          }`}
+                          placeholder="Confirm new password"
+                          disabled={forgotPasswordLoading}
+                          minLength={8}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className={`absolute inset-y-0 right-0 pr-3 flex items-center transition-colors duration-200 ${
+                            isDarkMode 
+                              ? 'text-gray-400 hover:text-gray-300' 
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
+                          disabled={forgotPasswordLoading}
+                        >
+                          {showConfirmPassword ? (
+                            // Eye Slash Icon (Hide Password)
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                            </svg>
+                          ) : (
+                            // Eye Icon (Show Password)
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                          )}
+                        </button>
+                      </div>
                     </div>
                     <div className="flex gap-3">
                       <button
