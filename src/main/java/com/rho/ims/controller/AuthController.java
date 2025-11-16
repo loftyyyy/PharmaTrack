@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,6 +30,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
 @RestController
@@ -192,19 +194,23 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws MessagingException {
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
 
         if(userService.existsByEmail(forgotPasswordDTO.getEmail())){
 
-            String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
+            try {
+                String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
 
-            emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
-            return ResponseEntity.ok().body("OTP sent successfully!");
+                emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
+                return ResponseEntity.ok().body("OTP sent successfully!");
+
+            }catch (MessagingException | UnsupportedEncodingException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. Please try again");
+            }
+
         }
 
-
         return ResponseEntity.badRequest().body("Email not found");
-
     }
 
     @PostMapping("/verify-otp")
@@ -228,6 +234,7 @@ public class AuthController {
         if(!isValid){
             return ResponseEntity.badRequest().body("OTP is invalid or expired");
         }
+
         try{
             userService.changePassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getPassword());
 
