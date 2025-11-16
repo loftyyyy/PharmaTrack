@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import apiService from '../services/api'
 
@@ -18,18 +18,36 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   
-  // Forgot Password Flow State
+  // Forgot Password Flow State - Initialize from localStorage if available
   const [showForgotPassword, setShowForgotPassword] = useState(false)
-  const [forgotPasswordStep, setForgotPasswordStep] = useState(1) // 1: Email, 2: OTP, 3: Reset Password
-  const [forgotPasswordData, setForgotPasswordData] = useState({
-    email: '',
-    otp: '',
-    password: '',
-    confirmPassword: ''
+  const [forgotPasswordStep, setForgotPasswordStep] = useState(() => {
+    const saved = localStorage.getItem('pharma_forgot_password_step')
+    return saved ? parseInt(saved, 10) : 1
+  })
+  const [forgotPasswordData, setForgotPasswordData] = useState(() => {
+    const saved = localStorage.getItem('pharma_forgot_password_data')
+    return saved ? JSON.parse(saved) : {
+      email: '',
+      otp: '',
+      password: '',
+      confirmPassword: ''
+    }
   })
   const [forgotPasswordError, setForgotPasswordError] = useState('')
   const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false)
-  const [otpResendCooldown, setOtpResendCooldown] = useState(0)
+  const [otpResendCooldown, setOtpResendCooldown] = useState(() => {
+    const saved = localStorage.getItem('pharma_forgot_password_cooldown')
+    const savedTime = saved ? parseInt(saved, 10) : 0
+    // Check if cooldown has expired
+    if (savedTime > 0) {
+      const savedTimestamp = localStorage.getItem('pharma_forgot_password_cooldown_timestamp')
+      if (savedTimestamp) {
+        const elapsed = Math.floor((Date.now() - parseInt(savedTimestamp, 10)) / 1000)
+        return Math.max(0, savedTime - elapsed)
+      }
+    }
+    return 0
+  })
   const otpInputRefs = useRef([])
   
   // Persist error to localStorage whenever it changes
@@ -193,6 +211,25 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
     return '❌ Unable to sign in. Please check your credentials and try again.'
   }
 
+  // Persist forgot password state to localStorage
+  useEffect(() => {
+    if (forgotPasswordStep > 1 || forgotPasswordData.email) {
+      localStorage.setItem('pharma_forgot_password_step', forgotPasswordStep.toString())
+      localStorage.setItem('pharma_forgot_password_data', JSON.stringify(forgotPasswordData))
+    }
+  }, [forgotPasswordStep, forgotPasswordData])
+
+  // Persist OTP cooldown to localStorage
+  useEffect(() => {
+    if (otpResendCooldown > 0) {
+      localStorage.setItem('pharma_forgot_password_cooldown', otpResendCooldown.toString())
+      localStorage.setItem('pharma_forgot_password_cooldown_timestamp', Date.now().toString())
+    } else {
+      localStorage.removeItem('pharma_forgot_password_cooldown')
+      localStorage.removeItem('pharma_forgot_password_cooldown_timestamp')
+    }
+  }, [otpResendCooldown])
+
   // OTP Resend Cooldown Timer
   useEffect(() => {
     if (otpResendCooldown > 0) {
@@ -319,6 +356,12 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
         setForgotPasswordStep(1)
         setForgotPasswordData({ email: '', otp: '', password: '', confirmPassword: '' })
         setForgotPasswordError('')
+        setOtpResendCooldown(0)
+        // Clear saved state from localStorage on successful reset
+        localStorage.removeItem('pharma_forgot_password_step')
+        localStorage.removeItem('pharma_forgot_password_data')
+        localStorage.removeItem('pharma_forgot_password_cooldown')
+        localStorage.removeItem('pharma_forgot_password_cooldown_timestamp')
         // Show success message in login error area temporarily
         setError('✅ Password reset successful! Please log in with your new password.')
         setTimeout(() => setError(''), 5000)
@@ -394,13 +437,27 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
     }
   }
 
-  // Reset forgot password flow
+  // Reset forgot password flow (and clear localStorage)
   const resetForgotPasswordFlow = () => {
     setShowForgotPassword(false)
     setForgotPasswordStep(1)
     setForgotPasswordData({ email: '', otp: '', password: '', confirmPassword: '' })
     setForgotPasswordError('')
     setOtpResendCooldown(0)
+    // Clear saved state from localStorage
+    localStorage.removeItem('pharma_forgot_password_step')
+    localStorage.removeItem('pharma_forgot_password_data')
+    localStorage.removeItem('pharma_forgot_password_cooldown')
+    localStorage.removeItem('pharma_forgot_password_cooldown_timestamp')
+  }
+
+  // Handle modal close - don't reset if user accidentally clicks outside
+  const handleModalClose = (e) => {
+    // Only close if clicking the backdrop, not the modal content
+    if (e.target === e.currentTarget) {
+      setShowForgotPassword(false)
+      // Don't reset the state - it's saved in localStorage
+    }
   }
 
 
@@ -539,7 +596,26 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
             </label>
             <button
               type="button"
-              onClick={() => setShowForgotPassword(true)}
+              onClick={() => {
+                // Restore state from localStorage when opening modal
+                const savedStep = localStorage.getItem('pharma_forgot_password_step')
+                const savedData = localStorage.getItem('pharma_forgot_password_data')
+                const savedCooldown = localStorage.getItem('pharma_forgot_password_cooldown')
+                const savedCooldownTimestamp = localStorage.getItem('pharma_forgot_password_cooldown_timestamp')
+                
+                if (savedStep) {
+                  setForgotPasswordStep(parseInt(savedStep, 10))
+                }
+                if (savedData) {
+                  setForgotPasswordData(JSON.parse(savedData))
+                }
+                if (savedCooldown && savedCooldownTimestamp) {
+                  const elapsed = Math.floor((Date.now() - parseInt(savedCooldownTimestamp, 10)) / 1000)
+                  const remaining = Math.max(0, parseInt(savedCooldown, 10) - elapsed)
+                  setOtpResendCooldown(remaining)
+                }
+                setShowForgotPassword(true)
+              }}
               className="text-sm text-pharma-teal hover:text-pharma-medium transition-colors duration-200 focus:outline-none"
             >
               Forgot password?
@@ -577,7 +653,7 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
 
         {/* Forgot Password Modal */}
         {showForgotPassword && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={resetForgotPasswordFlow}>
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={handleModalClose}>
             <div 
               className={`max-w-md w-full rounded-xl shadow-2xl transition-colors duration-300 ${
                 isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
@@ -609,35 +685,50 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
                 </div>
 
                 {/* Progress Steps */}
-                <div className="flex items-center justify-between mb-6">
-                  {[1, 2, 3].map((step) => (
-                    <div key={step} className="flex items-center flex-1">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors duration-200 ${
-                        forgotPasswordStep >= step
-                          ? 'bg-pharma-teal border-pharma-teal text-white'
-                          : isDarkMode
-                            ? 'border-gray-600 text-gray-500'
-                            : 'border-gray-300 text-gray-400'
-                      }`}>
-                        {forgotPasswordStep > step ? (
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        ) : (
-                          <span className="text-sm font-semibold">{step}</span>
+                <div className="flex items-center mb-6 w-full">
+                  {[1, 2, 3].map((step, index) => {
+                    const isCompleted = forgotPasswordStep > step
+                    const isCurrent = forgotPasswordStep === step
+                    const isPending = forgotPasswordStep < step
+                    
+                    return (
+                      <React.Fragment key={step}>
+                        <div className="flex items-center flex-shrink-0 relative z-10">
+                          <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors duration-200 ${
+                            forgotPasswordStep >= step
+                              ? 'bg-pharma-teal border-pharma-teal text-white'
+                              : isDarkMode
+                                ? 'border-gray-600 text-gray-500'
+                                : 'border-gray-300 text-gray-400'
+                          }`}>
+                            {isCompleted ? (
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            ) : (
+                              <span className="text-sm font-semibold">{step}</span>
+                            )}
+                          </div>
+                        </div>
+                        {index < 2 && (
+                          <div 
+                            className={`h-1 mx-2 transition-colors duration-200 ${
+                              isCompleted
+                                ? 'bg-pharma-teal'
+                                : isDarkMode
+                                  ? 'bg-gray-700'
+                                  : 'bg-gray-200'
+                            }`} 
+                            style={{ 
+                              flex: '1 1 auto',
+                              minWidth: '30px',
+                              maxWidth: 'none'
+                            }} 
+                          />
                         )}
-                      </div>
-                      {step < 3 && (
-                        <div className={`flex-1 h-0.5 mx-2 transition-colors duration-200 ${
-                          forgotPasswordStep > step
-                            ? 'bg-pharma-teal'
-                            : isDarkMode
-                              ? 'bg-gray-700'
-                              : 'bg-gray-200'
-                        }`} />
-                      )}
-                    </div>
-                  ))}
+                      </React.Fragment>
+                    )
+                  })}
                 </div>
 
                 {/* Error Message */}
