@@ -242,7 +242,8 @@ public class AuthController {
 
             return ResponseEntity.ok("Password reset successful");
         }catch (Exception e){
-            return ResponseEntity.status(500).body("Failed to reset password. Please try again");
+            logger.error("Failed to reset password for email {}: {}", passwordResetRequestDTO.getEmail(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password. Please try again");
         }
 
     }
