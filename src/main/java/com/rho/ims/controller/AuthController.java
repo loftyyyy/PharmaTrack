@@ -6,6 +6,8 @@ import com.rho.ims.dto.auth.AuthResponse;
 import com.rho.ims.dto.message.MessageResponse;
 import com.rho.ims.dto.token.TokenRefreshRequest;
 import com.rho.ims.dto.token.TokenRefreshResponse;
+import com.rho.ims.dto.user.ForgotPasswordDTO;
+import com.rho.ims.dto.user.OTPRequestDTO;
 import com.rho.ims.dto.user.PasswordResetRequestDTO;
 import com.rho.ims.dto.user.UserResponseDTO;
 import com.rho.ims.service.*;
@@ -190,28 +192,25 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email) throws MessagingException {
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws MessagingException {
 
-        if(!userService.existsByEmail(email)){
+        if(!userService.existsByEmail(forgotPasswordDTO.getEmail())){
             return ResponseEntity.badRequest().body("Email not found");
         }
 
-        String otp = otpService.generateOtp(email);
+        String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
 
-        emailOTPService.sendEmail(email, otp);
+        emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
 
 
         return ResponseEntity.ok().body("OTP sent successfully!");
     }
 
     @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp){
+    public ResponseEntity<?> verifyOtp(@Valid @RequestBody OTPRequestDTO otp){
 
-        if(otp.isBlank()){
-            return ResponseEntity.badRequest().body("OTP not found");
-        }
 
-        boolean isValid = otpService.verifyOtp(email, otp);
+        boolean isValid = otpService.verifyOtp(otp.getEmail(), otp.getOtp());
 
         if(!isValid){
             return ResponseEntity.badRequest().body("OTP is invalid or expired");
@@ -221,7 +220,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO){
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordResetRequestDTO passwordResetRequestDTO){
 
         boolean isValid = otpService.verifyOtp(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getOtp());
 
