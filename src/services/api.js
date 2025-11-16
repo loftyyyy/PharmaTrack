@@ -264,14 +264,12 @@ class ApiService {
     },
     // OTP-based password reset flow
     forgotPassword: (email) => {
-      // Backend expects email as request parameter
-      const params = new URLSearchParams({ email })
-      return this.request(`/auth/forgot-password?${params}`, { method: 'POST' })
+      // Backend expects ForgotPasswordDTO with email in request body
+      return this.post('/auth/forgot-password', { email })
     },
     verifyOtp: (email, otp) => {
-      // Backend expects email and otp as request parameters
-      const params = new URLSearchParams({ email, otp })
-      return this.request(`/auth/verify-otp?${params}`, { method: 'POST' })
+      // Backend expects OTPRequestDTO with email and otp in request body
+      return this.post('/auth/verify-otp', { email, otp })
     },
     resetPassword: (email, otp, password) => {
       // Backend expects PasswordResetRequestDTO with email, otp, and password
