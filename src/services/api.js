@@ -240,8 +240,21 @@ class ApiService {
       // Properly format the refresh token request according to backend expectations
       return this.post('/auth/refresh', { refreshToken })
     },
-    forgotPassword: (email) => this.post('/auth/forgot-password', { email }),
-    resetPassword: (token, password) => this.post('/auth/reset-password', { token, password }),
+    // OTP-based password reset flow
+    forgotPassword: (email) => {
+      // Backend expects email as request parameter
+      const params = new URLSearchParams({ email })
+      return this.request(`/auth/forgot-password?${params}`, { method: 'POST' })
+    },
+    verifyOtp: (email, otp) => {
+      // Backend expects email and otp as request parameters
+      const params = new URLSearchParams({ email, otp })
+      return this.request(`/auth/verify-otp?${params}`, { method: 'POST' })
+    },
+    resetPassword: (email, otp, password) => {
+      // Backend expects PasswordResetRequestDTO with email, otp, and password
+      return this.post('/auth/reset-password', { email, otp, password })
+    },
   }
 
   // User management endpoints (v1 API - requires Authorization)
