@@ -17,9 +17,9 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
   
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
   
   // Forgot Password Flow State - Initialize from localStorage if available
-  const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [forgotPasswordStep, setForgotPasswordStep] = useState(() => {
     const saved = localStorage.getItem('pharma_forgot_password_step')
     return saved ? parseInt(saved, 10) : 1
