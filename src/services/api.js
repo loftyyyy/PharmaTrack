@@ -117,8 +117,30 @@ class ApiService {
       
       // Handle different response types
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`)
+        // Try to get error message from response body
+        // Backend may return JSON or plain text (e.g., "OTP is invalid or expired")
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`
+        
+        try {
+          // Get response as text first (works for both JSON and plain text)
+          const responseText = await response.text()
+          
+          if (responseText && responseText.trim()) {
+            // Try to parse as JSON, if it fails, use as plain text
+            try {
+              const errorData = JSON.parse(responseText)
+              errorMessage = errorData.message || errorData.error || errorData || errorMessage
+            } catch {
+              // Not JSON, use as plain text
+              errorMessage = responseText.trim()
+            }
+          }
+        } catch (textError) {
+          // If reading response fails, use status code
+          console.warn('Could not extract error message from response', textError)
+        }
+        
+        throw new Error(errorMessage)
       }
 
       // Handle empty responses (like 204 No Content)
@@ -240,8 +262,19 @@ class ApiService {
       // Properly format the refresh token request according to backend expectations
       return this.post('/auth/refresh', { refreshToken })
     },
-    forgotPassword: (email) => this.post('/auth/forgot-password', { email }),
-    resetPassword: (token, password) => this.post('/auth/reset-password', { token, password }),
+    // OTP-based password reset flow
+    forgotPassword: (email) => {
+      // Backend expects ForgotPasswordDTO with email in request body
+      return this.post('/auth/forgot-password', { email })
+    },
+    verifyOtp: (email, otp) => {
+      // Backend expects OTPRequestDTO with email and otp in request body
+      return this.post('/auth/verify-otp', { email, otp })
+    },
+    resetPassword: (email, otp, password) => {
+      // Backend expects PasswordResetRequestDTO with email, otp, and password
+      return this.post('/auth/reset-password', { email, otp, password })
+    },
   }
 
   // User management endpoints (v1 API - requires Authorization)
