@@ -18,12 +18,8 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
-  const [forgotEmail, setForgotEmail] = useState('')
-  const [forgotStatus, setForgotStatus] = useState({ success: '', error: '' })
-  const [isForgotSubmitting, setIsForgotSubmitting] = useState(false)
   
   // Forgot Password Flow State - Initialize from localStorage if available
-  const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [forgotPasswordStep, setForgotPasswordStep] = useState(() => {
     const saved = localStorage.getItem('pharma_forgot_password_step')
     return saved ? parseInt(saved, 10) : 1
@@ -843,7 +839,7 @@ const LoginPage = ({ isDarkMode, isSystemTheme, toggleDarkMode }) => {
 
         {/* Forgot Password Modal */}
         {showForgotPassword && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={handleModalClose}>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={handleModalClose}>
             <div 
               className={`max-w-md w-full rounded-xl shadow-2xl transition-colors duration-300 ${
                 isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
