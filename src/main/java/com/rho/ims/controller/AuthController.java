@@ -194,16 +194,17 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws MessagingException {
 
-        if(!userService.existsByEmail(forgotPasswordDTO.getEmail())){
-            return ResponseEntity.badRequest().body("Email not found");
+        if(userService.existsByEmail(forgotPasswordDTO.getEmail())){
+
+            String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
+
+            emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
+            return ResponseEntity.ok().body("OTP sent successfully!");
         }
 
-        String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
 
-        emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
+        return ResponseEntity.badRequest().body("Email not found");
 
-
-        return ResponseEntity.ok().body("OTP sent successfully!");
     }
 
     @PostMapping("/verify-otp")
@@ -227,11 +228,16 @@ public class AuthController {
         if(!isValid){
             return ResponseEntity.badRequest().body("OTP is invalid or expired");
         }
-        userService.changePassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getPassword());
+        try{
+            userService.changePassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getPassword());
 
-        otpService.deleteOtp(passwordResetRequestDTO.getEmail());
+            otpService.deleteOtp(passwordResetRequestDTO.getEmail());
 
-        return ResponseEntity.ok("Password reset successful");
+            return ResponseEntity.ok("Password reset successful");
+        }catch (Exception e){
+            return ResponseEntity.status(500).body("Failed to reset password. Please try again");
+        }
+
     }
 
 }
