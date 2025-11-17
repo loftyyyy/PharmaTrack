@@ -174,15 +174,11 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
-
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
             String accessToken = authHeader.substring(7);
-
             try {
-
                 String username = jwtUtil.extractUsername(accessToken);
                 // Blacklist the access token
                 tokenBlacklistService.blacklistToken(accessToken);
@@ -191,12 +187,9 @@ public class AuthController {
 
                 logger.info("Successful logout for user: {}", username);
                 return ResponseEntity.ok(new MessageResponse("User logged out successfully!"));
-
             } catch (Exception e) {
-
                 logger.warn("Logout failed with invalid token", e);
                 return ResponseEntity.badRequest().body(new MessageResponse("Invalid token"));
-
             }
         }
 
