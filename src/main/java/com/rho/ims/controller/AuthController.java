@@ -159,11 +159,15 @@ public class AuthController {
             return ResponseEntity.ok(new TokenRefreshResponse(newAccessToken, newRefreshToken, expiresIn));
 
         } catch (TokenRefreshException e) {
+
             logger.warn("Token refresh failed: {}", e.getMessage());
             throw e;
+
         } catch (Exception e) {
+
             logger.error("Unexpected error during token refresh", e);
             throw new TokenRefreshException(refreshToken, "Invalid refresh token");
+
         }
 
     }
