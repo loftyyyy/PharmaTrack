@@ -194,9 +194,7 @@ public class AuthController {
         }
 
         logger.warn("Logout attempt without token");
-
         return ResponseEntity.badRequest().body(new MessageResponse("No token provided"));
-
     }
 
     @PostMapping("/forgot-password")
