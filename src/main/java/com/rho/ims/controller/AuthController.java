@@ -201,22 +201,14 @@ public class AuthController {
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
 
         if(userService.existsByEmail(forgotPasswordDTO.getEmail())){
-
             try {
-
                 String otp = otpService.generateOtp(forgotPasswordDTO.getEmail());
-
                 emailOTPService.sendEmail(forgotPasswordDTO.getEmail(), otp);
                 return ResponseEntity.ok().body("OTP sent successfully!");
-
             }catch (MessagingException | UnsupportedEncodingException e) {
-
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. Please try again");
-
             }
-
         }
-
         return ResponseEntity.badRequest().body("Email not found");
     }
 
