@@ -214,8 +214,6 @@ public class AuthController {
 
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@Valid @RequestBody OTPRequestDTO otp){
-
-
         boolean isValid = otpService.verifyOtp(otp.getEmail(), otp.getOtp());
 
         if(!isValid){
@@ -223,7 +221,6 @@ public class AuthController {
         }
 
         return ResponseEntity.ok().body("OTP verified!");
-
     }
 
     @PostMapping("/reset-password")
