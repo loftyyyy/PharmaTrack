@@ -239,7 +239,6 @@ public class AuthController {
             logger.error("Failed to reset password for email {}: {}", passwordResetRequestDTO.getEmail(), e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password. Please try again");
         }
-
     }
 
 }
