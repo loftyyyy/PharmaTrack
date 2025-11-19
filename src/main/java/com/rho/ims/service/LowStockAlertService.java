@@ -32,15 +32,19 @@ public class LowStockAlertService {
 
     @Transactional
     public void updateOrCreateLowStockAlerts(){
+
         List<ProductBatch> productBatch = productBatchRepository.findAll();
 
         for(ProductBatch pb : productBatch){
+
             if(pb.getQuantity() <= pb.getProduct().getMinimumStock()){
+
                 Severity severity = assessSeverity(pb);
 
                 Optional<LowStockAlert> existingAlert = lowStockAlertRepository.findByProductBatch(pb);
 
                 if(existingAlert.isEmpty()){
+
                     LowStockAlert lowStockAlert = LowStockAlert.builder()
                             .productBatch(pb)
                             .severity(severity)
@@ -49,7 +53,9 @@ public class LowStockAlertService {
                             .build();
 
                     lowStockAlertRepository.save(lowStockAlert);
+
                 }else{
+
                     LowStockAlert lowStockAlert = existingAlert.get();
 
                     if (severity.compareTo(lowStockAlert.getSeverity()) > 0 || Boolean.TRUE.equals(lowStockAlert.getResolved())) {
