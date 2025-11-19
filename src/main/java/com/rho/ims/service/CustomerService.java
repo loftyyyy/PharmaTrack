@@ -34,8 +34,8 @@ public class CustomerService {
         customer.setIsActive(Boolean.TRUE);
         customer.setAddressProvince(customerCreateDTO.getAddressProvince());
         customer.setAddressPostalCode(customerCreateDTO.getAddressPostalCode());
-        return customerRepository.save(customer);
 
+        return customerRepository.save(customer);
     }
 
     public List<Customer> getAll() {
@@ -43,12 +43,14 @@ public class CustomerService {
     }
 
     public Customer getCustomer(Long id){
+
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
 
         return customer;
     }
 
     public Customer updateCustomer(CustomerUpdateDTO customerUpdateDTO, Long id){
+
         Optional<Customer> existing = customerRepository.findByEmail(customerUpdateDTO.getEmail());
 
         if(existing.isPresent() && !existing.get().getId().equals(id)) {
@@ -64,22 +66,29 @@ public class CustomerService {
         customer.setAddressProvince(customerUpdateDTO.getAddressProvince());
         customer.setAddressPostalCode(customerUpdateDTO.getAddressPostalCode());
         customer.setIsActive(customerUpdateDTO.getIsActive());
+
         return customerRepository.save(customer);
     }
 
     public List<Customer> getActiveCustomers(){
+
         List<Customer> activeCustomers = customerRepository.findByIsActive(Boolean.TRUE);
         return activeCustomers;
+
     }
 
     public void deactivateCustomer(Long id){
+
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
         customer.setIsActive(Boolean.FALSE);
+
         customerRepository.save(customer);
     }
 
     public Customer getWalkInCustomer(){
+
         Customer walkInCustomer = customerRepository.findByName("Walk-In");
+
         return walkInCustomer;
     }
 
