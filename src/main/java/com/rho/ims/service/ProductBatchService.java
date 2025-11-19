@@ -24,6 +24,7 @@ import java.util.Optional;
 
 @Service
 public class ProductBatchService {
+
     private final ProductBatchRepository productBatchRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
@@ -100,6 +101,7 @@ public class ProductBatchService {
 
     @Transactional
     public ProductBatchResult findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
+
         Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
 
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
@@ -130,6 +132,7 @@ public class ProductBatchService {
     }
 
     public ProductBatch updateProductBatch(ProductBatchUpdateDTO productBatchUpdateDTO, Long id){
+
         ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
 
         productBatch.setQuantity(productBatchUpdateDTO.getQuantity());
@@ -141,6 +144,7 @@ public class ProductBatchService {
         productBatch.setBatchStatus(productBatchUpdateDTO.getBatchStatus());
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         productBatch.setUpdatedBy(user);
+
         return productBatchRepository.save(productBatch);
 
     }
