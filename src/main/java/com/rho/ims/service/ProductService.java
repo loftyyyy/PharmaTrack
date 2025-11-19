@@ -34,6 +34,7 @@ public class ProductService {
     }
 
     public Product saveProduct(ProductCreateDTO productCreateDTO){
+
         if (productRepository.existsByBarcode((productCreateDTO.getBarcode()))){
             throw new DuplicateCredentialException("barcode", productCreateDTO.getBarcode());
         }
@@ -70,9 +71,7 @@ public class ProductService {
         product.setBatchManaged(Boolean.FALSE);
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-
         product.setCreatedBy(user);
-
 
         return productRepository.save(product);
 
@@ -84,10 +83,10 @@ public class ProductService {
 
     public Product getProduct(Long id){
         return productRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("product","Product doesn't exist"));
-
     }
 
     public Product updateProduct(Long id, ProductUpdateDTO productUpdateDTO){
+
         Category category = categoryRepository.findById(productUpdateDTO.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("category","category not found"));
         Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product", "product not found"));
         Optional<Product>  existing = productRepository.findByBarcode(productUpdateDTO.getBarcode());
@@ -122,6 +121,7 @@ public class ProductService {
 
 
     private String generateSKU(ProductCreateDTO productCreateDTO){
+
       String nameAbbr = productCreateDTO.getName().replaceAll("[^A-Za-z]", "")
                 .substring(0, Math.min(4, productCreateDTO.getName().length()))
                 .toUpperCase();
@@ -137,6 +137,7 @@ public class ProductService {
                 .toUpperCase();
 
         return String.format("%s-%s-%s-%s", nameAbbr, strength, formAbbr, brandAbbr);
+
     }
 
 }
