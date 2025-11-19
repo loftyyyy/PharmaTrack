@@ -73,5 +73,6 @@ public class EmailOTPService {
         helper.setText(htmlBody.replace("${otp}", otp), true);
 
         mailSender.send(message);
+
     }
 }
