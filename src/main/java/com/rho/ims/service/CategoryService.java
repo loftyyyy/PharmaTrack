@@ -39,17 +39,18 @@ public class CategoryService {
         category.setActive(Boolean.TRUE);
 
         return categoryRepository.save(category);
-
     }
 
     public Category updateCategory(Long id, CategoryUpdateDTO categoryUpdateDTO){
 
         Category category = categoryRepository.findById(id).orElseThrow( () -> new RuntimeException("Category doesn't exist"));
         Optional<Category> existing = categoryRepository.findByName(categoryUpdateDTO.getName());
+
         if(existing.isPresent() && !existing.get().getId().equals(id)){
             throw new DuplicateCredentialException("Name", categoryUpdateDTO.getName());
 
         }
+
         category.setName(categoryUpdateDTO.getName());
         category.setActive(categoryUpdateDTO.getActive());
 
