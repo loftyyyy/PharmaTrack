@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class RateLimitingService {
+
     private static final Logger logger = LoggerFactory.getLogger(RateLimitingService.class);
 
     // Store buckets with last access time
@@ -60,6 +61,7 @@ public class RateLimitingService {
         logger.info("Rate limiting initialized - Login: {} attempts per {} seconds, Refresh: {} attempts per {} seconds",
                 loginAttempts, loginWindowSeconds, refreshAttempts, refreshWindowSeconds);
         logger.info("Token cleanup enabled: {}", cleanupEnabled);
+
     }
 
     // Inner class to track last access
@@ -77,6 +79,7 @@ public class RateLimitingService {
     @Scheduled(fixedRateString = "${security.token-cleanup.interval:3600000}")
     @ConditionalOnProperty(name = "security.token-cleanup.enabled", havingValue = "true", matchIfMissing = true)
     public void cleanupOldBuckets() {
+
         long cutoffTime = System.currentTimeMillis() - (retentionHours * 3600000); // 2 hours old
         int removedCount = 0;
 
@@ -92,9 +95,11 @@ public class RateLimitingService {
         if (removedCount > 0) {
             logger.info("Cleanup completed: removed {} stale rate limit buckets", removedCount);
         }
+
     }
 
     public boolean isLoginAllowed(String clientIp) {
+
         BucketEntry entry = buckets.computeIfAbsent(clientIp + "_login",
                 k -> new BucketEntry(Bucket.builder().addLimit(loginBandwidth).build()));
         entry.lastAccessTime.set(System.currentTimeMillis());
@@ -104,9 +109,11 @@ public class RateLimitingService {
                     clientIp, loginAttempts, loginWindowSeconds);
         }
         return allowed;
+
     }
 
     public boolean isRefreshAllowed(String clientIp) {
+
         BucketEntry entry = buckets.computeIfAbsent(clientIp + "_refresh",
                 k -> new BucketEntry(Bucket.builder().addLimit(refreshBandwidth).build()));
         entry.lastAccessTime.set(System.currentTimeMillis());
@@ -116,6 +123,7 @@ public class RateLimitingService {
                     clientIp, refreshAttempts, refreshWindowSeconds);
         }
         return allowed;
+
     }
 
     public long getRemainingLoginAttempts(String clientIp) {
