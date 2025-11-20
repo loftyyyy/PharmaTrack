@@ -32,6 +32,7 @@ public class StockAdjustmentService {
 
     @Transactional
     public StockAdjustment saveStockAdjustment(StockAdjustmentCreateDTO stockAdjustmentCreateDTO) {
+
         Product product = productRepository.findById(stockAdjustmentCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         ProductBatch productBatch = productBatchRepository.findById(stockAdjustmentCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
 
@@ -72,6 +73,7 @@ public class StockAdjustmentService {
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setProduct(product);
         inventoryLog.setProductBatch(productBatch);
+
         if (stockAdjustmentCreateDTO.getAdjustmentType() == AdjustmentType.CORRECTION) {
             inventoryLog.setReason(
                     String.format("Manual Stock Correction: adjusted from %d → %d (%s)", oldQuantity, newQuantity, stockAdjustmentCreateDTO.getReason())
@@ -79,6 +81,7 @@ public class StockAdjustmentService {
         } else {
             inventoryLog.setReason("Manual Stock Adjustment: " + stockAdjustmentCreateDTO.getReason());
         }
+
         inventoryLog.setPurchase(null);
         inventoryLog.setSale(null);
         inventoryLog.setChangeType(ChangeType.ADJUST);
@@ -88,6 +91,7 @@ public class StockAdjustmentService {
         inventoryLogRepository.save(inventoryLog);
 
         return stockAdjustment;
+        
     }
 
     public List<StockAdjustment> getAll() {

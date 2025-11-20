@@ -197,7 +197,7 @@ public class SaleService {
         sale.setVoidedAt(LocalDateTime.now());
 
         return saleRepository.save(sale);
-        
+
     }
 
 
