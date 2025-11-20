@@ -72,7 +72,6 @@ public class PurchaseService {
 
         purchaseRepository.save(purchase);
 
-
         for(PurchaseItemCreateDTO purchaseItem : purchaseCreateDTO.getPurchaseItems()){
 
 
@@ -88,7 +87,6 @@ public class PurchaseService {
             if(!product.getActive()){
                 throw new IllegalStateException("Product is inactive");
             }
-
 
             LocalDate manufacturingDate = purchaseItem.getManufacturingDate();
             LocalDate expiryDate = purchaseItem.getExpiryDate();
@@ -141,20 +139,20 @@ public class PurchaseService {
         purchase.setGrandTotal(grandTotal);
 
         return purchaseRepository.save(purchase);
+
     }
 
     public List<Purchase> getAll(){
-
         return purchaseRepository.findAll();
     }
 
     public Purchase getPurchase(Long id){
-
         return purchaseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
     }
 
     @Transactional
     public Purchase updatePurchase(PurchaseUpdateDTO purchaseUpdateDTO, Long id) {
+
         Purchase purchase = purchaseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("purchase not found"));
 
@@ -183,6 +181,7 @@ public class PurchaseService {
         purchase.setUpdatedBy(user);
 
         return purchaseRepository.save(purchase);
+
     }
 
     public void deletePurchase(Long id){
@@ -193,6 +192,7 @@ public class PurchaseService {
 
     @Transactional
     public Purchase confirmPurchase(Long id) {
+        
         System.out.println("CONFIRMED PURCHASE");
         Purchase purchase = purchaseRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("purchase not found"));
 
