@@ -109,6 +109,7 @@ public class SaleService {
 
     @Transactional
     public Sale confirmSale(Long saleId){
+
         Sale sale = saleRepository.findById(saleId).orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
 
         for(SaleItem saleItem : sale.getSaleItems()){
@@ -134,11 +135,11 @@ public class SaleService {
         sale.setStatus(SaleStatus.CONFIRMED);
         return saleRepository.save(sale);
 
-
     }
 
     @Transactional
     public Sale cancelSale(Long saleId){
+
         Sale sale = saleRepository.findById(saleId).orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
 
         if(sale.getStatus() != SaleStatus.PENDING){
@@ -151,10 +152,12 @@ public class SaleService {
         sale.setUpdatedBy(user);
 
         return saleRepository.save(sale);
+
     }
 
     @Transactional
     public Sale voidSale(Long saleId, SaleVoidDTO saleVoidDTO) {
+
         Sale sale = saleRepository.findById(saleId).orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
 
         if(sale.getStatus() != SaleStatus.CONFIRMED){
@@ -180,8 +183,10 @@ public class SaleService {
             inventoryLog.setChangeType(ChangeType.IN);
             inventoryLog.setPurchase(null);
             inventoryLog.setReason("Sale voided: " + saleVoidDTO.getVoidReason());
+
             User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
             inventoryLog.setCreatedBy(user);
+
             inventoryLogRepository.save(inventoryLog);
         }
 
@@ -192,6 +197,7 @@ public class SaleService {
         sale.setVoidedAt(LocalDateTime.now());
 
         return saleRepository.save(sale);
+        
     }
 
 
