@@ -35,6 +35,7 @@ public class RefreshTokenService {
     }
 
     public boolean isRefreshTokenValid(String refreshToken) {
+
         Optional<RefreshToken> tokenEntity = refreshTokenRepository.findByToken(refreshToken);
 
         if (tokenEntity.isEmpty()) {
