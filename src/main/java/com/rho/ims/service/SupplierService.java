@@ -25,6 +25,7 @@ public class SupplierService {
     }
 
     public Supplier saveSupplier(SupplierCreateDTO supplierCreateDTO) {
+
         String normalizedName = supplierCreateDTO.getName().trim();
 
         if (supplierRepository.existsByNameIgnoreCase(normalizedName)) {
@@ -49,12 +50,14 @@ public class SupplierService {
         supplier.setSupplierCode(supplierCode);
 
         User user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
         if (user == null) {
             throw new ResourceNotFoundException("User doesn't exist, make sure you are logged in");
         }
         supplier.setCreatedBy(user);
 
         return supplierRepository.save(supplier);
+        
     }
 
     public List<Supplier> getAll(){

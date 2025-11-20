@@ -91,7 +91,7 @@ public class StockAdjustmentService {
         inventoryLogRepository.save(inventoryLog);
 
         return stockAdjustment;
-        
+
     }
 
     public List<StockAdjustment> getAll() {
