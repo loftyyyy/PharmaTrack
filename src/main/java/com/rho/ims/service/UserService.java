@@ -71,6 +71,7 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserUpdateDTO userUpdateDTO) {
+
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("user", id.toString()));
 
@@ -114,6 +115,7 @@ public class UserService {
         }
 
         return userRepository.save(existingUser);
+        
     }
 
     public boolean existsByEmail(String email){
