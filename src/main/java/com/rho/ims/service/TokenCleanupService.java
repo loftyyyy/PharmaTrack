@@ -25,6 +25,7 @@ public class TokenCleanupService {
     @Scheduled(fixedRate = 3600000) // Every hour
     @Transactional
     public void cleanupExpiredTokens() {
+
         try {
             LocalDateTime now = LocalDateTime.now();
             int deletedCount = refreshTokenRepository.deleteExpiredTokens(now);

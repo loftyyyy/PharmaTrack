@@ -57,7 +57,7 @@ public class SupplierService {
         supplier.setCreatedBy(user);
 
         return supplierRepository.save(supplier);
-        
+
     }
 
     public List<Supplier> getAll(){
