@@ -34,6 +34,7 @@ public class RoleService {
         Role newRole = new Role();
         newRole.setName(role.getName());
         return roleRepository.save(newRole);
+
     }
 
     public List<Role> getAll() {
@@ -47,6 +48,7 @@ public class RoleService {
     }
 
     public Role updateRole(Long id, RoleUpdateDTO roleUpdateDTO){
+
         Role role = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
         if(roleRepository.existsByName(roleUpdateDTO.getName()) || role.getName().equals(roleUpdateDTO.getName())){
             throw new RuntimeException("Name Already Exists!");
