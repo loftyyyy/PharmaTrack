@@ -22,7 +22,6 @@ public class CategoryService {
 
     public List<Category> getAll(){
         return categoryRepository.findAll();
-
     }
 
     public Category getCategory(long id){
@@ -42,7 +41,6 @@ public class CategoryService {
     }
 
     public Category updateCategory(Long id, CategoryUpdateDTO categoryUpdateDTO){
-
         Category category = categoryRepository.findById(id).orElseThrow( () -> new RuntimeException("Category doesn't exist"));
         Optional<Category> existing = categoryRepository.findByName(categoryUpdateDTO.getName());
 
@@ -55,7 +53,6 @@ public class CategoryService {
         category.setActive(categoryUpdateDTO.getActive());
 
         return categoryRepository.save(category);
-
     }
 
 
