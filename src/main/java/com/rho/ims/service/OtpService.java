@@ -39,7 +39,6 @@ public class OtpService {
     }
 
     public boolean verifyOtp(String email, String otp){
-
         String key = "otp:" + email;
 
         Object value = redisTemplate.opsForValue().get(key);
@@ -50,14 +49,11 @@ public class OtpService {
         }
 
         return value.equals(otp);
-
     }
 
     public void deleteOtp(String email){
-
         String key = "otp:" + email;
         redisTemplate.delete(key);
-
     }
 
 }
