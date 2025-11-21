@@ -29,7 +29,6 @@ public class InventoryLogService {
 
 
     public InventoryLog saveInventoryLog(InventoryLogCreateDTO inventoryLogCreateDTO){
-
         Purchase purchase = purchaseRepository.findById(inventoryLogCreateDTO.getPurchaseId()).orElseThrow(() -> new ResourceNotFoundException("Purchase not found"));
         Product product = productRepository.findById(inventoryLogCreateDTO.getProductId()).orElseThrow();
         Sale sale = saleRepository.findById(inventoryLogCreateDTO.getSaleId()).orElseThrow();
@@ -48,7 +47,6 @@ public class InventoryLogService {
         inventoryLog.setCreatedBy(user);
 
         return inventoryLogRepository.save(inventoryLog);
-
     }
 
     public List<InventoryLog> getAll(){
@@ -56,11 +54,9 @@ public class InventoryLogService {
     }
 
     public InventoryLog getInventoryLog(Long id){
-
         InventoryLog inventoryLog = inventoryLogRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Inventory log not found"));
 
         return inventoryLog;
-
     }
 
 
