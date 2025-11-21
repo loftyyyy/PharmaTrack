@@ -38,7 +38,6 @@ public class ProductBatchService {
     }
 
     public ProductBatch saveProductBatch(ProductBatchCreateDTO productBatchCreateDTO) {
-
         if (productBatchRepository.existsByProductIdAndBatchNumber(
                 productBatchCreateDTO.getProductId(),
                 productBatchCreateDTO.getBatchNumber())) {
@@ -101,7 +100,6 @@ public class ProductBatchService {
 
     @Transactional
     public ProductBatchResult findOrCreateProductBatch(ProductBatchCreateDTO productBatchCreateDTO){
-
         Optional<ProductBatch> existing = productBatchRepository.findByProductIdAndBatchNumberAndManufacturingDateAndExpiryDate(productBatchCreateDTO.getProductId(), productBatchCreateDTO.getBatchNumber(), productBatchCreateDTO.getManufacturingDate(), productBatchCreateDTO.getExpiryDate());
 
         Product product = productRepository.findById(productBatchCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("product", productBatchCreateDTO.getProductId().toString()));
@@ -116,7 +114,6 @@ public class ProductBatchService {
         }else{
             return new ProductBatchResult(saveProductBatch(productBatchCreateDTO),true);
         }
-
     }
 
     public List<ProductBatch> getAll(){
@@ -132,7 +129,6 @@ public class ProductBatchService {
     }
 
     public ProductBatch updateProductBatch(ProductBatchUpdateDTO productBatchUpdateDTO, Long id){
-
         ProductBatch productBatch = productBatchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product batch", id.toString()));
 
         productBatch.setQuantity(productBatchUpdateDTO.getQuantity());
@@ -146,7 +142,6 @@ public class ProductBatchService {
         productBatch.setUpdatedBy(user);
 
         return productBatchRepository.save(productBatch);
-
     }
 
     public boolean isExistingProductIdAndBatchNumber(ProductBatchCheckRequestDTO productBatchCheckRequestDTO) {
