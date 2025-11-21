@@ -192,7 +192,6 @@ public class PurchaseService {
 
     @Transactional
     public Purchase confirmPurchase(Long id) {
-
         System.out.println("CONFIRMED PURCHASE");
         Purchase purchase = purchaseRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("purchase not found"));
 
@@ -261,7 +260,6 @@ public class PurchaseService {
         purchase.setUpdatedBy(user);
 
         return purchaseRepository.save(purchase);
-
     }
 
     public Purchase cancelPurchase(Long id) {
@@ -297,6 +295,5 @@ public class PurchaseService {
         purchase.setUpdatedBy(user);
 
         return purchaseRepository.save(purchase);
-
     }
 }
