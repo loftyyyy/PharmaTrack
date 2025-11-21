@@ -26,14 +26,12 @@ import java.util.List;
 
     public List<PurchaseItem> getAll(){
         return purchaseItemRepository.findAll();
-
     }
 
     public PurchaseItem getPurchaseItem(Long id){
         PurchaseItem purchaseItem = purchaseItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Purchase item not found"));
 
         return purchaseItem;
-
     }
 
     public PurchaseItem updatePurchaseItem(PurchaseItemUpdateDTO purchaseItemUpdateDTO, Long id){
@@ -43,12 +41,10 @@ import java.util.List;
         purchaseItem.setUnitPrice(purchaseItemUpdateDTO.getUnitPrice());
 
         return purchaseItemRepository.save(purchaseItem);
-
     }
 
     public void deletePurchaseItem(Long id){
         PurchaseItem purchaseItem = purchaseItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Purchase item not found"));
         purchaseItemRepository.delete(purchaseItem);
-
     }
 }
