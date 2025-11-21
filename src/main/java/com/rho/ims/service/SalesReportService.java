@@ -13,8 +13,5 @@ public class SalesReportService {
         this.saleRepository = saleRepository;
         this.saleItemRepository = saleItemRepository;
     }
-
-
-
 }
 
