@@ -30,7 +30,6 @@ public class ProductSupplierService {
     }
 
     public ProductSupplier saveProductSupplier(ProductSupplierCreateDTO productSupplierCreateDTO){
-
         Product product = productRepository.findById(productSupplierCreateDTO.getProductId()).orElseThrow( () -> new ResourceNotFoundException("product", productSupplierCreateDTO.getProductId().toString()));
         Supplier supplier = supplierRepository.findById(productSupplierCreateDTO.getSupplierId()).orElseThrow( () -> new ResourceNotFoundException("supplier", productSupplierCreateDTO.getSupplierId().toString()));
 
@@ -79,11 +78,9 @@ public class ProductSupplierService {
 
     public ProductSupplier getProductSupplier(Long id){
         return productSupplierRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("product supplier", id.toString()));
-
     }
 
     public ProductSupplier updateProductSupplier(ProductSupplierUpdateDTO productSupplierUpdateDTO, Long id){
-
         ProductSupplier productSupplier = productSupplierRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product supplier", id.toString()));
 
         Optional<ProductSupplier> existing = productSupplierRepository.findBySupplierIdAndSupplierProductCode(productSupplier.getSupplier().getId(), productSupplierUpdateDTO.getSupplierProductCode());
@@ -96,7 +93,6 @@ public class ProductSupplierService {
         productSupplier.setSupplierProductCode(productSupplierUpdateDTO.getSupplierProductCode());
 
         return productSupplierRepository.save(productSupplier);
-
     }
 
 }
