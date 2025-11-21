@@ -32,7 +32,6 @@ public class StockAdjustmentService {
 
     @Transactional
     public StockAdjustment saveStockAdjustment(StockAdjustmentCreateDTO stockAdjustmentCreateDTO) {
-
         Product product = productRepository.findById(stockAdjustmentCreateDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         ProductBatch productBatch = productBatchRepository.findById(stockAdjustmentCreateDTO.getProductBatchId()).orElseThrow(() -> new ResourceNotFoundException("Product batch not found"));
 
@@ -91,7 +90,6 @@ public class StockAdjustmentService {
         inventoryLogRepository.save(inventoryLog);
 
         return stockAdjustment;
-
     }
 
     public List<StockAdjustment> getAll() {
