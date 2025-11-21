@@ -25,7 +25,6 @@ public class SupplierService {
     }
 
     public Supplier saveSupplier(SupplierCreateDTO supplierCreateDTO) {
-
         String normalizedName = supplierCreateDTO.getName().trim();
 
         if (supplierRepository.existsByNameIgnoreCase(normalizedName)) {
@@ -57,7 +56,6 @@ public class SupplierService {
         supplier.setCreatedBy(user);
 
         return supplierRepository.save(supplier);
-
     }
 
     public List<Supplier> getAll(){
@@ -66,7 +64,6 @@ public class SupplierService {
 
     public Supplier getSupplier(Long id){
         return supplierRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("supplier", id.toString()));
-
     }
 
     public Supplier updateSupplier(SupplierUpdateDTO supplierUpdateDTO, Long id){
@@ -91,9 +88,6 @@ public class SupplierService {
         supplier.setUpdatedBy(user);
 
         return supplierRepository.save(supplier);
-
-
-
     }
 
     public static String generateSupplierCode(String supplierName) {
