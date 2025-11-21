@@ -20,7 +20,6 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(CustomerCreateDTO customerCreateDTO) {
-
         if(customerRepository.existsByEmail(customerCreateDTO.getEmail())){
             throw new DuplicateCredentialException("Email already registered");
         }
@@ -43,14 +42,12 @@ public class CustomerService {
     }
 
     public Customer getCustomer(Long id){
-
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
 
         return customer;
     }
 
     public Customer updateCustomer(CustomerUpdateDTO customerUpdateDTO, Long id){
-
         Optional<Customer> existing = customerRepository.findByEmail(customerUpdateDTO.getEmail());
 
         if(existing.isPresent() && !existing.get().getId().equals(id)) {
@@ -71,14 +68,11 @@ public class CustomerService {
     }
 
     public List<Customer> getActiveCustomers(){
-
         List<Customer> activeCustomers = customerRepository.findByIsActive(Boolean.TRUE);
         return activeCustomers;
-
     }
 
     public void deactivateCustomer(Long id){
-
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
         customer.setIsActive(Boolean.FALSE);
 
@@ -86,19 +80,16 @@ public class CustomerService {
     }
 
     public Customer getWalkInCustomer(){
-
         Customer walkInCustomer = customerRepository.findByName("Walk-In");
 
         return walkInCustomer;
     }
 
     public void activateCustomer(Long id){
-
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
         customer.setIsActive(Boolean.TRUE);
 
         customerRepository.save(customer);
-
     }
 
 
