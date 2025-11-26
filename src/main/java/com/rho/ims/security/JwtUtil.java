@@ -32,11 +32,13 @@ public class JwtUtil {
 
     public String generateAccessToken(String username) {
         logger.info("Access Token Generated");
+
         return generateToken(username, ACCESS_TOKEN_EXPIRATION, "ACCESS");
     }
 
     public String generateRefreshToken(String username) {
         logger.info("Refresh Token Generated");
+
         return generateToken(username, REFRESH_TOKEN_EXPIRATION, "REFRESH");
     }
 
