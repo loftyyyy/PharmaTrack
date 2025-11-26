@@ -66,4 +66,5 @@ public class PurchaseItem {
     @Enumerated(EnumType.STRING)
     @Column(name = "batch_status", nullable = false)
     private BatchStatus batchStatus;
+
 }
