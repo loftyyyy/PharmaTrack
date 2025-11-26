@@ -23,24 +23,28 @@ public class PurchaseItemController {
     @GetMapping
     public ResponseEntity<?> getAllPurchaseItem() {
         List<PurchaseItemResponseDTO> purchaseItems = purchaseItemService.getAll().stream().map(purchaseItem -> new PurchaseItemResponseDTO(purchaseItem)).toList();
+
         return ResponseEntity.ok().body(purchaseItems);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPurchaseItem(@PathVariable Long id) {
         PurchaseItem purchaseItem = purchaseItemService.getPurchaseItem(id);
+
         return ResponseEntity.ok().body(new PurchaseItemResponseDTO(purchaseItem));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePurchaseItem(@Valid @RequestBody PurchaseItemUpdateDTO purchaseItemUpdateDTO, @PathVariable Long id) {
         PurchaseItem purchaseItem = purchaseItemService.updatePurchaseItem(purchaseItemUpdateDTO, id);
+
         return ResponseEntity.ok().body(new PurchaseItemResponseDTO(purchaseItem));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePurchaseItem(@PathVariable Long id) {
         purchaseItemService.deletePurchaseItem(id);
+
         return ResponseEntity.ok().body("Purchase item deleted successfully");
     }
 
