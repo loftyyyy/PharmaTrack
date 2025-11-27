@@ -20,24 +20,28 @@ public class LowStockAlertController {
     @GetMapping("/count")
     public ResponseEntity<?> getUnresolvedAlertCount(){
         Integer alertCount = lowStockAlertService.unresolvedAlertCount();
+
         return ResponseEntity.ok().body(alertCount);
     }
 
     @GetMapping("/unresolved")
     public ResponseEntity<?> getUnresolvedAlerts(){
         List<LowStockAlertDTO> unResolvedLowStockAlerts = lowStockAlertService.getUnresolvedAlerts().stream().map(unResolvedAlert -> new LowStockAlertDTO(unResolvedAlert)).toList();
+
         return ResponseEntity.ok().body(unResolvedLowStockAlerts);
     }
 
     @GetMapping("/resolved")
     public ResponseEntity<?> getResolvedAlerts(){
         List<LowStockAlertDTO> unResolvedLowStockAlerts = lowStockAlertService.getResolvedAlerts().stream().map(resolvedAlert -> new LowStockAlertDTO(resolvedAlert)).toList();
+
         return ResponseEntity.ok().body(unResolvedLowStockAlerts);
     }
 
     @PutMapping("/{id}/resolve")
     public ResponseEntity<?> resolveAlert(@PathVariable Long id){
         lowStockAlertService.resolveAlert(id);
+
         return ResponseEntity.ok().body("Alert resolved successfully");
     }
 
