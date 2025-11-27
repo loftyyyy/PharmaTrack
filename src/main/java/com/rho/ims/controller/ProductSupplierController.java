@@ -24,24 +24,28 @@ public class ProductSupplierController {
     @PostMapping("/create")
     public ResponseEntity<?> createProductSupplier(@Valid @RequestBody ProductSupplierCreateDTO productSupplierCreateDTO){
         ProductSupplier productSupplier = productSupplierService.saveProductSupplier(productSupplierCreateDTO);
+
         return ResponseEntity.ok().body( new ProductSupplierResponseDTO(productSupplier));
     }
 
     @GetMapping
     public ResponseEntity<?> getAllProductSupplier(){
         List<ProductSupplierResponseDTO> productSuppliers = productSupplierService.getAll().stream().map(productSupplier -> new ProductSupplierResponseDTO(productSupplier)).toList();
+
         return ResponseEntity.ok().body(productSuppliers);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductSupplier(@PathVariable Long id){
         ProductSupplier productSupplier = productSupplierService.getProductSupplier(id);
+
         return ResponseEntity.ok().body(new ProductSupplierResponseDTO(productSupplier));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProductSupplier(@Valid @RequestBody ProductSupplierUpdateDTO productSupplierUpdateDTO, @PathVariable Long id){
         ProductSupplier productSupplier = productSupplierService.updateProductSupplier(productSupplierUpdateDTO, id);
+
         return ResponseEntity.ok().body(new ProductSupplierResponseDTO(productSupplier));
     }
 
