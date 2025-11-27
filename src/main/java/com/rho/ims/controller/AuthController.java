@@ -73,13 +73,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest, HttpServletRequest request) {
-//        String clientIp = getClientIpAddress(request);
         String clientIp = clientIpResolver.getClientIp(request);
         logger.info("Login attempt for user: {} from IP: {}", authRequest.getUsername(), clientIp);
         
         // Check rate limiting
         if (!rateLimitingService.isLoginAllowed(clientIp)) {
             logger.warn("Login rate limit exceeded for IP: {}", clientIp);
+
             return ResponseEntity.status(429).body(null); // Too Many Requests
         }
         
@@ -99,6 +99,7 @@ public class AuthController {
             AuthResponse response = new AuthResponse(accessToken, refreshToken, new UserResponseDTO(user));
 
             logger.info("Successful login for user: {}", username);
+
             return ResponseEntity.ok(response);
             
         } catch (BadCredentialsException e) {
@@ -126,6 +127,7 @@ public class AuthController {
         // Check rate limiting
         if (!rateLimitingService.isRefreshAllowed(clientIp)) {
             logger.warn("Refresh rate limit exceeded for IP: {}", clientIp);
+
             return ResponseEntity.status(429).body(null); // Too Many Requests
         }
 
@@ -156,6 +158,7 @@ public class AuthController {
             refreshTokenService.saveRefreshToken(username, newRefreshToken);
 
             logger.info("Successful token refresh for user: {}", username);
+
             return ResponseEntity.ok(new TokenRefreshResponse(newAccessToken, newRefreshToken, expiresIn));
 
         } catch (TokenRefreshException e) {
@@ -194,6 +197,7 @@ public class AuthController {
         }
 
         logger.warn("Logout attempt without token");
+
         return ResponseEntity.badRequest().body(new MessageResponse("No token provided"));
     }
 
@@ -209,6 +213,7 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. Please try again");
             }
         }
+
         return ResponseEntity.badRequest().body("Email not found");
     }
 
@@ -234,9 +239,11 @@ public class AuthController {
         try{
             userService.changePassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getPassword());
             otpService.deleteOtp(passwordResetRequestDTO.getEmail());
+
             return ResponseEntity.ok("Password reset successful");
         }catch (Exception e){
             logger.error("Failed to reset password for email {}: {}", passwordResetRequestDTO.getEmail(), e.getMessage());
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reset password. Please try again");
         }
     }
