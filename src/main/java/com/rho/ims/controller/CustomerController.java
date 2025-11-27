@@ -24,49 +24,56 @@ public class CustomerController {
     @PostMapping("/create")
     public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerCreateDTO customerCreateDTO){
         Customer customer = customerService.saveCustomer(customerCreateDTO);
+
         return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
     }
 
     @GetMapping
     public ResponseEntity<?> getAllCustomer(){
         List<CustomerResponseDTO> customers = customerService.getAll().stream().map(customer -> new CustomerResponseDTO(customer)).toList();
+
         return ResponseEntity.ok().body(customers);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCustomer(@PathVariable Long id){
         Customer customer = customerService.getCustomer(id);
+
         return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
     }
 
     @GetMapping("/walkIn")
     public ResponseEntity<?> getWalkInCustomer(){
         Customer customer = customerService.getWalkInCustomer();
+
         return ResponseEntity.ok().body(new CustomerResponseDTO(customer));
     }
 
     @GetMapping("/active")
     public ResponseEntity<?> getActiveCustomer(){
         List<CustomerResponseDTO> activeCustomers = customerService.getActiveCustomers().stream().map(customer -> new CustomerResponseDTO(customer)).toList();
+
         return ResponseEntity.ok().body(activeCustomers);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerUpdateDTO customerUpdateDTO, @PathVariable Long id){
         Customer customer = customerService.updateCustomer(customerUpdateDTO, id);
+
         return ResponseEntity.ok().body(customer);
     }
 
     @PutMapping("/deactivate/{id}")
     public ResponseEntity<?> deactivateCustomer(@PathVariable Long id){
         customerService.deactivateCustomer(id);
-        System.out.println("Customer Deactivated");
+
         return ResponseEntity.ok().body("Customer deactivated successfully");
     }
 
     @PutMapping("/activate/{id}")
     public ResponseEntity<?> activateCustomer(@PathVariable Long id){
         customerService.activateCustomer(id);
+
         return ResponseEntity.ok().body("Customer activated successfully");
     }
 }
