@@ -25,39 +25,43 @@ public class ProductBatchController {
     @GetMapping
     public ResponseEntity<?> getAllProductBatch(){
         List<ProductBatchResponseDTO> productBatches = productBatchService.getAll().stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
+
         return ResponseEntity.ok().body(productBatches);
     }
 
     @GetMapping("/earliest")
     public ResponseEntity<?> getAllEarliestBatchForAllProducts(){
        List<ProductBatchResponseDTO> earliestProductBatches = productBatchService.getEarliestBatchForAllProducts().stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
+
        return ResponseEntity.ok().body(earliestProductBatches);
     }
 
     @GetMapping("/{id}/batches")
     public ResponseEntity<?> getBatchesFromProduct(@PathVariable Long id){
         List<ProductBatchResponseDTO> productBatches = productBatchService.getProductBatchesFromProduct(id).stream().map(productBatch -> new ProductBatchResponseDTO(productBatch)).toList();
+
         return ResponseEntity.ok().body(productBatches);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductBatch(@PathVariable Long id){
         ProductBatch productBatch = productBatchService.getProductBatch(id);
+
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProductBatch(@Valid @RequestBody ProductBatchUpdateDTO productBatchUpdateDTO, @PathVariable Long id){
         ProductBatch productBatch = productBatchService.updateProductBatch(productBatchUpdateDTO, id);
+
         return ResponseEntity.ok().body(new ProductBatchResponseDTO(productBatch));
     }
 
 
     @PostMapping("/check")
     public ResponseEntity<?> checkProductBatchExists(@Valid @RequestBody ProductBatchCheckRequestDTO productBatchCheckRequestDTO){
-        System.out.println("Called");
         boolean existing = productBatchService.isExistingProductIdAndBatchNumber(productBatchCheckRequestDTO);
-        System.out.println(existing);
+
         return ResponseEntity.ok().body(new ProductBatchCheckResponseDTO(existing));
     }
 
