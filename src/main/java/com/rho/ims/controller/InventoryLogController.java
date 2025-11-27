@@ -26,18 +26,21 @@ public class InventoryLogController {
     @RequestMapping("/create")
     public ResponseEntity<?> createInventoryLog(@Valid @RequestBody InventoryLogCreateDTO inventoryLogCreateDTO){
         InventoryLog inventoryLog = inventoryLogService.saveInventoryLog(inventoryLogCreateDTO);
+
         return ResponseEntity.ok().body(new InventoryLogResponseDTO(inventoryLog));
     }
 
     @RequestMapping("/")
     public ResponseEntity<?> getAllInventoryLog() {
         List<InventoryLogResponseDTO> inventoryLogs = inventoryLogService.getAll().stream().map(inventoryLog -> new InventoryLogResponseDTO(inventoryLog)).toList();
+
         return ResponseEntity.ok().body(inventoryLogs);
     }
 
     @RequestMapping("/{id}")
     public ResponseEntity<?> getInventoryLog(@PathVariable Long id){
         InventoryLog inventoryLog = inventoryLogService.getInventoryLog(id);
+
         return ResponseEntity.ok().body(new InventoryLogResponseDTO(inventoryLog));
     }
 
